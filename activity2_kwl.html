@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>استراتيجية KWL | ورشة Claude.ai</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+/* ═══ RESET ═══ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --sky:    #EEF7FF;
+  --sun:    #FFD93D;
+  --sun2:   #FFA41B;
+  --mint:   #6BCB77;
+  --mint2:  #4D9E57;
+  --coral:  #FF6B6B;
+  --coral2: #E84040;
+  --blue:   #4D96FF;
+  --blue2:  #1A6FD4;
+  --purple: #C77DFF;
+  --purp2:  #9B3FD4;
+  --white:  #FFFFFF;
+  --text:   #1A2340;
+  --text2:  #4A5568;
+  --text3:  #A0AEC0;
+  --border: #E2E8F0;
+}
+
+body {
+  font-family: 'Tajawal', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background: var(--sky);
+  position: relative;
+}
+
+/* ═══ ANIMATED BACKGROUND ═══ */
+.bg-canvas {
+  position: fixed; inset: 0; z-index: 0;
+  overflow: hidden; pointer-events: none;
+}
+
+/* Clouds */
+.cloud {
+  position: absolute;
+  background: white;
+  border-radius: 50px;
+  opacity: 0.85;
+  animation: floatCloud linear infinite;
+}
+.cloud::before, .cloud::after {
+  content: ''; position: absolute;
+  background: white; border-radius: 50%;
+}
+.cloud-1 { width: 120px; height: 38px; top: 8%; left: -130px; animation-duration: 28s; animation-delay: 0s; }
+.cloud-1::before { width: 60px; height: 60px; top: -30px; right: 15px; }
+.cloud-1::after  { width: 40px; height: 40px; top: -18px; right: 50px; }
+.cloud-2 { width: 90px; height: 28px; top: 20%; left: -100px; animation-duration: 36s; animation-delay: 8s; opacity: 0.7; }
+.cloud-2::before { width: 45px; height: 45px; top: -22px; right: 10px; }
+.cloud-2::after  { width: 30px; height: 30px; top: -14px; right: 35px; }
+.cloud-3 { width: 140px; height: 44px; top: 5%; left: -150px; animation-duration: 44s; animation-delay: 16s; opacity: 0.6; }
+.cloud-3::before { width: 70px; height: 70px; top: -35px; right: 20px; }
+.cloud-3::after  { width: 50px; height: 50px; top: -22px; right: 60px; }
+@keyframes floatCloud { from { transform: translateX(0); } to { transform: translateX(110vw); } }
+
+/* Sun */
+.sun {
+  position: absolute; top: -30px; right: 60px;
+  width: 110px; height: 110px;
+  background: radial-gradient(circle, var(--sun) 55%, var(--sun2) 100%);
+  border-radius: 50%;
+  box-shadow: 0 0 40px rgba(255,217,61,0.5), 0 0 80px rgba(255,217,61,0.2);
+  animation: sunPulse 4s ease-in-out infinite;
+}
+@keyframes sunPulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.05);} }
+
+/* Rays */
+.sun-ray {
+  position: absolute; top: 50%; left: 50%;
+  width: 8px; height: 22px; background: var(--sun);
+  border-radius: 4px; transform-origin: 4px 70px;
+  opacity: 0.7;
+}
+
+/* Stars */
+.star {
+  position: absolute;
+  animation: twinkle ease-in-out infinite;
+  color: var(--sun);
+  font-size: 20px;
+  user-select: none;
+}
+@keyframes twinkle { 0%,100%{opacity:.2;transform:scale(.8);} 50%{opacity:1;transform:scale(1.2);} }
+
+/* Ground */
+.ground {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  height: 70px;
+  background: linear-gradient(180deg, #7EC850 0%, #5A9E35 100%);
+  z-index: 0;
+}
+.ground-bumps {
+  position: absolute; top: -12px; left: 0; right: 0;
+  height: 20px; overflow: hidden;
+}
+.ground-bumps::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(circle at 10% 100%, #7EC850 30%, transparent 31%),
+              radial-gradient(circle at 25% 100%, #7EC850 25%, transparent 26%),
+              radial-gradient(circle at 40% 100%, #7EC850 32%, transparent 33%),
+              radial-gradient(circle at 55% 100%, #7EC850 28%, transparent 29%),
+              radial-gradient(circle at 70% 100%, #7EC850 30%, transparent 31%),
+              radial-gradient(circle at 85% 100%, #7EC850 26%, transparent 27%),
+              radial-gradient(circle at 96% 100%, #7EC850 22%, transparent 23%);
+}
+
+/* Flowers */
+.flower { position: fixed; bottom: 50px; font-size: 28px; z-index: 1; animation: sway 3s ease-in-out infinite; }
+@keyframes sway { 0%,100%{transform:rotate(-5deg);} 50%{transform:rotate(5deg);} }
+
+/* ABC Letters floating */
+.abc { position: fixed; font-size: 32px; font-weight: 900; opacity: .12; z-index: 0; animation: floatAbc 6s ease-in-out infinite; pointer-events:none; }
+@keyframes floatAbc { 0%,100%{transform:translateY(0) rotate(-5deg);} 50%{transform:translateY(-14px) rotate(5deg);} }
+
+/* ═══ VIEWS ═══ */
+.view { display: none; position: relative; z-index: 10; min-height: 100vh; padding: 2rem 1rem 6rem; align-items: center; justify-content: center; flex-direction: column; }
+.view.active { display: flex; }
+
+/* ═══ VIEW 1: WELCOME ═══ */
+.welcome-card {
+  background: white;
+  border-radius: 32px;
+  padding: 2.8rem 2.5rem;
+  width: 100%; max-width: 480px;
+  box-shadow: 0 8px 48px rgba(0,0,0,0.12), 0 0 0 3px var(--sun);
+  text-align: center;
+  animation: bounceIn .6s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes bounceIn { from { opacity:0; transform: scale(.7) translateY(30px); } to { opacity:1; transform: scale(1) translateY(0); } }
+
+.card-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: linear-gradient(135deg, #FFD93D, #FFA41B);
+  color: white; border-radius: 30px; padding: 6px 20px;
+  font-size: 13px; font-weight: 700; margin-bottom: 1.4rem;
+  box-shadow: 0 3px 12px rgba(255,164,27,.35);
+}
+
+.welcome-title { font-size: 26px; font-weight: 900; color: var(--text); margin-bottom: .5rem; }
+.welcome-sub { font-size: 14px; color: var(--text2); line-height: 1.8; margin-bottom: 1.8rem; }
+
+.input-wrap { text-align: right; margin-bottom: 1.4rem; }
+.input-label { font-size: 13px; font-weight: 700; color: var(--text2); display: block; margin-bottom: 6px; }
+.name-input {
+  width: 100%; padding: 14px 16px;
+  background: #F7F9FC; border: 2px solid var(--border);
+  border-radius: 14px; font-family: 'Tajawal', sans-serif;
+  font-size: 15px; color: var(--text); outline: none; transition: all .2s;
+}
+.name-input:focus { border-color: var(--blue); background: white; box-shadow: 0 0 0 3px rgba(77,150,255,.12); }
+.name-input::placeholder { color: var(--text3); }
+
+.btn-start {
+  width: 100%; padding: 15px;
+  background: linear-gradient(135deg, var(--blue), var(--blue2));
+  color: white; border: none; border-radius: 16px;
+  font-family: 'Tajawal', sans-serif; font-size: 16px; font-weight: 700;
+  cursor: pointer; transition: all .2s;
+  box-shadow: 0 4px 20px rgba(77,150,255,.35);
+}
+.btn-start:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(77,150,255,.45); }
+.btn-start:active { transform: translateY(0); }
+
+.teacher-link { margin-top: 1.2rem; }
+.btn-teacher {
+  background: none; border: 2px dashed var(--border);
+  border-radius: 12px; padding: 8px 20px;
+  font-family: 'Tajawal', sans-serif; font-size: 13px; color: var(--text3);
+  cursor: pointer; transition: all .2s; display: inline-flex; align-items: center; gap: 7px;
+}
+.btn-teacher:hover { border-color: var(--purple); color: var(--purp2); background: rgba(199,125,255,.06); }
+
+/* ═══ VIEW 2: KWL TABLE ═══ */
+.kwl-wrap {
+  width: 100%; max-width: 900px;
+  animation: bounceIn .5s cubic-bezier(.34,1.56,.64,1);
+}
+
+.kwl-header { text-align: center; margin-bottom: 1.8rem; }
+.kwl-header h1 { font-size: 26px; font-weight: 900; color: var(--text); margin-bottom: 4px; }
+.kwl-header .kwl-name { font-size: 15px; color: var(--text2); }
+.kwl-header .kwl-name span { font-weight: 700; color: var(--blue2); }
+
+.kwl-table {
+  display: grid; grid-template-columns: 1fr 1fr 1fr;
+  gap: 14px; margin-bottom: 1.5rem;
+}
+@media(max-width: 600px) { .kwl-table { grid-template-columns: 1fr; } }
+
+.kwl-col {
+  background: white; border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.09);
+  display: flex; flex-direction: column;
+  transition: transform .2s;
+}
+.kwl-col:hover { transform: translateY(-3px); }
+
+.kwl-col-head {
+  padding: 1.2rem 1rem;
+  text-align: center; color: white;
+}
+.kwl-col-head .col-letter {
+  font-size: 42px; font-weight: 900; display: block; line-height: 1;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+.kwl-col-head .col-ar { font-size: 15px; font-weight: 700; margin-top: 4px; display: block; }
+.kwl-col-head .col-en { font-size: 12px; opacity: .85; display: block; margin-top: 2px; }
+
+.col-k .kwl-col-head { background: linear-gradient(135deg, #4D96FF, #1A6FD4); }
+.col-w .kwl-col-head { background: linear-gradient(135deg, #FF6B6B, #E84040); }
+.col-l .kwl-col-head { background: linear-gradient(135deg, #6BCB77, #4D9E57); }
+
+.kwl-col-body { padding: 1rem; flex: 1; display: flex; flex-direction: column; }
+
+.kwl-textarea {
+  flex: 1; min-height: 160px;
+  background: #F7F9FC; border: 2px solid var(--border);
+  border-radius: 12px; padding: 12px;
+  font-family: 'Tajawal', sans-serif; font-size: 14px; color: var(--text);
+  line-height: 1.8; resize: none; outline: none; transition: all .2s;
+  width: 100%;
+}
+.kwl-textarea:focus { border-color: var(--blue); background: white; box-shadow: 0 0 0 3px rgba(77,150,255,.1); }
+.kwl-textarea::placeholder { color: var(--text3); }
+.kwl-textarea:disabled {
+  background: #F0F4F8; color: var(--text3);
+  cursor: not-allowed; border-style: dashed;
+}
+
+.col-l .kwl-textarea:disabled { border-color: #C6F6D5; background: #F0FFF4; }
+.l-lock {
+  text-align: center; padding: 10px 8px;
+  font-size: 12px; color: var(--mint2); font-weight: 600;
+  background: #F0FFF4; border: 1px dashed #9AE6B4;
+  border-radius: 10px; margin-top: 8px;
+}
+
+.kwl-actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+
+.btn-save {
+  flex: 1; min-width: 200px; padding: 15px;
+  background: linear-gradient(135deg, var(--mint), var(--mint2));
+  color: white; border: none; border-radius: 16px;
+  font-family: 'Tajawal', sans-serif; font-size: 15px; font-weight: 700;
+  cursor: pointer; transition: all .2s;
+  box-shadow: 0 4px 18px rgba(107,203,119,.35);
+}
+.btn-save:hover { transform: translateY(-2px); box-shadow: 0 6px 22px rgba(107,203,119,.45); }
+.btn-save:disabled { background: linear-gradient(135deg,#CBD5E0,#A0AEC0); box-shadow:none; cursor:not-allowed; transform:none; }
+
+.btn-fill-l {
+  flex: 1; min-width: 200px; padding: 15px;
+  background: linear-gradient(135deg, var(--sun), var(--sun2));
+  color: white; border: none; border-radius: 16px;
+  font-family: 'Tajawal', sans-serif; font-size: 15px; font-weight: 700;
+  cursor: pointer; transition: all .2s;
+  box-shadow: 0 4px 18px rgba(255,164,27,.35);
+  display: none;
+}
+.btn-fill-l:hover { transform: translateY(-2px); }
+.btn-fill-l.show { display: flex; align-items: center; justify-content: center; gap: 8px; }
+
+/* ═══ VIEW 3: THANKS ═══ */
+.thanks-card {
+  background: white; border-radius: 32px;
+  padding: 3rem 2.5rem; width: 100%; max-width: 460px;
+  text-align: center; box-shadow: 0 8px 48px rgba(0,0,0,.12);
+  animation: bounceIn .5s cubic-bezier(.34,1.56,.64,1);
+}
+.thanks-emoji { font-size: 64px; display: block; margin-bottom: .8rem; animation: wiggle .5s ease; }
+@keyframes wiggle { 0%,100%{transform:rotate(0);} 25%{transform:rotate(-12deg);} 75%{transform:rotate(12deg);} }
+.thanks-title { font-size: 24px; font-weight: 900; color: var(--text); margin-bottom: .5rem; }
+.thanks-sub { font-size: 14px; color: var(--text2); line-height: 1.8; margin-bottom: 1.5rem; }
+.thanks-preview {
+  background: #F7F9FC; border: 1px solid var(--border); border-radius: 14px;
+  padding: 12px 16px; text-align: right; font-size: 13px; color: var(--text2); line-height: 1.8;
+}
+.btn-unlock-l {
+  margin-top: 1.2rem; width: 100%; padding: 13px;
+  background: linear-gradient(135deg,#6BCB77,#4D9E57);
+  color: white; border: none; border-radius: 14px;
+  font-family: 'Tajawal',sans-serif; font-size: 14px; font-weight: 700;
+  cursor: pointer; transition: all .2s;
+}
+.btn-unlock-l:hover { transform:translateY(-2px); }
+
+/* ═══ PASSWORD MODAL ═══ */
+.modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.35); backdrop-filter: blur(6px);
+  z-index: 200; align-items: center; justify-content: center;
+}
+.modal-overlay.show { display: flex; }
+.modal-box {
+  background: white; border-radius: 24px; padding: 2.2rem 2.5rem;
+  width: 100%; max-width: 360px; text-align: center;
+  box-shadow: 0 16px 64px rgba(0,0,0,0.18);
+  animation: bounceIn .35s cubic-bezier(.34,1.56,.64,1);
+}
+.modal-icon { font-size: 36px; margin-bottom: .8rem; }
+.modal-title { font-size: 18px; font-weight: 700; margin-bottom: .4rem; }
+.modal-sub { font-size: 13px; color: var(--text3); margin-bottom: 1.2rem; }
+.pin-input {
+  width: 100%; background: #F7F9FC; border: 2px solid var(--border);
+  border-radius: 12px; padding: 13px; font-size: 24px; letter-spacing: 10px;
+  text-align: center; font-family: 'Tajawal',sans-serif; color: var(--text);
+  outline: none; transition: all .2s;
+}
+.pin-input:focus { border-color: var(--blue); }
+.pin-err { font-size: 13px; color: var(--coral2); margin-top: 7px; min-height: 18px; }
+.modal-btns { display:flex; gap:10px; margin-top:1.2rem; }
+.btn-ghost { flex:1; padding:12px; background:none; border:1.5px solid var(--border); border-radius:12px; font-family:'Tajawal',sans-serif; font-size:14px; color:var(--text3); cursor:pointer; transition:all .2s; }
+.btn-ghost:hover { border-color:var(--text2); color:var(--text); }
+.btn-confirm { flex:2; padding:12px; background:linear-gradient(135deg,var(--blue),var(--blue2)); color:white; border:none; border-radius:12px; font-family:'Tajawal',sans-serif; font-size:14px; font-weight:700; cursor:pointer; }
+
+/* ═══ DASHBOARD ═══ */
+#v-dashboard { display:none; flex-direction:column; min-height:100vh; background:var(--sky); padding:0; }
+
+.dash-header {
+  background: white; border-bottom: 3px solid var(--sun);
+  padding: 1rem 1.8rem;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 12px; position: sticky; top: 0; z-index: 50;
+}
+.dash-logo { display:flex; align-items:center; gap:12px; }
+.dash-logo-icon {
+  width: 44px; height: 44px; border-radius: 14px;
+  background: linear-gradient(135deg,var(--blue),var(--blue2));
+  display: flex; align-items:center; justify-content:center; font-size:22px;
+}
+.dash-logo-text h2 { font-size:16px; font-weight:700; color:var(--text); }
+.dash-logo-text p  { font-size:12px; color:var(--text3); }
+
+.dash-stats { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+.stat-chip {
+  background:linear-gradient(135deg,#EEF7FF,#D6ECFF);
+  border:1px solid #BAD8F5; border-radius:20px; padding:6px 16px;
+  display:flex; align-items:center; gap:8px;
+}
+.stat-chip .sv { font-size:20px; font-weight:900; color:var(--blue2); }
+.stat-chip .sl { font-size:12px; color:var(--text3); }
+.live-pill {
+  display:flex; align-items:center; gap:6px;
+  background:linear-gradient(135deg,#F0FFF4,#C6F6D5);
+  border:1px solid #9AE6B4; border-radius:20px; padding:6px 14px;
+  font-size:12px; font-weight:700; color:var(--mint2);
+}
+.live-dot { width:8px;height:8px;border-radius:50%;background:var(--mint2);animation:blink 1.3s ease-in-out infinite; }
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.2;}}
+
+.dash-body { padding:1.6rem; flex:1; }
+
+.question-banner {
+  background: white; border-radius: 20px; padding: 1.2rem 1.5rem;
+  margin-bottom: 1.8rem; border-right: 5px solid var(--blue);
+  box-shadow: 0 3px 16px rgba(0,0,0,.07);
+}
+.qb-label { font-size:11px; font-weight:700; color:var(--blue); letter-spacing:.5px; margin-bottom:5px; }
+.qb-text  { font-size:16px; font-weight:700; color:var(--text); line-height:1.6; }
+
+/* KWL Response Cards */
+.resp-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:16px; }
+
+.resp-card {
+  background: white; border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 3px 20px rgba(0,0,0,.08);
+  animation: cardIn .4s cubic-bezier(.22,1,.36,1);
+  border-top: 4px solid var(--sun);
+}
+@keyframes cardIn { from{opacity:0;transform:scale(.9) translateY(10px);}to{opacity:1;transform:scale(1) translateY(0);} }
+.resp-card.new-glow { animation: cardIn .4s cubic-bezier(.22,1,.36,1), glowPop .7s ease; }
+@keyframes glowPop { 0%{box-shadow:0 0 0 4px rgba(255,217,61,.5),0 6px 24px rgba(255,217,61,.3);}100%{box-shadow:0 3px 20px rgba(0,0,0,.08);} }
+
+.resp-card-header {
+  display:flex; align-items:center; gap:10px;
+  padding:12px 16px; background:#FAFBFC; border-bottom:1px solid var(--border);
+}
+.resp-avatar {
+  width:38px;height:38px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;font-weight:900;color:white;flex-shrink:0;
+}
+.resp-name { font-size:14px;font-weight:700;color:var(--text); }
+.resp-time { font-size:11px;color:var(--text3);margin-top:1px; }
+
+.resp-kwl { display:grid; grid-template-columns:1fr 1fr 1fr; }
+.resp-col { padding:12px 14px; border-left:1px solid var(--border); }
+.resp-col:last-child { border-left:none; }
+.resp-col-head { font-size:11px;font-weight:700;margin-bottom:5px; }
+.resp-col-body { font-size:12.5px;color:var(--text2);line-height:1.7; }
+.resp-col.rk .resp-col-head { color:var(--blue2); }
+.resp-col.rw .resp-col-head { color:var(--coral2); }
+.resp-col.rl .resp-col-head { color:var(--mint2); }
+.empty-resp { font-size:12px;color:var(--text3);font-style:italic; }
+
+.empty-state { grid-column:1/-1; text-align:center; padding:4rem 2rem; color:var(--text3); }
+.empty-icon { font-size:56px; margin-bottom:1rem; }
+.empty-title { font-size:18px;font-weight:700;color:var(--text2);margin-bottom:6px; }
+
+.btn-reset { background:none;border:1.5px solid #FED7D7;border-radius:10px;padding:7px 16px;font-family:'Tajawal',sans-serif;font-size:12px;color:var(--coral2);cursor:pointer;transition:all .2s; }
+.btn-reset:hover { background:#FFF5F5;border-color:var(--coral2); }
+
+/* Stars decoration */
+.star-decor { position:fixed;font-size:24px;opacity:.15;pointer-events:none;z-index:0;animation:twinkle ease-in-out infinite; }
+</style>
+</head>
+<body>
+
+<!-- ═══ BG ═══ -->
+<div class="bg-canvas">
+  <div class="sun"></div>
+  <div class="cloud cloud-1"></div>
+  <div class="cloud cloud-2"></div>
+  <div class="cloud cloud-3"></div>
+  <div class="ground"><div class="ground-bumps"></div></div>
+</div>
+
+<!-- Flowers -->
+<div class="flower" style="left:3%">🌸</div>
+<div class="flower" style="left:12%" style="animation-delay:.5s">🌻</div>
+<div class="flower" style="left:22%;animation-delay:1s">🌺</div>
+<div class="flower" style="right:5%;animation-delay:.3s">🌷</div>
+<div class="flower" style="right:15%;animation-delay:.8s">🌸</div>
+<div class="flower" style="right:28%;animation-delay:1.2s">🌼</div>
+
+<!-- Floating ABC -->
+<div class="abc" style="top:30%;left:2%;font-size:48px;color:#4D96FF;animation-delay:0s">ك</div>
+<div class="abc" style="top:50%;left:5%;font-size:36px;color:#FF6B6B;animation-delay:1s">و</div>
+<div class="abc" style="top:40%;right:3%;font-size:44px;color:#6BCB77;animation-delay:.5s">ل</div>
+<div class="abc" style="top:60%;right:6%;font-size:30px;color:#C77DFF;animation-delay:1.5s">م</div>
+
+<!-- Stars -->
+<div class="star-decor" style="top:15%;left:30%;animation-duration:2.2s">⭐</div>
+<div class="star-decor" style="top:25%;right:25%;animation-duration:3s;animation-delay:.8s">✨</div>
+<div class="star-decor" style="top:45%;left:45%;animation-duration:2.5s;animation-delay:.4s;font-size:18px">⭐</div>
+
+<!-- ═══ PASSWORD MODAL ═══ -->
+<div class="modal-overlay" id="modal">
+  <div class="modal-box">
+    <div class="modal-icon">🔐</div>
+    <div class="modal-title">لوحة المعلمة</div>
+    <div class="modal-sub">أدخلي كلمة المرور</div>
+    <input class="pin-input" id="pinInput" type="password" maxlength="6" placeholder="••••" onkeydown="if(event.key==='Enter')checkPin()">
+    <div class="pin-err" id="pinErr"></div>
+    <div class="modal-btns">
+      <button class="btn-ghost" onclick="closeModal()">إلغاء</button>
+      <button class="btn-confirm" onclick="checkPin()">دخول ←</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ VIEW 1: WELCOME ═══ -->
+<div class="view active" id="v-welcome">
+  <div class="welcome-card">
+    <div class="card-badge">⭐ استراتيجية KWL</div>
+    <h1 class="welcome-title">ماذا أعرف؟ ماذا أريد؟ ماذا تعلّمت؟ 🌟</h1>
+    <p class="welcome-sub">سنبدأ معاً بتفعيل معرفتك السابقة<br>واستكشاف ما تتوقعينه من ورشتنا اليوم!</p>
+    <div class="input-wrap">
+      <label class="input-label">اسمك الكريم 👩‍🏫</label>
+      <input class="name-input" type="text" id="nameInput" placeholder="مثال: أ. سارة العنزي" autocomplete="off" onkeydown="if(event.key==='Enter')startKWL()">
+    </div>
+    <button class="btn-start" onclick="startKWL()">ابدئي النشاط 🚀</button>
+    <div class="teacher-link">
+      <button class="btn-teacher" onclick="openModal()">🔐 شاشة المعلمة</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ VIEW 2: KWL TABLE ═══ -->
+<div class="view" id="v-kwl">
+  <div class="kwl-wrap">
+    <div class="kwl-header">
+      <h1>جدول KWL 📊</h1>
+      <p class="kwl-name">أهلاً <span id="kwlName">—</span>! اكتبي في الخانتين الأوليين الآن</p>
+    </div>
+
+    <div class="kwl-table">
+      <!-- K -->
+      <div class="kwl-col col-k">
+        <div class="kwl-col-head">
+          <span class="col-letter">K</span>
+          <span class="col-ar">ماذا أعرف؟</span>
+          <span class="col-en">What I Know</span>
+        </div>
+        <div class="kwl-col-body">
+          <textarea class="kwl-textarea" id="kText" placeholder="اكتبي هنا ما تعرفينه عن استخدام التكنولوجيا في التدريس عن بعد..."></textarea>
+        </div>
+      </div>
+      <!-- W -->
+      <div class="kwl-col col-w">
+        <div class="kwl-col-head">
+          <span class="col-letter">W</span>
+          <span class="col-ar">ماذا أريد أن أتعلّم؟</span>
+          <span class="col-en">What I Want to Know</span>
+        </div>
+        <div class="kwl-col-body">
+          <textarea class="kwl-textarea" id="wText" placeholder="اكتبي هنا ما تتمنين تعلّمه من ورشة اليوم..."></textarea>
+        </div>
+      </div>
+      <!-- L -->
+      <div class="kwl-col col-l">
+        <div class="kwl-col-head">
+          <span class="col-letter">L</span>
+          <span class="col-ar">ماذا تعلّمت؟</span>
+          <span class="col-en">What I Learned</span>
+        </div>
+        <div class="kwl-col-body">
+          <textarea class="kwl-textarea" id="lText" placeholder="ستملئين هذه الخانة في نهاية الورشة..." disabled></textarea>
+          <div class="l-lock">🔒 تُفتح في نهاية الورشة</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="kwl-actions">
+      <button class="btn-save" id="saveBtn" onclick="saveKW()">✅ حفظ K و W</button>
+      <button class="btn-fill-l" id="fillLBtn" onclick="unlockL()">🌟 إضافة ماذا تعلّمت (L)</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ VIEW 3: THANKS ═══ -->
+<div class="view" id="v-thanks">
+  <div class="thanks-card">
+    <span class="thanks-emoji">🎉</span>
+    <div class="thanks-title">أحسنتِ!</div>
+    <div class="thanks-sub">وصلت إجابتك إلى المعلمة<br>سنعود لخانة «ماذا تعلّمت؟» في نهاية الورشة</div>
+    <div class="thanks-preview" id="thanksPreview"></div>
+    <button class="btn-unlock-l" id="unlockFromThanks" onclick="goFillL()">🌟 أنهت الورشة؟ أضيفي ماذا تعلّمت</button>
+  </div>
+</div>
+
+<!-- ═══ DASHBOARD ═══ -->
+<div id="v-dashboard">
+  <div class="dash-header">
+    <div class="dash-logo">
+      <div class="dash-logo-icon">📊</div>
+      <div class="dash-logo-text">
+        <h2>لوحة المتابعة — KWL</h2>
+        <p>إجابات المعلمات — لحظياً</p>
+      </div>
+    </div>
+    <div class="dash-stats">
+      <div class="stat-chip"><span class="sv" id="totalCount">0</span><span class="sl">استجابة</span></div>
+      <div class="live-pill"><div class="live-dot"></div>مباشر</div>
+      <button class="btn-reset" onclick="resetAll()">🗑 مسح</button>
+    </div>
+  </div>
+  <div class="dash-body">
+    <div class="question-banner">
+      <div class="qb-label">استراتيجية KWL — ورشة Claude.ai</div>
+      <div class="qb-text">ماذا أعرف؟ | ماذا أريد أن أتعلّم؟ | ماذا تعلّمت؟</div>
+    </div>
+    <div class="resp-grid" id="respGrid">
+      <div class="empty-state">
+        <div class="empty-icon">⏳</div>
+        <div class="empty-title">بانتظار الإجابات...</div>
+        <p style="font-size:13px">ستظهر بطاقات المعلمات هنا فور إرسالهن</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const DB   = 'https://cyber-safety-class-b266a-default-rtdb.firebaseio.com';
+const PATH = '/workshop_kwl';
+const PIN  = '1234';
+
+const AVATARS = ['#4D96FF','#FF6B6B','#6BCB77','#C77DFF','#FFD93D','#F97316','#06B6D4','#EC4899'];
+let userName = '', userKey = '', allData = {}, knownKeys = new Set(), evtSrc = null;
+
+function ini(n){ return (n||'?').replace(/^أ\.\s*/,'').charAt(0); }
+function colorFor(n){ let h=0; for(let c of n) h=(h*31+c.charCodeAt(0))%AVATARS.length; return AVATARS[Math.abs(h)%AVATARS.length]; }
+function timeStr(ts){ return ts ? new Date(ts).toLocaleTimeString('ar',{hour:'2-digit',minute:'2-digit'}) : ''; }
+
+function showView(id){
+  ['v-welcome','v-kwl','v-thanks'].forEach(v=>{
+    const el=document.getElementById(v);
+    el.style.display=''; el.classList.remove('active');
+  });
+  document.getElementById('v-dashboard').style.display='none';
+  const t=document.getElementById(id);
+  if(!t) return;
+  t.style.display='flex'; t.classList.add('active');
+}
+
+// ── WELCOME ──
+function startKWL(){
+  const n = document.getElementById('nameInput').value.trim();
+  if(!n){ document.getElementById('nameInput').style.borderColor='#FF6B6B'; return; }
+  userName = n;
+  userKey = 'kwl_' + Date.now();
+  document.getElementById('kwlName').textContent = n;
+  showView('v-kwl');
+}
+
+// ── SAVE K+W ──
+async function saveKW(){
+  const k = document.getElementById('kText').value.trim();
+  const w = document.getElementById('wText').value.trim();
+  if(!k && !w){ alert('يرجى ملء خانة واحدة على الأقل'); return; }
+  const btn = document.getElementById('saveBtn');
+  btn.disabled=true; btn.textContent='جاري الحفظ...';
+  const data = { name:userName, k, w, l:'', timestamp:Date.now() };
+  try {
+    const r = await fetch(`${DB}${PATH}/${userKey}.json`,{
+      method:'PUT', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(data)
+    });
+    if(!r.ok) throw new Error();
+    document.getElementById('thanksPreview').innerHTML =
+      `<b style="color:#1A6FD4">K — ماذا أعرف:</b><br>${k||'—'}<br><br><b style="color:#E84040">W — ماذا أريد:</b><br>${w||'—'}`;
+    showView('v-thanks');
+    document.getElementById('fillLBtn').classList.add('show');
+  } catch {
+    btn.disabled=false; btn.textContent='✅ حفظ K و W';
+    alert('خطأ في الإرسال — تأكدي من الاتصال');
+  }
+}
+
+// ── UNLOCK L ──
+function unlockL(){
+  const l = document.getElementById('lText');
+  l.disabled=false; l.style.borderColor='#6BCB77';
+  l.placeholder='اكتبي هنا ما تعلّمتِه من الورشة...';
+  document.querySelector('.l-lock').innerHTML='✏️ يمكنكِ الآن الكتابة';
+  document.getElementById('saveBtn').style.display='none';
+  document.getElementById('fillLBtn').style.display='none';
+  // Show update button
+  const acts = document.querySelector('.kwl-actions');
+  const btn = document.createElement('button');
+  btn.className='btn-save'; btn.style.background='linear-gradient(135deg,#6BCB77,#4D9E57)';
+  btn.textContent='✅ حفظ ماذا تعلّمت (L)';
+  btn.onclick = saveL;
+  acts.appendChild(btn);
+  showView('v-kwl');
+}
+
+function goFillL(){ unlockL(); }
+
+async function saveL(){
+  const l = document.getElementById('lText').value.trim();
+  if(!l){ alert('اكتبي ماذا تعلّمتِ أولاً'); return; }
+  try {
+    await fetch(`${DB}${PATH}/${userKey}/l.json`,{
+      method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(l)
+    });
+    const finalCard = document.createElement('div');
+    finalCard.style.cssText='background:#F0FFF4;border:2px solid #9AE6B4;border-radius:16px;padding:1rem;text-align:center;margin-top:1rem;font-size:14px;color:#276749;font-weight:700;';
+    finalCard.innerHTML='🌟 تم حفظ جدولك الكامل! شكراً لمشاركتك في الورشة';
+    document.querySelector('.kwl-actions').appendChild(finalCard);
+  } catch { alert('خطأ في الحفظ'); }
+}
+
+// ── PASSWORD ──
+function openModal(){ document.getElementById('modal').classList.add('show'); setTimeout(()=>document.getElementById('pinInput').focus(),100); }
+function closeModal(){ document.getElementById('modal').classList.remove('show'); document.getElementById('pinInput').value=''; document.getElementById('pinErr').textContent=''; }
+function checkPin(){
+  if(document.getElementById('pinInput').value===PIN){ closeModal(); openDashboard(); }
+  else{ document.getElementById('pinErr').textContent='❌ كلمة المرور غير صحيحة'; document.getElementById('pinInput').value=''; }
+}
+
+// ── DASHBOARD ──
+function openDashboard(){
+  ['v-welcome','v-kwl','v-thanks'].forEach(v=>{ const el=document.getElementById(v); el.style.display='none'; el.classList.remove('active'); });
+  document.getElementById('v-dashboard').style.display='flex';
+  startListening();
+}
+
+function buildCard(id,d,isNew=false){
+  const c=colorFor(d.name||'');
+  return `
+  <div class="resp-card ${isNew?'new-glow':''}" id="rc_${id}">
+    <div class="resp-card-header">
+      <div class="resp-avatar" style="background:${c}">${ini(d.name||'')}</div>
+      <div>
+        <div class="resp-name">${d.name||''}</div>
+        <div class="resp-time">${timeStr(d.timestamp)}</div>
+      </div>
+    </div>
+    <div class="resp-kwl">
+      <div class="resp-col rk">
+        <div class="resp-col-head">K — أعرف</div>
+        <div class="resp-col-body">${d.k ? d.k : '<span class="empty-resp">—</span>'}</div>
+      </div>
+      <div class="resp-col rw">
+        <div class="resp-col-head">W — أريد</div>
+        <div class="resp-col-body">${d.w ? d.w : '<span class="empty-resp">—</span>'}</div>
+      </div>
+      <div class="resp-col rl">
+        <div class="resp-col-head">L — تعلّمت</div>
+        <div class="resp-col-body">${d.l ? d.l : '<span class="empty-resp">لم يُضَف بعد</span>'}</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderDash(hk=null){
+  const entries=Object.entries(allData).sort((a,b)=>(b[1].timestamp||0)-(a[1].timestamp||0));
+  document.getElementById('totalCount').textContent=entries.length;
+  const grid=document.getElementById('respGrid');
+  if(!entries.length){
+    grid.innerHTML=`<div class="empty-state"><div class="empty-icon">⏳</div><div class="empty-title">بانتظار الإجابات...</div><p style="font-size:13px">ستظهر بطاقات المعلمات هنا فور إرسالهن</p></div>`;
+    return;
+  }
+  grid.innerHTML=entries.map(([id,d])=>buildCard(id,d,id===hk)).join('');
+}
+
+function startListening(){
+  if(evtSrc) evtSrc.close();
+  evtSrc=new EventSource(`${DB}${PATH}.json`);
+  evtSrc.addEventListener('put',e=>{
+    const {path,data}=JSON.parse(e.data);
+    if(path==='/'){allData=data||{};knownKeys=new Set(Object.keys(allData));renderDash();}
+    else{
+      const key=path.replace('/','');
+      if(data===null){delete allData[key];knownKeys.delete(key);renderDash();}
+      else{const isNew=!knownKeys.has(key);allData[key]=data;knownKeys.add(key);renderDash(isNew?key:null);}
+    }
+  });
+  evtSrc.addEventListener('patch',e=>{const{data}=JSON.parse(e.data);if(data){Object.assign(allData,data);renderDash();}});
+  evtSrc.onerror=()=>{evtSrc.close();setInterval(async()=>{try{const r=await fetch(`${DB}${PATH}.json`);allData=await r.json()||{};renderDash();}catch{}},3000);};
+}
+
+async function resetAll(){
+  if(!confirm('مسح جميع الإجابات؟')) return;
+  await fetch(`${DB}${PATH}.json`,{method:'DELETE'});
+  allData={};knownKeys=new Set();renderDash();
+}
+</script>
+</body>
+</html>
