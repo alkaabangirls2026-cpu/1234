@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>نشاط الافتتاح | ورشة Claude.ai</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+/* ═══ RESET ═══ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ═══ PALETTE ═══ */
+:root {
+  --cream:   #FAF8F5;
+  --white:   #FFFFFF;
+  --stone:   #F0ECE6;
+  --border:  #E2DAD0;
+  --border2: #C8BDB0;
+  --text:    #1E1A16;
+  --text2:   #5A5048;
+  --text3:   #9E8E80;
+  --teal:    #0A7C6E;
+  --teal2:   #0D9183;
+  --teal3:   #E6F4F1;
+  --teal4:   #B8E0DA;
+  --rose:    #C4516A;
+  --rose2:   #FAEAED;
+  --amber:   #B5621E;
+  --amber2:  #FDF0E6;
+  --sage:    #4A7C59;
+  --sage2:   #EAF2EC;
+  --purple:  #6B4FA0;
+  --purple2: #F0EBF8;
+  --gold:    #9A7B2E;
+  --gold2:   #FDF6E3;
+}
+
+/* ═══ BASE ═══ */
+body {
+  font-family: 'Tajawal', sans-serif;
+  background: var(--cream);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ═══ VIEWS ═══ */
+.view { display: none; min-height: 100vh; }
+.view.active { display: flex; flex-direction: column; }
+
+/* ══════════════════════════════════════
+   VIEW 1: WELCOME
+══════════════════════════════════════ */
+#v-welcome {
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: var(--cream);
+  position: relative;
+}
+
+/* decorative blobs */
+#v-welcome::before {
+  content: '';
+  position: fixed; top: -80px; left: -80px;
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(10,124,110,0.08) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+#v-welcome::after {
+  content: '';
+  position: fixed; bottom: -60px; right: -60px;
+  width: 340px; height: 340px;
+  background: radial-gradient(circle, rgba(196,81,106,0.07) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.welcome-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  padding: 3rem 2.8rem;
+  width: 100%;
+  max-width: 520px;
+  text-align: center;
+  box-shadow: 0 2px 40px rgba(30,26,22,0.07), 0 1px 0 rgba(255,255,255,0.9) inset;
+  animation: riseUp .5s cubic-bezier(.22,1,.36,1);
+}
+@keyframes riseUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.w-tag {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: var(--teal3); border: 1px solid var(--teal4);
+  border-radius: 30px; padding: 5px 18px;
+  font-size: 13px; font-weight: 600; color: var(--teal);
+  margin-bottom: 1.5rem;
+}
+.w-dot { width: 7px; height: 7px; background: var(--teal); border-radius: 50%; }
+
+.w-title {
+  font-size: 28px; font-weight: 900; color: var(--text);
+  line-height: 1.3; margin-bottom: .6rem;
+}
+.w-title span { color: var(--teal); }
+.w-subtitle {
+  font-size: 15px; color: var(--text3); line-height: 1.8;
+  margin-bottom: 2rem;
+}
+
+.field-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 1.5rem; text-align: right; }
+.field-group label { font-size: 13px; font-weight: 600; color: var(--text2); }
+.field-group input {
+  background: var(--stone);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 15px; color: var(--text);
+  outline: none; transition: all .2s;
+  width: 100%;
+}
+.field-group input:focus { border-color: var(--teal); background: var(--white); box-shadow: 0 0 0 3px rgba(10,124,110,0.08); }
+.field-group input::placeholder { color: var(--text3); }
+
+.btn-main {
+  width: 100%; padding: 15px;
+  background: var(--teal); color: var(--white);
+  border: none; border-radius: 14px;
+  font-family: 'Tajawal', sans-serif; font-size: 16px; font-weight: 700;
+  cursor: pointer; transition: all .2s;
+  position: relative; overflow: hidden;
+}
+.btn-main::after { content: ''; position: absolute; inset: 0; background: rgba(255,255,255,0); transition: background .2s; }
+.btn-main:hover { background: var(--teal2); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(10,124,110,0.25); }
+.btn-main:active { transform: translateY(0); }
+
+.teacher-link {
+  margin-top: 1.4rem;
+  display: flex; align-items: center; justify-content: center;
+}
+.teacher-btn {
+  background: none; border: 1px solid var(--border);
+  border-radius: 10px; padding: 8px 18px;
+  font-family: 'Tajawal', sans-serif; font-size: 13px; color: var(--text3);
+  cursor: pointer; display: flex; align-items: center; gap: 7px;
+  transition: all .2s;
+}
+.teacher-btn:hover { border-color: var(--teal); color: var(--teal); background: var(--teal3); }
+
+/* ══════════════════════════════════════
+   VIEW 2: QUESTION
+══════════════════════════════════════ */
+#v-question {
+  padding: 2rem;
+  align-items: center;
+  justify-content: center;
+  background: var(--cream);
+  position: relative;
+}
+#v-question::before {
+  content: '';
+  position: fixed; top: 0; left: 0; right: 0; height: 4px;
+  background: linear-gradient(90deg, var(--teal), var(--rose));
+}
+
+.q-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  padding: 2.5rem 2.8rem;
+  width: 100%; max-width: 600px;
+  box-shadow: 0 2px 40px rgba(30,26,22,0.07);
+  animation: riseUp .4s cubic-bezier(.22,1,.36,1);
+}
+
+.q-greeting {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 1.5rem;
+}
+.q-avatar {
+  width: 44px; height: 44px; border-radius: 14px;
+  background: var(--teal3); border: 1.5px solid var(--teal4);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; flex-shrink: 0;
+}
+.q-greeting-text { font-size: 14px; color: var(--text2); }
+.q-greeting-name { font-size: 16px; font-weight: 700; color: var(--text); }
+
+.q-divider { border: none; border-top: 1px solid var(--border); margin: 0 0 1.5rem; }
+
+.q-label { font-size: 12px; font-weight: 600; color: var(--teal); text-transform: uppercase; letter-spacing: .5px; margin-bottom: .7rem; }
+.q-text {
+  font-size: 18px; font-weight: 700; color: var(--text);
+  line-height: 1.6; margin-bottom: 1.8rem;
+}
+
+.answer-area {
+  background: var(--stone);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 14px 16px;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 14.5px; color: var(--text);
+  line-height: 1.8; resize: none;
+  width: 100%; min-height: 120px;
+  outline: none; transition: all .2s;
+}
+.answer-area:focus { border-color: var(--teal); background: var(--white); box-shadow: 0 0 0 3px rgba(10,124,110,0.08); }
+.answer-area::placeholder { color: var(--text3); }
+
+.char-count { font-size: 12px; color: var(--text3); text-align: left; margin-top: 6px; }
+
+.btn-submit {
+  margin-top: 1.2rem; width: 100%;
+  padding: 14px; background: var(--teal); color: var(--white);
+  border: none; border-radius: 14px;
+  font-family: 'Tajawal', sans-serif; font-size: 15px; font-weight: 700;
+  cursor: pointer; transition: all .2s;
+}
+.btn-submit:hover { background: var(--teal2); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(10,124,110,0.22); }
+.btn-submit:disabled { background: var(--border); color: var(--text3); cursor: not-allowed; transform: none; box-shadow: none; }
+
+/* ══════════════════════════════════════
+   VIEW 3: THANK YOU
+══════════════════════════════════════ */
+#v-thanks {
+  align-items: center; justify-content: center; padding: 2rem;
+  background: var(--cream);
+}
+.thanks-card {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 28px; padding: 3rem 2.8rem;
+  width: 100%; max-width: 480px; text-align: center;
+  box-shadow: 0 2px 40px rgba(30,26,22,0.07);
+  animation: riseUp .4s cubic-bezier(.22,1,.36,1);
+}
+.thanks-ring {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: var(--teal3); border: 2px solid var(--teal4);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 36px; margin: 0 auto 1.4rem;
+  animation: popIn .5s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes popIn { from { transform: scale(.3); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.thanks-title { font-size: 24px; font-weight: 900; color: var(--text); margin-bottom: .5rem; }
+.thanks-sub { font-size: 14px; color: var(--text3); line-height: 1.8; }
+.preview-box {
+  background: var(--teal3); border: 1px solid var(--teal4);
+  border-radius: 14px; padding: 14px 16px; margin-top: 1.5rem;
+  font-size: 13.5px; color: var(--teal); text-align: right;
+  line-height: 1.8;
+}
+
+/* ══════════════════════════════════════
+   PASSWORD MODAL
+══════════════════════════════════════ */
+.modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(30,26,22,0.45); backdrop-filter: blur(4px);
+  z-index: 100; align-items: center; justify-content: center;
+}
+.modal-overlay.show { display: flex; }
+.modal-box {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 24px; padding: 2.2rem 2.5rem;
+  width: 100%; max-width: 400px;
+  box-shadow: 0 8px 48px rgba(30,26,22,0.15);
+  animation: riseUp .3s cubic-bezier(.22,1,.36,1);
+  text-align: center;
+}
+.modal-icon { font-size: 32px; margin-bottom: .8rem; }
+.modal-title { font-size: 18px; font-weight: 700; margin-bottom: .4rem; color: var(--text); }
+.modal-sub { font-size: 13px; color: var(--text3); margin-bottom: 1.4rem; }
+.pin-input {
+  width: 100%;
+  background: var(--stone); border: 1.5px solid var(--border);
+  border-radius: 12px; padding: 13px;
+  font-family: 'Tajawal', sans-serif; font-size: 22px;
+  text-align: center; letter-spacing: 8px; color: var(--text);
+  outline: none; transition: all .2s;
+}
+.pin-input:focus { border-color: var(--teal); background: var(--white); box-shadow: 0 0 0 3px rgba(10,124,110,0.08); }
+.modal-error { font-size: 13px; color: var(--rose); margin-top: 8px; min-height: 20px; }
+.modal-btns { display: flex; gap: 10px; margin-top: 1.2rem; }
+.btn-ghost {
+  flex: 1; padding: 12px; background: none;
+  border: 1.5px solid var(--border); border-radius: 12px;
+  font-family: 'Tajawal', sans-serif; font-size: 14px; color: var(--text3);
+  cursor: pointer; transition: all .2s;
+}
+.btn-ghost:hover { border-color: var(--border2); color: var(--text); }
+.btn-confirm {
+  flex: 2; padding: 12px; background: var(--teal); color: var(--white);
+  border: none; border-radius: 12px;
+  font-family: 'Tajawal', sans-serif; font-size: 14px; font-weight: 700;
+  cursor: pointer; transition: all .2s;
+}
+.btn-confirm:hover { background: var(--teal2); }
+
+/* ══════════════════════════════════════
+   VIEW 4: DASHBOARD
+══════════════════════════════════════ */
+#v-dashboard {
+  flex-direction: column;
+  background: var(--cream);
+  min-height: 100vh;
+}
+#v-dashboard::before {
+  content: '';
+  position: fixed; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--teal), #5EEAD4, var(--rose));
+}
+
+.dash-header {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 1.2rem 2rem;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 12px;
+  position: sticky; top: 0; z-index: 10;
+}
+.dash-logo { display: flex; align-items: center; gap: 12px; }
+.dash-logo-icon {
+  width: 40px; height: 40px; border-radius: 12px;
+  background: var(--teal3); border: 1.5px solid var(--teal4);
+  display: flex; align-items: center; justify-content: center; font-size: 18px;
+}
+.dash-logo-text h2 { font-size: 16px; font-weight: 700; color: var(--text); }
+.dash-logo-text p  { font-size: 12px; color: var(--text3); }
+
+.dash-stats { display: flex; gap: 10px; flex-wrap: wrap; }
+.stat-pill {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--stone); border: 1px solid var(--border);
+  border-radius: 20px; padding: 6px 14px;
+}
+.stat-pill .s-val { font-size: 18px; font-weight: 900; color: var(--teal); }
+.stat-pill .s-lbl { font-size: 12px; color: var(--text3); }
+
+.live-badge {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--teal3); border: 1px solid var(--teal4);
+  border-radius: 20px; padding: 5px 14px;
+  font-size: 12px; font-weight: 600; color: var(--teal);
+}
+.live-dot {
+  width: 7px; height: 7px; border-radius: 50%; background: var(--teal);
+  animation: blink 1.4s ease-in-out infinite;
+}
+@keyframes blink { 0%,100%{opacity:1;} 50%{opacity:.3;} }
+
+.dash-body { padding: 1.8rem 2rem; flex: 1; }
+
+.dash-question-banner {
+  background: var(--white); border: 1px solid var(--border);
+  border-right: 4px solid var(--teal);
+  border-radius: 16px; padding: 1.2rem 1.5rem;
+  margin-bottom: 1.8rem;
+}
+.dq-label { font-size: 11px; font-weight: 700; color: var(--teal); letter-spacing: .5px; margin-bottom: 5px; }
+.dq-text  { font-size: 16px; font-weight: 700; color: var(--text); line-height: 1.6; }
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 14px;
+}
+
+/* Answer Card */
+.ans-card {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 20px; padding: 1.3rem 1.5rem;
+  animation: cardIn .4s cubic-bezier(.22,1,.36,1);
+  transition: box-shadow .2s;
+}
+.ans-card:hover { box-shadow: 0 4px 20px rgba(30,26,22,0.08); }
+@keyframes cardIn {
+  from { opacity: 0; transform: scale(.95) translateY(8px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+.ans-card-top {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
+}
+.ans-avatar {
+  width: 36px; height: 36px; border-radius: 11px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 700; flex-shrink: 0;
+  color: var(--white);
+}
+.ans-name { font-size: 14px; font-weight: 700; color: var(--text); }
+.ans-time { font-size: 11px; color: var(--text3); margin-top: 1px; }
+.ans-body {
+  font-size: 13.5px; color: var(--text2); line-height: 1.8;
+  border-top: 1px solid var(--border); padding-top: 10px;
+}
+
+/* empty state */
+.empty-state {
+  grid-column: 1/-1; text-align: center;
+  padding: 5rem 2rem; color: var(--text3);
+}
+.empty-icon { font-size: 48px; margin-bottom: 1rem; }
+.empty-title { font-size: 18px; font-weight: 600; color: var(--text2); margin-bottom: 6px; }
+.empty-sub { font-size: 14px; }
+
+.dash-reset {
+  background: none; border: 1px solid var(--border);
+  border-radius: 10px; padding: 7px 16px;
+  font-family: 'Tajawal', sans-serif; font-size: 12px; color: var(--text3);
+  cursor: pointer; transition: all .2s; display: flex; align-items: center; gap: 6px;
+}
+.dash-reset:hover { border-color: var(--rose); color: var(--rose); }
+
+/* highlight new card */
+.ans-card.new-glow { animation: cardIn .4s cubic-bezier(.22,1,.36,1), glowIn .6s ease; }
+@keyframes glowIn {
+  0%   { box-shadow: 0 0 0 3px rgba(10,124,110,0.3), 0 4px 20px rgba(10,124,110,0.15); }
+  100% { box-shadow: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ MODAL: PASSWORD ═══ -->
+<div class="modal-overlay" id="modal">
+  <div class="modal-box">
+    <div class="modal-icon">🔐</div>
+    <div class="modal-title">لوحة المتابعة</div>
+    <div class="modal-sub">أدخلي كلمة المرور للدخول إلى شاشة المعلمة</div>
+    <input class="pin-input" id="pinInput" type="password" maxlength="6" placeholder="••••" onkeydown="if(event.key==='Enter') checkPin()">
+    <div class="modal-error" id="pinErr"></div>
+    <div class="modal-btns">
+      <button class="btn-ghost" onclick="closeModal()">إلغاء</button>
+      <button class="btn-confirm" onclick="checkPin()">دخول ←</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ VIEW 1: WELCOME ═══ -->
+<div class="view active" id="v-welcome">
+  <div class="welcome-card">
+    <div class="w-tag"><div class="w-dot"></div> ورشة Claude.ai</div>
+    <h1 class="w-title">أهلاً بكِ 👋</h1>
+    <p class="w-subtitle">قبل أن نبدأ — نريد أن نسمع منكِ<br>سؤال واحد عن تجربتك التدريسية</p>
+
+    <div class="field-group">
+      <label>اسمك الكريم</label>
+      <input type="text" id="nameInput" placeholder="مثال: أ. نورة المطيري" autocomplete="off" onkeydown="if(event.key==='Enter') startActivity()">
+    </div>
+
+    <button class="btn-main" onclick="startActivity()">
+      ابدئي النشاط ←
+    </button>
+
+    <div class="teacher-link">
+      <button class="teacher-btn" onclick="openModal()">
+        🔐 &nbsp; شاشة المعلمة
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ VIEW 2: QUESTION ═══ -->
+<div class="view" id="v-question">
+  <div class="q-card">
+    <div class="q-greeting">
+      <div class="q-avatar">👩‍🏫</div>
+      <div>
+        <div class="q-greeting-text">مرحباً</div>
+        <div class="q-greeting-name" id="greetName">—</div>
+      </div>
+    </div>
+    <hr class="q-divider">
+    <div class="q-label">سؤال النشاط</div>
+    <div class="q-text">
+      ما هي التحديات التي تواجهينها عند إنشاء أنشطة تفاعلية في حصة التعلم عن بُعد؟
+    </div>
+    <textarea class="answer-area" id="ansInput" placeholder="شاركينا أهم تحدٍّ تواجهينه... (جملة أو أكثر)" maxlength="400" oninput="updateCount()"></textarea>
+    <div class="char-count"><span id="charCount">0</span> / 400</div>
+    <button class="btn-submit" id="submitBtn" onclick="submitAnswer()" disabled>
+      إرسال ←
+    </button>
+  </div>
+</div>
+
+<!-- ═══ VIEW 3: THANK YOU ═══ -->
+<div class="view" id="v-thanks">
+  <div class="thanks-card">
+    <div class="thanks-ring">✅</div>
+    <div class="thanks-title">شكراً لكِ!</div>
+    <div class="thanks-sub">وصلت إجابتك إلى المعلمة<br>سنناقشها معاً خلال لحظات</div>
+    <div class="preview-box" id="previewBox"></div>
+  </div>
+</div>
+
+<!-- ═══ VIEW 4: DASHBOARD ═══ -->
+<div class="view" id="v-dashboard" style="display:none; flex-direction:column;">
+  <div class="dash-header">
+    <div class="dash-logo">
+      <div class="dash-logo-icon">📊</div>
+      <div class="dash-logo-text">
+        <h2>شاشة المتابعة</h2>
+        <p>إجابات المعلمات — لحظياً</p>
+      </div>
+    </div>
+    <div class="dash-stats">
+      <div class="stat-pill">
+        <span class="s-val" id="totalCount">0</span>
+        <span class="s-lbl">استجابة</span>
+      </div>
+      <div class="live-badge"><div class="live-dot"></div> مباشر</div>
+      <button class="dash-reset" onclick="resetAll()">🗑 مسح الكل</button>
+    </div>
+  </div>
+
+  <div class="dash-body">
+    <div class="dash-question-banner">
+      <div class="dq-label">السؤال المطروح</div>
+      <div class="dq-text">ما هي التحديات التي تواجهينها عند إنشاء أنشطة تفاعلية في حصة التعلم عن بُعد؟</div>
+    </div>
+    <div class="cards-grid" id="cardsGrid">
+      <div class="empty-state">
+        <div class="empty-icon">⏳</div>
+        <div class="empty-title">بانتظار الإجابات...</div>
+        <div class="empty-sub">ستظهر بطاقات المعلمات هنا فور إرسالهن إجاباتهن</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══ CONFIG ═══
+const DB_URL = 'https://cyber-safety-class-default-rtdb.firebaseio.com';
+const DB_PATH = '/workshop_challenges';
+const PIN = '1234';
+
+// Avatar colors
+const COLORS = ['#0A7C6E','#C4516A','#6B4FA0','#4A7C59','#B5621E','#2563EB','#9A7B2E','#0E7490'];
+
+let userName = '';
+let knownKeys = new Set();
+let allData = {};
+let eventSource = null;
+
+// ═══ HELPERS ═══
+function showView(id) {
+  document.querySelectorAll('.view').forEach(v => { v.classList.remove('active'); v.style.display = ''; });
+  const el = document.getElementById(id);
+  el.style.display = 'flex';
+  el.classList.add('active');
+}
+
+function initials(name) {
+  return name ? name.trim().replace(/^أ\.\s*/, '').charAt(0) : '؟';
+}
+
+function colorFor(name) {
+  let hash = 0;
+  for (let c of name) hash = (hash * 31 + c.charCodeAt(0)) % COLORS.length;
+  return COLORS[Math.abs(hash) % COLORS.length];
+}
+
+function timeStr(ts) {
+  if (!ts) return '';
+  return new Date(ts).toLocaleTimeString('ar', { hour: '2-digit', minute: '2-digit' });
+}
+
+// ═══ FLOW ═══
+function startActivity() {
+  const n = document.getElementById('nameInput').value.trim();
+  if (!n) { document.getElementById('nameInput').focus(); document.getElementById('nameInput').style.borderColor = '#C4516A'; return; }
+  userName = n;
+  document.getElementById('greetName').textContent = n;
+  showView('v-question');
+}
+
+function updateCount() {
+  const val = document.getElementById('ansInput').value;
+  document.getElementById('charCount').textContent = val.length;
+  document.getElementById('submitBtn').disabled = val.trim().length < 5;
+}
+
+async function submitAnswer() {
+  const answer = document.getElementById('ansInput').value.trim();
+  if (!answer) return;
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true; btn.textContent = 'جاري الإرسال...';
+  const key = 'resp_' + Date.now();
+  const data = { name: userName, answer, timestamp: Date.now() };
+  try {
+    const r = await fetch(`${DB_URL}${DB_PATH}/${key}.json`, {
+      method: 'PUT', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    if (!r.ok) throw new Error();
+    document.getElementById('previewBox').textContent = '«' + answer + '»';
+    showView('v-thanks');
+  } catch {
+    btn.disabled = false; btn.textContent = 'إرسال ←';
+    alert('حدث خطأ — تأكدي من اتصالك بالإنترنت وحاولي مجدداً');
+  }
+}
+
+// ═══ PASSWORD ═══
+function openModal() { document.getElementById('modal').classList.add('show'); setTimeout(()=>document.getElementById('pinInput').focus(),100); }
+function closeModal() { document.getElementById('modal').classList.remove('show'); document.getElementById('pinInput').value=''; document.getElementById('pinErr').textContent=''; }
+
+function checkPin() {
+  const val = document.getElementById('pinInput').value;
+  if (val === PIN) {
+    closeModal();
+    openDashboard();
+  } else {
+    document.getElementById('pinErr').textContent = '❌ كلمة المرور غير صحيحة';
+    document.getElementById('pinInput').value = '';
+    document.getElementById('pinInput').focus();
+  }
+}
+
+// ═══ DASHBOARD ═══
+function openDashboard() {
+  document.querySelectorAll('.view').forEach(v => { v.classList.remove('active'); v.style.display = 'none'; });
+  const dash = document.getElementById('v-dashboard');
+  dash.style.display = 'flex';
+  startListening();
+}
+
+function buildCard(id, d, isNew = false) {
+  const color = colorFor(d.name || '');
+  const ini = initials(d.name || '');
+  return `
+  <div class="ans-card ${isNew ? 'new-glow' : ''}" id="card_${id}">
+    <div class="ans-card-top">
+      <div class="ans-avatar" style="background:${color}">${ini}</div>
+      <div>
+        <div class="ans-name">${d.name || ''}</div>
+        <div class="ans-time">${timeStr(d.timestamp)}</div>
+      </div>
+    </div>
+    <div class="ans-body">${d.answer || ''}</div>
+  </div>`;
+}
+
+function renderDash(highlightKey = null) {
+  const entries = Object.entries(allData).sort((a, b) => (b[1].timestamp || 0) - (a[1].timestamp || 0));
+  const grid = document.getElementById('cardsGrid');
+  document.getElementById('totalCount').textContent = entries.length;
+  if (entries.length === 0) {
+    grid.innerHTML = `<div class="empty-state"><div class="empty-icon">⏳</div><div class="empty-title">بانتظار الإجابات...</div><div class="empty-sub">ستظهر بطاقات المعلمات هنا فور إرسالهن إجاباتهن</div></div>`;
+    return;
+  }
+  grid.innerHTML = entries.map(([id, d]) => buildCard(id, d, id === highlightKey)).join('');
+}
+
+function startListening() {
+  if (eventSource) eventSource.close();
+  eventSource = new EventSource(`${DB_URL}${DB_PATH}.json`);
+
+  eventSource.addEventListener('put', e => {
+    const { path, data } = JSON.parse(e.data);
+    if (path === '/') {
+      allData = data || {};
+      knownKeys = new Set(Object.keys(allData));
+      renderDash();
+    } else {
+      const key = path.replace('/', '');
+      if (data === null) { delete allData[key]; knownKeys.delete(key); renderDash(); }
+      else {
+        const isNew = !knownKeys.has(key);
+        allData[key] = data; knownKeys.add(key);
+        renderDash(isNew ? key : null);
+      }
+    }
+  });
+
+  eventSource.addEventListener('patch', e => {
+    const { data } = JSON.parse(e.data);
+    if (data) { Object.assign(allData, data); renderDash(); }
+  });
+
+  eventSource.onerror = () => {
+    eventSource.close();
+    setTimeout(() => {
+      setInterval(async () => {
+        try {
+          const r = await fetch(`${DB_URL}${DB_PATH}.json`);
+          const d = await r.json();
+          allData = d || {};
+          renderDash();
+        } catch {}
+      }, 3000);
+    }, 2000);
+  };
+}
+
+async function resetAll() {
+  if (!confirm('هل أنتِ متأكدة من مسح جميع الإجابات؟')) return;
+  await fetch(`${DB_URL}${DB_PATH}.json`, { method: 'DELETE' });
+  allData = {}; knownKeys = new Set();
+  renderDash();
+}
+</script>
+</body>
+</html>
