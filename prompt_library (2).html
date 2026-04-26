@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مكتبة Prompts | الاستراتيجيات التعليمية</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F5F3EF;
+  --white: #FFFFFF;
+  --ink: #1C1917;
+  --ink2: #44403C;
+  --ink3: #78716C;
+  --border: #E7E3DD;
+  --border2: #D4CFC8;
+
+  /* Category colors */
+  --c1: #C2410C;  --c1l: #FFF7ED;  --c1b: #FED7AA; /* التفكير والتنظيم - برتقالي */
+  --c2: #065F46;  --c2l: #ECFDF5;  --c2b: #A7F3D0; /* التقييم - أخضر */
+  --c3: #1D4ED8;  --c3l: #EFF6FF;  --c3b: #BFDBFE; /* التفاعل - أزرق */
+  --c4: #7C3AED;  --c4l: #F5F3FF;  --c4b: #DDD6FE; /* المراجعة - بنفسجي */
+  --c5: #BE123C;  --c5l: #FFF1F2;  --c5b: #FECDD3; /* التعلم الذاتي - أحمر */
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Tajawal', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+}
+
+/* ─── HEADER ─── */
+.site-header {
+  background: var(--ink);
+  padding: 2rem;
+  position: relative; overflow: hidden;
+}
+.site-header::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(
+    45deg, transparent, transparent 30px,
+    rgba(255,255,255,0.02) 30px, rgba(255,255,255,0.02) 60px
+  );
+}
+.header-inner { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
+.header-tag {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 30px; padding: 5px 16px;
+  font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.7);
+  margin-bottom: 1rem;
+}
+.header-tag .dot { width: 6px; height: 6px; border-radius: 50%; background: #34D399; }
+.site-header h1 { font-size: 32px; font-weight: 900; color: #FFF; margin-bottom: 6px; }
+.site-header h1 span { color: #FCD34D; }
+.site-header p { font-size: 14px; color: rgba(255,255,255,0.55); line-height: 1.8; max-width: 600px; }
+
+/* ─── FILTER BAR ─── */
+.filter-bar {
+  background: var(--white); border-bottom: 1px solid var(--border);
+  padding: .9rem 2rem;
+  position: sticky; top: 0; z-index: 50;
+  display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
+}
+.filter-label { font-size: 12px; font-weight: 700; color: var(--ink3); margin-left: 4px; }
+.ftab {
+  background: none; border: 1.5px solid var(--border2);
+  border-radius: 30px; padding: 6px 16px;
+  font-family: 'Tajawal', sans-serif; font-size: 13px; font-weight: 500;
+  color: var(--ink3); cursor: pointer; transition: all .18s;
+  white-space: nowrap;
+}
+.ftab:hover { border-color: var(--ink); color: var(--ink); }
+.ftab.on { border-color: transparent; color: white; font-weight: 700; }
+
+.search-wrap {
+  margin-right: auto; position: relative;
+}
+.search-input {
+  background: var(--bg); border: 1.5px solid var(--border2);
+  border-radius: 30px; padding: 7px 36px 7px 16px;
+  font-family: 'Tajawal', sans-serif; font-size: 13px; color: var(--ink);
+  outline: none; width: 220px; transition: all .2s;
+}
+.search-input:focus { border-color: var(--ink); background: var(--white); }
+.search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 14px; }
+
+/* ─── MAIN ─── */
+.main { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+
+/* ─── CATEGORY ─── */
+.category { margin-bottom: 3rem; }
+.cat-header {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 1.2rem; padding-bottom: 1rem;
+  border-bottom: 2px solid var(--border);
+}
+.cat-icon { font-size: 24px; }
+.cat-title { font-size: 19px; font-weight: 900; color: var(--ink); }
+.cat-count {
+  font-size: 12px; font-weight: 700; padding: 3px 10px;
+  border-radius: 20px; margin-right: 4px;
+}
+
+/* ─── CARDS GRID ─── */
+.cards-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(440px, 1fr)); gap: 16px;
+}
+@media(max-width: 520px) { .cards-grid { grid-template-columns: 1fr; } }
+
+/* ─── PROMPT CARD ─── */
+.prompt-card {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 20px; overflow: hidden;
+  transition: transform .2s, box-shadow .2s;
+  cursor: pointer;
+}
+.prompt-card:hover { transform: translateY(-3px); box-shadow: 0 8px 32px rgba(0,0,0,0.09); }
+
+.card-accent { height: 4px; }
+
+.card-top {
+  padding: 1.2rem 1.4rem .8rem;
+  display: flex; align-items: flex-start; gap: 12px;
+}
+.strat-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  border-radius: 8px; padding: 5px 12px;
+  font-size: 12px; font-weight: 700; flex-shrink: 0;
+}
+.card-titles { flex: 1; }
+.card-strat { font-size: 15px; font-weight: 700; color: var(--ink); }
+.card-subject {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 12px; font-weight: 600; color: var(--ink3);
+  margin-top: 3px;
+}
+.card-subject .subj-dot { width: 5px; height: 5px; border-radius: 50%; }
+
+/* Collapsible prompt */
+.card-prompt-wrap { padding: 0 1.4rem 1rem; }
+.prompt-preview {
+  font-size: 13px; color: var(--ink2); line-height: 1.85;
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
+  overflow: hidden; transition: all .3s;
+}
+.prompt-preview.expanded { -webkit-line-clamp: unset; }
+.prompt-box {
+  background: #FAFAF8; border: 1.5px solid var(--border);
+  border-radius: 12px; padding: 14px;
+  font-size: 13px; line-height: 1.95; color: var(--ink2);
+  white-space: pre-wrap; display: none;
+  margin-top: 10px;
+}
+.prompt-box.show { display: block; }
+
+/* fill spans */
+.prompt-box .fill { color: #C2410C; font-weight: 700; background: #FFF7ED; border-radius: 4px; padding: 1px 6px; }
+
+.card-footer {
+  padding: .8rem 1.4rem 1.2rem;
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+}
+.btn-expand {
+  background: none; border: 1.5px solid var(--border2);
+  border-radius: 10px; padding: 7px 14px;
+  font-family: 'Tajawal', sans-serif; font-size: 12.5px;
+  font-weight: 600; color: var(--ink3); cursor: pointer; transition: all .18s;
+  display: flex; align-items: center; gap: 5px;
+}
+.btn-expand:hover { border-color: var(--ink); color: var(--ink); }
+.btn-copy {
+  padding: 7px 16px; border: none; border-radius: 10px;
+  font-family: 'Tajawal', sans-serif; font-size: 12.5px; font-weight: 700;
+  cursor: pointer; transition: all .18s; display: flex; align-items: center; gap: 5px;
+  color: white;
+}
+.btn-copy:hover { filter: brightness(1.1); transform: translateY(-1px); }
+.btn-copy:active { transform: translateY(0); }
+
+.open-claude-btn {
+  margin-right: auto;
+  display: flex; align-items: center; gap: 5px;
+  background: none; border: 1.5px solid var(--border2);
+  border-radius: 10px; padding: 7px 14px;
+  font-family: 'Tajawal', sans-serif; font-size: 12px;
+  color: var(--ink3); cursor: pointer; transition: all .18s;
+  text-decoration: none;
+}
+.open-claude-btn:hover { border-color: #F97316; color: #C2410C; }
+
+/* ─── COPIED TOAST ─── */
+.toast {
+  position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(100px);
+  background: var(--ink); color: white;
+  border-radius: 30px; padding: 10px 24px;
+  font-size: 14px; font-weight: 600;
+  z-index: 999; transition: transform .3s cubic-bezier(.34,1.56,.64,1);
+  pointer-events: none;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+/* ─── STATS ROW ─── */
+.stats-row {
+  display: flex; gap: 12px; margin-bottom: 1.8rem; flex-wrap: wrap;
+}
+.stat-box {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 14px; padding: 1rem 1.4rem;
+  flex: 1; min-width: 120px; text-align: center;
+}
+.stat-box .sv { font-size: 28px; font-weight: 900; display: block; }
+.stat-box .sl { font-size: 12px; color: var(--ink3); margin-top: 2px; }
+
+/* hidden */
+.prompt-card.hidden { display: none; }
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast">✅ تم نسخ الـ Prompt!</div>
+
+<!-- ─── HEADER ─── -->
+<div class="site-header">
+  <div class="header-inner">
+    <div class="header-tag"><div class="dot"></div> ورشة Claude.ai — الأدوات التدريبية</div>
+    <h1>مكتبة <span>Prompts</span> الاستراتيجيات التعليمية</h1>
+    <p>كل استراتيجية تقليدية مع الـ Prompt الجاهز لتحويلها إلى نشاط إلكتروني تفاعلي<br>انسخي الـ Prompt مباشرة في Claude.ai وستحصلين على النشاط خلال ثوانٍ</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:1.2rem;"><div style="background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.25);border-radius:10px;padding:7px 16px;font-size:13px;color:#4ade80;">🔥 Firebase مدمج في كل Prompt</div><div style="background:rgba(59,130,246,0.12);border:1px solid rgba(59,130,246,0.25);border-radius:10px;padding:7px 16px;font-size:13px;color:#93c5fd;">🌐 مُصمَّم للتعلم عن بُعد</div><div style="background:rgba(251,191,36,0.12);border:1px solid rgba(251,191,36,0.25);border-radius:10px;padding:7px 16px;font-size:13px;color:#fcd34d;">🔐 شاشة المعلمة بكلمة مرور</div></div>
+  </div>
+</div>
+
+<!-- ─── FILTER BAR ─── -->
+<div class="filter-bar">
+  <span class="filter-label">تصفية:</span>
+  <button class="ftab on" style="background:var(--ink);" onclick="filter('all',this)">الكل</button>
+  <button class="ftab" onclick="filter('think',this)">🧠 التفكير</button>
+  <button class="ftab" onclick="filter('assess',this)">📋 التقييم</button>
+  <button class="ftab" onclick="filter('interact',this)">🤝 التفاعل</button>
+  <button class="ftab" onclick="filter('review',this)">🔄 المراجعة</button>
+  <button class="ftab" onclick="filter('self',this)">⭐ الذاتي</button>
+  <div class="search-wrap">
+    <input class="search-input" type="text" placeholder="ابحثي عن استراتيجية..." oninput="search(this.value)">
+    <span class="search-icon">🔍</span>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- Stats -->
+<div class="stats-row">
+  <div class="stat-box"><span class="sv" style="color:var(--c1)">16</span><span class="sl">استراتيجية</span></div>
+  <div class="stat-box"><span class="sv" style="color:var(--c3)">9</span><span class="sl">مادة دراسية</span></div>
+  <div class="stat-box"><span class="sv" style="color:var(--c2)">16</span><span class="sl">Prompt جاهز</span></div>
+  <div class="stat-box"><span class="sv" style="color:var(--c5)">0 ث</span><span class="sl">وقت النسخ</span></div>
+</div>
+
+<div id="cardsContainer"></div>
+
+</div><!-- /main -->
+
+<script>
+// ═══════════════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════════════
+// ─── SHARED REQUIREMENTS (appended to every prompt) ───
+const SHARED = `
+
+══════════════════════════════════════
+⚠️ متطلبات ثابتة لجميع الأنشطة (التعلم عن بُعد):
+══════════════════════════════════════
+🌐 البيئة: التعلم عن بُعد — الطلاب على أجهزتهم المنزلية ولا يجلسون بجانب بعض
+💬 التفاعل: يتم فقط من خلال الكتابة داخل الملف — لا حديث شفهي
+🔥 Firebase: https://cyber-safety-class-b266a-default-rtdb.firebaseio.com
+
+📡 إرسال البيانات:
+✓ كل إجابة يكتبها الطالب تُرسل تلقائياً لـ Firebase عند الضغط على «إرسال»
+✓ المسار: /[اسم_النشاط]/[مفتاح_فريد]
+✓ يُحفظ: الاسم + الإجابة + التوقيت
+
+🖥️ شاشة المعلمة (مدمجة في نفس الملف):
+✓ زر «شاشة المعلمة 🔐» يظهر في أسفل صفحة الطالب
+✓ عند الضغط: تظهر نافذة إدخال كلمة المرور (كلمة المرور: 1234)
+✓ عند الدخول الصحيح: تظهر لوحة المتابعة الحية في نفس الصفحة
+✓ اللوحة تُظهر: اسم كل طالب + إجابته + وقت الإرسال
+✓ الإجابات تتحدث لحظياً بدون إعادة تحميل
+✓ عداد: كم طالب أرسل
+✓ زر «مسح الكل» لإعادة الجلسة
+✓ تصميم اللوحة يختلف بصرياً عن شاشة الطالب
+
+📱 تقني:
+✓ ملف HTML واحد مكتفٍ بذاته
+✓ يعمل على الهاتف والحاسب
+✓ كل النصوص باللغة العربية`;
+
+const categories = [
+  {
+    id: 'think', icon: '🧠', title: 'استراتيجيات التفكير والتنظيم',
+    color: 'var(--c1)', light: 'var(--c1l)', border: 'var(--c1b)',
+    strategies: [
+      {
+        strat: 'الخريطة الذهنية',
+        subject: 'الدراسات الاجتماعية', subjIcon: '🌍',
+        prompt: `اصنعي لي نشاط HTML «خريطة ذهنية» لمادة الدراسات الاجتماعية للصف [السادس]
+للتعلم عن بُعد — الطالبة تعمل بشكل فردي على جهازها
+
+الموضوع: مناطق قطر الجغرافية
+المفهوم المحوري: «مناطق قطر»
+الأفرع: المنطقة الشمالية / الوسطى / الجنوبية / العاصمة الدوحة / السواحل
+
+شاشة الطالبة:
+✓ خريطة ذهنية مرئية — الطالبة تضغط على فرع وتكتب معلومة
+✓ إضافة أفرع فرعية جديدة بزر «+»
+✓ كل فرع رئيسي بلون مختلف
+✓ زر «أرسلي خريطتك للمعلمة» يحوّل الخريطة لنص ويرسلها` + SHARED
+      },
+      {
+        strat: 'مخطط فين (Venn)',
+        subject: 'العلوم', subjIcon: '🔬',
+        prompt: `اصنعي لي نشاط HTML «مخطط فين» لمادة العلوم للصف [الخامس]
+للتعلم عن بُعد — الطالبة تعمل بشكل فردي على جهازها
+
+موضوع المقارنة: الخلية النباتية vs الخلية الحيوانية
+
+شاشة الطالبة:
+✓ دائرتان متداخلتان بألوان مختلفة
+✓ الطالبة تكتب في كل منطقة (يسار / وسط / يمين)
+✓ تلميح يظهر عند طلبه
+✓ زر «تحقق من إجابتي» يُظهر الإجابة النموذجية
+✓ زر «أرسلي مخططك للمعلمة»` + SHARED
+      },
+      {
+        strat: 'جدول T-Chart',
+        subject: 'اللغة العربية', subjIcon: '📖',
+        prompt: `اصنعي لي نشاط HTML «جدول T» لمادة اللغة العربية للصف [الرابع]
+للتعلم عن بُعد — الطالبة تعمل بشكل فردي على جهازها
+
+موضوع المقارنة: الفعل المبني vs الفعل المعرب
+
+شاشة الطالبة:
+✓ جدولان جانب بجانب بعناوين واضحة
+✓ كل خانة قابلة للكتابة
+✓ زر «أضيفي مثالاً» يُضيف صفاً جديداً
+✓ في الأسفل: «ما الفرق الأساسي بينهما؟» — خانة مفتوحة
+✓ زر «أرسلي جدولك للمعلمة»` + SHARED
+      },
+      {
+        strat: 'هرم الأولويات',
+        subject: 'التربية الإسلامية', subjIcon: '☪️',
+        prompt: `اصنعي لي نشاط HTML «هرم الأولويات» لمادة التربية الإسلامية للصف [السابع]
+للتعلم عن بُعد — الطالبة تعمل بشكل فردي على جهازها
+
+الموضوع: ترتيب مراتب العبادات حسب الأهمية
+العناصر: الصلاة / الزكاة / الصوم / الحج / الجهاد بالنفس / الجهاد بالمال / الأمر بالمعروف / النهي عن المنكر
+
+شاشة الطالبة:
+✓ هرم مرئي بـ 4 مستويات
+✓ الطالبة تسحب كل عنصر لمستواه بالسحب والإفلات
+✓ زر «تحقق» يُظهر الترتيب الصحيح مع التعليل
+✓ تأثير حركي للإجابة الصحيحة
+✓ زر «أرسلي ترتيبك للمعلمة»` + SHARED
+      },
+    ]
+  },
+  {
+    id: 'assess', icon: '📋', title: 'استراتيجيات التقييم',
+    color: 'var(--c2)', light: 'var(--c2l)', border: 'var(--c2b)',
+    strategies: [
+      {
+        strat: 'Exit Ticket ذكي',
+        subject: 'الرياضيات', subjIcon: '🔢',
+        prompt: `اصنعي لي نشاط HTML «Exit Ticket» لمادة الرياضيات للصف [الثامن]
+للتعلم عن بُعد — في آخر 5 دقائق من الحصة
+
+موضوع الحصة: المعادلات الخطية
+
+شاشة الطالبة — 3 أسئلة متدرجة:
+السؤال 1 (فهم): «ما المقصود بالمعادلة الخطية؟ اكتبي تعريفاً بكلماتك»
+السؤال 2 (تطبيق): «حلّي المعادلة: 3x + 7 = 22 واكتبي خطوات الحل»
+السؤال 3 (تفكير ناقد): «لماذا تُسمى خطية وليست تربيعية؟»
+
+✓ مؤقت 5 دقائق مرئي
+✓ شريط تقدم: السؤال 1 من 3
+✓ بعد الإرسال: تقييم ذاتي بالنجوم (كيف أقيّمين فهمك؟)
+✓ رسالة تشجيع ختامية
+✓ زر «أرسلي إجاباتك للمعلمة»` + SHARED
+      },
+      {
+        strat: 'بطاقة المخرجات (3-2-1)',
+        subject: 'الحاسب', subjIcon: '💻',
+        prompt: `اصنعي لي نشاط HTML «بطاقة 3-2-1» لمادة الحاسب للصف [السابع]
+للتعلم عن بُعد — في نهاية الحصة
+
+الموضوع: شبكات الحاسوب
+
+شاشة الطالبة — 3 أقسام:
+3️⃣ «اكتبي 3 أشياء تعلّمتِها اليوم»
+2️⃣ «اكتبي شيئين أثارا اهتمامك وتريدين معرفة المزيد عنهما»
+1️⃣ «اكتبي سؤالاً واحداً لا يزال عندك»
+
+✓ كل قسم بلون مختلف
+✓ خانات كتابة قابلة للتوسع
+✓ مؤقت 5 دقائق
+✓ زر «أرسلي بطاقتك للمعلمة»` + SHARED
+      },
+      {
+        strat: 'مقياس الفهم الحي',
+        subject: 'الفيزياء', subjIcon: '⚡',
+        prompt: `اصنعي لي نشاط HTML «مقياس الفهم الحي» لمادة الفيزياء للصف [التاسع]
+للتعلم عن بُعد — يُستخدم في منتصف الحصة لقياس الفهم لحظياً
+
+شاشة الطالبة:
+✓ 3 أزرار كبيرة وواضحة:
+  🟢 «فهمت تماماً — تابعي»
+  🟡 «فهمت جزئياً — أريد مثالاً»
+  🔴 «لم أفهم — أحتاج شرحاً آخر»
+✓ خانة نص اختيارية: «ما الجزء الذي لم يتضح لك؟»
+✓ يمكن تغيير الإجابة في أي وقت
+
+شاشة المعلمة (من نفس الملف بكلمة مرور):
+✓ رسم بياني دائري يتحدث كل ثانيتين
+✓ تنبيه لوني إذا تجاوز الأحمر 30%
+✓ أسباب عدم الفهم تظهر كبطاقات
+✓ عداد المشاركين` + SHARED
+      },
+    ]
+  },
+  {
+    id: 'interact', icon: '🤝', title: 'استراتيجيات التفاعل الجماعي',
+    color: 'var(--c3)', light: 'var(--c3l)', border: 'var(--c3b)',
+    strategies: [
+      {
+        strat: 'Think-Pair-Share كتابي',
+        subject: 'التربية الإسلامية', subjIcon: '☪️',
+        prompt: `اصنعي لي نشاط HTML «فكّر - زاوِج - شارك» لمادة التربية الإسلامية للصف [الثامن]
+للتعلم عن بُعد — التزاوج يتم عبر الكتابة المشتركة في Firebase لا بالحديث
+
+السؤال المحوري: «كيف تُطبّقين قيمة الصدق في حياتك اليومية؟»
+
+المرحلة 1 — فكّر (3 دقائق):
+✓ الطالبة تكتب إجابتها الفردية
+✓ مؤقت تنازلي — لا ترى إجابات الآخرين بعد
+
+المرحلة 2 — زاوِج (4 دقائق):
+✓ تُظهر الشاشة إجابة طالبة أخرى (عشوائية من Firebase)
+✓ الطالبة تكتب: «ما الذي أضافته زميلتي لفكرتي؟»
+✓ تُرسل الإجابة المشتركة
+
+المرحلة 3 — شارك (3 دقائق):
+✓ ملخص ما كتبته في المرحلتين
+✓ زر «أرسلي خلاصتك للمعلمة»
+✓ انتقال تلقائي بمؤقت بين المراحل` + SHARED
+      },
+      {
+        strat: 'جولة المعرض الرقمي',
+        subject: 'التربية البدنية', subjIcon: '⚽',
+        prompt: `اصنعي لي نشاط HTML «جولة المعرض الرقمي» لمادة التربية البدنية للصف [السادس]
+للتعلم عن بُعد — الطالبة تتنقل بين المحطات الرقمية وتكتب إجاباتها
+
+الموضوع: قواعد الألعاب الرياضية
+
+5 محطات رقمية (في نفس الملف):
+المحطة 1 — كرة القدم: [3 قواعد أساسية] + مهمة: «أضيفي قاعدة تعرفينها كتابةً»
+المحطة 2 — كرة السلة: [أبعاد الملعب + مدة المباراة] + مهمة: «الفرق بين التصويب والتمرير؟»
+المحطة 3 — كرة الطائرة: [عدد اللاعبين + النقاط] + مهمة: «متى ينتهي الشوط؟»
+المحطة 4 — السباحة: [أنواع السباحة] + مهمة: «رتّبي الأنواع من الأسهل للأصعب»
+المحطة 5 — ألعاب القوى: [مسافات السباق] + مهمة: «أي رياضة تفضلين ولماذا؟»
+
+✓ مؤقت 5 دقائق لكل محطة
+✓ شريط تقدم يُظهر المحطة الحالية
+✓ إجابة كل محطة تُرسل لـ Firebase عند الانتقال تلقائياً` + SHARED
+      },
+      {
+        strat: 'العصف الذهني الجماعي الحي',
+        subject: 'الدراسات الاجتماعية', subjIcon: '🌍',
+        prompt: `اصنعي لي نشاط HTML «عصف ذهني جماعي حي» لمادة الدراسات الاجتماعية للصف [الخامس]
+للتعلم عن بُعد — كل طالبة تكتب أفكارها وتظهر للجميع
+
+الموضوع: «كيف نحافظ على البيئة في قطر؟»
+
+شاشة الطالبة:
+✓ السؤال يظهر كبيراً
+✓ خانة كتابة الفكرة (جملة واحدة أو أكثر)
+✓ زر «أضيفي فكرتك» يرسلها ويُظهرها على اللوح المشترك
+✓ بعد الإرسال: «هل عندك فكرة أخرى؟» — يمكن الإرسال عدة مرات
+✓ الطالبة ترى أفكار زميلاتها تتراكم على الشاشة
+
+شاشة المعلمة (من نفس الملف بكلمة مرور):
+✓ لوح حي بجميع الأفكار كبطاقات ملوّنة
+✓ تحديث لحظي
+✓ زر تمييز أفضل الأفكار بنجمة
+✓ زر طباعة اللوح` + SHARED
+      },
+      {
+        strat: 'كرة الثلج الكتابية',
+        subject: 'الرياضيات', subjIcon: '🔢',
+        prompt: `اصنعي لي نشاط HTML «كرة الثلج» لمادة الرياضيات للصف [الخامس]
+للتعلم عن بُعد — كل مرحلة تتم بالكتابة وتُرسل لـ Firebase
+
+السؤال: «ما طرق إيجاد مساحة الأشكال الهندسية التي تعرفينها؟»
+
+المرحلة 1 — فردي (3 دقائق):
+✓ الطالبة تكتب ما تعرفه وتُرسل
+
+المرحلة 2 — ثنائي (4 دقائق):
+✓ تظهر إجابة طالبة أخرى (من Firebase)
+✓ الطالبة تكتب: «ما الذي أضافته زميلتي؟ ماذا تعلّمت منها؟»
+✓ تُرسل الإجابة الموسّعة
+
+المرحلة 3 — جماعي (3 دقائق):
+✓ تظهر 4 إجابات من مجموعات مختلفة
+✓ الطالبة تكتب قائمتها الكاملة الموحّدة وتُرسلها
+✓ شاشة المعلمة: مقارنة جميع القوائم` + SHARED
+      },
+    ]
+  },
+  {
+    id: 'review', icon: '🔄', title: 'استراتيجيات المراجعة',
+    color: 'var(--c4)', light: 'var(--c4l)', border: 'var(--c4b)',
+    strategies: [
+      {
+        strat: 'بطاقات المطابقة',
+        subject: 'العلوم', subjIcon: '🔬',
+        prompt: `اصنعي لي لعبة HTML «بطاقات المطابقة» لمادة العلوم للصف [الرابع]
+للتعلم عن بُعد — الطالبة تلعب على جهازها وترسل نتيجتها
+
+10 أزواج (مصطلح ← تعريفه):
+1. الضوء ← موجات تنتقل بسرعة هائلة
+2. الكسوف ← حجب القمر لضوء الشمس
+3. الخسوف ← دخول القمر في ظل الأرض
+4. الانعكاس ← ارتداد الضوء عن سطح مرآة
+5. الانكسار ← تغيّر مسار الضوء بين وسطين
+6. الطيف ← تحلّل الضوء إلى ألوانه السبعة
+7. العدسة المحدبة ← تجمّع أشعة الضوء
+8. العدسة المقعّرة ← تشتيت أشعة الضوء
+9. قوس قزح ← طيف ضوئي طبيعي
+10. البريزم ← مثلث زجاجي يُحلّل الضوء
+
+✓ سحب وإفلات بالفأرة واللمس
+✓ ترتيب عشوائي كل مرة
+✓ تأثير أخضر للصحيح، اهتزاز للخطأ
+✓ كونفيتي عند الإكمال + النتيجة
+✓ زر «أرسلي نتيجتك للمعلمة» بعد الإنهاء` + SHARED
+      },
+      {
+        strat: 'ترتيب الخطوات',
+        subject: 'التربية الإسلامية', subjIcon: '☪️',
+        prompt: `اصنعي لي لعبة HTML «رتّبي الخطوات» لمادة التربية الإسلامية للصف [السادس]
+للتعلم عن بُعد — الطالبة ترتّب على جهازها وترسل نتيجتها
+
+الموضوع: خطوات الوضوء الصحيح (11 خطوة)
+[النية — التسمية — غسل الكفين — المضمضة — الاستنشاق — غسل الوجه — غسل اليدين للمرفقين — مسح الرأس — مسح الأذنين — غسل القدمين — الدعاء]
+
+✓ الخطوات تظهر مخلوطة — الطالبة تسحب وترتّب
+✓ خطأ؟ تهتز البطاقة وترجع
+✓ صحيح؟ تثبت بلون أخضر
+✓ نتيجة ختامية: كم خطوة أصبت؟
+✓ زر «أرسلي نتيجتك للمعلمة»` + SHARED
+      },
+      {
+        strat: 'صح أم خطأ السريع',
+        subject: 'الرياضيات', subjIcon: '🔢',
+        prompt: `اصنعي لي لعبة HTML «صح أم خطأ السريعة» لمادة الرياضيات للصف [الثالث]
+للتعلم عن بُعد — الطالبة تلعب على جهازها وترسل نتيجتها
+
+15 عبارة عن جدول الضرب والقسمة:
+1. 6×7=42 ✓   2. 8×9=71 ✗(72)   3. 48÷6=8 ✓
+4. 7×8=54 ✗(56)  5. 63÷7=9 ✓   6. 5×9=44 ✗(45)
+7. 36÷4=9 ✓   8. 4×7=28 ✓   9. 54÷6=8 ✗(9)
+10. 9×9=81 ✓  11. 7×6=42 ✓  12. 8×8=63 ✗(64)
+13. 72÷8=9 ✓  14. 6×6=36 ✓  15. 45÷5=8 ✗(9)
+
+✓ مؤقت 5 ثوانٍ لكل عبارة (أخضر←أصفر←أحمر)
+✓ شرح الإجابة الصحيحة فوراً
+✓ ترتيب عشوائي في كل جولة
+✓ نجوم على النتيجة النهائية
+✓ زر «أرسلي نتيجتك للمعلمة»` + SHARED
+      },
+      {
+        strat: 'لعبة من أنا؟',
+        subject: 'الدراسات الاجتماعية', subjIcon: '🌍',
+        prompt: `اصنعي لي لعبة HTML «من أنا؟» لمادة الدراسات الاجتماعية للصف [الخامس]
+للتعلم عن بُعد — الطالبة تلعب على جهازها وترسل نتيجتها
+
+6 شخصيات تاريخية قطرية — لكل منها 4 تلميحات متدرجة:
+
+الشخصية 1: الشيخ جاسم بن محمد آل ثاني
+تلميح 1(صعب): «وحّدت قبائل وأسّستُ دولة في القرن التاسع عشر»
+تلميح 2: «دولتي تقع على شبه جزيرة في الخليج»
+تلميح 3: «لقبي مؤسس الدولة الحديثة»
+تلميح 4(سهل): «أنا مؤسس دولة قطر»
+
+[أضيفي 5 شخصيات أخرى بنفس الأسلوب]
+
+✓ 4 نقاط من التلميح الأول، تنقص مع كل تلميح
+✓ الطالبة تكتب إجابتها في خانة نص
+✓ قبول الإجابات المتشابهة
+✓ زر «أرسلي نتيجتك للمعلمة» بعد 6 جولات` + SHARED
+      },
+    ]
+  },
+  {
+    id: 'self', icon: '⭐', title: 'استراتيجيات التعلم الذاتي',
+    color: 'var(--c5)', light: 'var(--c5l)', border: 'var(--c5b)',
+    strategies: [
+      {
+        strat: 'يوميات التعلم',
+        subject: 'الحاسب', subjIcon: '💻',
+        prompt: `اصنعي لي نشاط HTML «يوميات التعلم» لمادة الحاسب للصف [السابع]
+للتعلم عن بُعد — الطالبة تملأ يومياتها وترسلها للمعلمة
+
+شاشة الطالبة:
+- اسمها + تاريخ الحصة + الموضوع (تُدخلها هي)
+- 4 خانات:
+  1. «أهم شيء تعلّمتِه اليوم» (إلزامية)
+  2. «ما الذي فاجأكِ أو أثار اهتمامك؟»
+  3. «ما الذي ستتذكرينه غداً؟»
+  4. «سؤالك للمعلمة» (اختيارية)
+- تقييم ذاتي: ⭐ كيف تقيّمين مشاركتك اليوم؟
+- زر «أرسلي يومياتك للمعلمة»
+
+شاشة المعلمة (من نفس الملف بكلمة مرور):
+✓ جميع اليوميات مرتّبة بالاسم والتاريخ
+✓ أسئلة الطلاب تظهر في قائمة منفصلة ومميّزة` + SHARED
+      },
+      {
+        strat: 'تقييم ذاتي بالنجوم',
+        subject: 'الرياضيات', subjIcon: '🔢',
+        prompt: `اصنعي لي نشاط HTML «تقييم ذاتي بالنجوم» لمادة الرياضيات للصف [السادس]
+للتعلم عن بُعد — الطالبة تقيّم نفسها وترسل نتيجتها للمعلمة
+
+نهاية وحدة الكسور:
+
+شاشة الطالبة — 6 مهارات بتقييم نجوم 1-5:
+⭐ «أجمع الكسور ذات المقامات المختلفة»
+⭐ «أطرح الكسور وأجد المقام المشترك»
+⭐ «أضرب كسرين ببعضهما»
+⭐ «أقسم الكسور بالضرب في المقلوب»
+⭐ «أحوّل كسراً عادياً لعشري»
+⭐ «أطبّق الكسور في مسائل حياتية»
+
+بعد التقييم:
+✓ رسم بياني شبكي (Radar Chart) يُظهر القوة والضعف
+✓ اقتراح: «ركّزي على مهارة ___ الأسبوع القادم»
+✓ زر «أرسلي تقييمك للمعلمة»
+
+شاشة المعلمة: مقارنة تقييمات جميع الطالبات` + SHARED
+      },
+      {
+        strat: 'بطاقة الإنجاز التراكمية',
+        subject: 'اللغة العربية', subjIcon: '📖',
+        prompt: `اصنعي لي نشاط HTML «بطاقة الإنجاز التراكمية» لمادة اللغة العربية للصف [الرابع]
+للتعلم عن بُعد — الطالبة تتابع تقدمها وترسل تحديثات للمعلمة
+
+وحدة القصيدة الشعرية (4 أسابيع)
+
+شاشة الطالبة — 6 محطات:
+📍 المحطة 1: حفظت 10 أبيات من القصيدة
+📍 المحطة 2: عرّفت المصطلحات الشعرية الخمسة
+📍 المحطة 3: حللت أسلوب الشاعر
+📍 المحطة 4: كتبت فقرة عن مشاعر القصيدة
+📍 المحطة 5: قارنت بين قصيدتين
+📍 المحطة 6: كتبت قصيدة قصيرة من إنشائي
+
+لكل محطة: ✓ أتقنت / 🔄 في تقدم / ⏳ لم أبدأ + تاريخ + ملاحظة
+✓ خط تقدم بصري
+✓ احتفال عند إكمال المحطات الست
+✓ زر «أرسلي تقدمك للمعلمة» بعد كل تحديث
+
+شاشة المعلمة: لوحة تتبع تقدم جميع الطالبات` + SHARED
+      },
+    ]
+  },
+];
+
+// ═══════════════════════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════════════════════
+function renderAll(filterCat = 'all', searchTerm = '') {
+  const container = document.getElementById('cardsContainer');
+  container.innerHTML = '';
+
+  categories.forEach(cat => {
+    if (filterCat !== 'all' && filterCat !== cat.id) return;
+
+    const filtered = cat.strategies.filter(s => {
+      if (!searchTerm) return true;
+      const q = searchTerm.toLowerCase();
+      return s.strat.includes(searchTerm) || s.subject.includes(searchTerm) || s.prompt.includes(searchTerm);
+    });
+    if (!filtered.length) return;
+
+    const catDiv = document.createElement('div');
+    catDiv.className = 'category';
+    catDiv.innerHTML = `
+      <div class="cat-header">
+        <span class="cat-icon">${cat.icon}</span>
+        <span class="cat-title">${cat.title}</span>
+        <span class="cat-count" style="background:${cat.light};color:${cat.color};border:1px solid ${cat.border}">${filtered.length}</span>
+      </div>
+      <div class="cards-grid" id="grid_${cat.id}"></div>`;
+    container.appendChild(catDiv);
+
+    const grid = catDiv.querySelector('.cards-grid');
+    filtered.forEach((s, idx) => {
+      const cardId = `${cat.id}_${idx}`;
+      const card = document.createElement('div');
+      card.className = 'prompt-card';
+      card.dataset.cat = cat.id;
+      card.innerHTML = `
+        <div class="card-accent" style="background:${cat.color}"></div>
+        <div class="card-top">
+          <div class="strat-badge" style="background:${cat.light};color:${cat.color};border:1px solid ${cat.border}">
+            ${cat.icon} ${s.strat}
+          </div>
+        </div>
+        <div style="padding:0 1.4rem .5rem">
+          <span class="card-subject">
+            <span class="subj-dot" style="background:${cat.color}"></span>
+            ${s.subjIcon} ${s.subject}
+          </span>
+        </div>
+        <div class="card-prompt-wrap">
+          <div class="prompt-box" id="box_${cardId}">${formatPrompt(s.prompt)}</div>
+        </div>
+        <div class="card-footer">
+          <button class="btn-expand" onclick="toggleExpand('${cardId}', this)">
+            👁 عرض الـ Prompt
+          </button>
+          <button class="btn-copy" style="background:${cat.color}" onclick="copyPrompt('${cardId}', this)">
+            📋 نسخ
+          </button>
+          <a class="open-claude-btn" href="https://claude.ai" target="_blank">
+            🤖 claude.ai ↗
+          </a>
+        </div>`;
+      grid.appendChild(card);
+      // Store raw prompt for copying
+      card.dataset.rawPrompt = s.prompt;
+    });
+  });
+}
+
+function formatPrompt(text) {
+  return text
+    .replace(/\[([^\]]+)\]/g, '<span class="fill">[$1]</span>')
+    .replace(/\n/g, '<br>');
+}
+
+function toggleExpand(id, btn) {
+  const box = document.getElementById('box_' + id);
+  if (box.classList.toggle('show')) {
+    btn.textContent = '🙈 إخفاء الـ Prompt';
+  } else {
+    btn.textContent = '👁 عرض الـ Prompt';
+  }
+}
+
+function copyPrompt(id, btn) {
+  // Find the card and get raw prompt
+  const box = document.getElementById('box_' + id);
+  const card = box.closest('.prompt-card');
+  const text = card.dataset.rawPrompt;
+  navigator.clipboard.writeText(text).then(() => {
+    const toast = document.getElementById('toast');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2500);
+    btn.textContent = '✅ تم!';
+    setTimeout(() => btn.textContent = '📋 نسخ', 2500);
+  });
+}
+
+// ═══ FILTER & SEARCH ═══
+let currentFilter = 'all';
+let currentSearch = '';
+
+function filter(cat, btn) {
+  currentFilter = cat;
+  document.querySelectorAll('.ftab').forEach(b => {
+    b.classList.remove('on'); b.style.background = ''; b.style.color = '';
+  });
+  btn.classList.add('on');
+  const colors = {
+    all:'var(--ink)', think:'var(--c1)', assess:'var(--c2)',
+    interact:'var(--c3)', review:'var(--c4)', self:'var(--c5)'
+  };
+  btn.style.background = colors[cat] || 'var(--ink)';
+  btn.style.color = 'white';
+  renderAll(currentFilter, currentSearch);
+}
+
+function search(val) {
+  currentSearch = val;
+  renderAll(currentFilter, currentSearch);
+}
+
+// Initial render
+renderAll();
+</script>
+</body>
+</html>
