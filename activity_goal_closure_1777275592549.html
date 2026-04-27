@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>غلق الهدف - الصف العاشر</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .school-name {
+            background: rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-weight: 500;
+        }
+
+        .student-select-section {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .student-select-section label {
+            display: block;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .student-select-section select {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.1rem;
+            font-family: 'Tajawal', sans-serif;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            background: #fafafa;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .student-select-section select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+
+        .quiz-section {
+            display: none;
+        }
+
+        .question-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border-right: 5px solid #667eea;
+            transition: transform 0.3s;
+        }
+
+        .question-card:hover {
+            transform: translateX(-5px);
+        }
+
+        .question-number {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .question-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .option:hover {
+            background: #e8f4fd;
+            border-color: #667eea;
+        }
+
+        .option.selected {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: transparent;
+        }
+
+        .option input {
+            display: none;
+        }
+
+        .option-letter {
+            width: 30px;
+            height: 30px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin-left: 15px;
+            color: #667eea;
+            flex-shrink: 0;
+        }
+
+        .option.selected .option-letter {
+            background: rgba(255,255,255,0.3);
+            color: white;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 20px rgba(17, 153, 142, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(17, 153, 142, 0.4);
+        }
+
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .result-section {
+            display: none;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .result-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+
+        .result-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .result-score {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .teacher-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            padding: 15px 25px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-family: 'Tajawal', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(240, 147, 251, 0.4);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .teacher-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .modal-content h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .modal-content input {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2rem;
+            font-family: 'Tajawal', sans-serif;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-content input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .modal-buttons button {
+            flex: 1;
+            padding: 12px;
+            font-family: 'Tajawal', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-enter {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-cancel {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .teacher-dashboard {
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin-top: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .dashboard-header h2 {
+            font-size: 1.5rem;
+            color: #333;
+        }
+
+        .stats-bar {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .stat-item {
+            flex: 1;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .responses-list {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .response-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border-right: 4px solid #667eea;
+        }
+
+        .response-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .student-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #333;
+        }
+
+        .response-time {
+            font-size: 0.85rem;
+            color: #888;
+            background: #e9ecef;
+            padding: 5px 12px;
+            border-radius: 20px;
+        }
+
+        .response-score {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: #11998e;
+        }
+
+        .response-details {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px dashed #ddd;
+        }
+
+        .answer-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .answer-row:last-child {
+            border-bottom: none;
+        }
+
+        .answer-correct {
+            color: #11998e;
+            font-weight: 600;
+        }
+
+        .answer-wrong {
+            color: #f5576c;
+            font-weight: 600;
+        }
+
+        .clear-btn {
+            background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-family: 'Tajawal', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .clear-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .exit-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-family: 'Tajawal', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .no-responses {
+            text-align: center;
+            padding: 50px;
+            color: #888;
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .stats-bar {
+                flex-direction: column;
+            }
+
+            .dashboard-header {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📝 تقييم غلق الهدف</h1>
+            <p>اختبار قصير للتحقق من تحقق الأهداف التعليمية</p>
+            <div class="school-name">🏫 مدرسة الكعبان الابتدائية الإعدادية الثانوية للبنات</div>
+        </div>
+
+        <div class="student-select-section" id="studentSelectSection">
+            <label>👩‍🎓 اختاري اسمك من القائمة:</label>
+            <select id="studentSelect">
+                <option value="">-- اختاري اسمك --</option>
+                <option value="ابتهاج حسين السالم">ابتهاج حسين السالم</option>
+                <option value="اسماء حسن العبادي">اسماء حسن العبادي</option>
+                <option value="العنود عبدالباسط">العنود عبدالباسط</option>
+                <option value="امنه عبدالرحمان تنك ريز">امنه عبدالرحمان تنك ريز</option>
+                <option value="ايمان احمد اليوسف">ايمان احمد اليوسف</option>
+                <option value="تيما حازم عمر">تيما حازم عمر</option>
+                <option value="جنى جمعه محمدطه يسن عويس">جنى جمعه محمدطه يسن عويس</option>
+                <option value="جنى عبدالرزاق الابراهيم">جنى عبدالرزاق الابراهيم</option>
+                <option value="جنى محمد عبدالفتاح على حبيب">جنى محمد عبدالفتاح على حبيب</option>
+                <option value="جنى محمود على عبدالمعبود محمد">جنى محمود على عبدالمعبود محمد</option>
+                <option value="جويريه ولي محمد">جويريه ولي محمد</option>
+                <option value="حياة بلال حسين القلم المراحلي">حياة بلال حسين القلم المراحلي</option>
+                <option value="رؤى احمد العبد الطعمه">رؤى احمد العبد الطعمه</option>
+                <option value="رتاج عزو العلي">رتاج عزو العلي</option>
+                <option value="رزان محمد عثمان محمد ادم">رزان محمد عثمان محمد ادم</option>
+                <option value="رنا رزق محمد الفاخري">رنا رزق محمد الفاخري</option>
+                <option value="ريتاج حسين السالم">ريتاج حسين السالم</option>
+                <option value="ريم احمد بخيت محمد عمر">ريم احمد بخيت محمد عمر</option>
+                <option value="ريما عمير راشد البطى الكعبى">ريما عمير راشد البطى الكعبى</option>
+                <option value="ساره حكيم محمدي نزاد كادستانه">ساره حكيم محمدي نزاد كادستانه</option>
+                <option value="شروق عمرو النوبي عبدالله احمد">شروق عمرو النوبي عبدالله احمد</option>
+                <option value="شهد اسماعيل">شهد اسماعيل</option>
+                <option value="شهد وليد عبدالحكم محمد محمود">شهد وليد عبدالحكم محمد محمود</option>
+                <option value="عايشة عبدالله عامر بن ديه الكعبي">عايشة عبدالله عامر بن ديه الكعبي</option>
+                <option value="فاطمه محمد النوراني بشاره">فاطمه محمد النوراني بشاره</option>
+                <option value="فاطمه عبدالله الفاضل احمد">فاطمه عبدالله الفاضل احمد</option>
+                <option value="فاطمه عدنان زم">فاطمه عدنان زم</option>
+                <option value="فريدة محمد محمدى محمد العوضى">فريدة محمد محمدى محمد العوضى</option>
+                <option value="لمار بلال جبر رصرص">لمار بلال جبر رصرص</option>
+                <option value="ماسه مصطفى هاشم يوسف عبدالمجيد">ماسه مصطفى هاشم يوسف عبدالمجيد</option>
+                <option value="مروه صالح المجود">مروه صالح المجود</option>
+                <option value="مليكه محمود معوض حسن عبدالمقصود">مليكه محمود معوض حسن عبدالمقصود</option>
+                <option value="ميسم عبداللطيف علي الامين">ميسم عبداللطيف علي الامين</option>
+                <option value="نوره علم محمد حاجى خان">نوره علم محمد حاجى خان</option>
+            </select>
+        </div>
+
+        <div class="quiz-section" id="quizSection">
+            <div class="question-card">
+                <div class="question-number">1</div>
+                <div class="question-text">ما هو العنصر الأساسي الذي تحتاجه الخلية لإنتاج الطاقة؟</div>
+                <div class="options">
+                    <label class="option" onclick="selectOption(this, 0, 'أ')">
+                        <input type="radio" name="q0" value="أ">
+                        <span class="option-letter">أ</span>
+                        <span>الأكسجين</span>
+                    </label>
+                    <label class="option" onclick="selectOption(this, 0, 'ب')">
+                        <input type="radio" name="q0" value="ب">
+                        <span class="option-letter">ب</span>
+                        <span>النيتروجين</span>
+                    </label>
+                    <label class="option" onclick="selectOption(this, 0, 'ج')">
+                        <input type="radio" name="q0" value="ج">
+                        <span class="option-letter">ج</span>
+                        <span>الهيليوم</span>
+                    </label>
+                    <label class="option" onclick="selectOption(this, 0, 'د')">
+                        <input type="radio" name="q0" value="د">
+                        <span class="option-letter">د</span>
+                        <span>الأرجون</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-number">2</div>
+                <div class="question-text">أين تحدث عملية التنفس الخلوي؟</div>
+                <div class="options">
+                    <label class="option" onclick="selectOption(this, 1, 'أ')">
+                        <input type="radio" name="q1" value="أ">
+                        <span class="option-letter">أ</span>
+                        <span>النواة</span>
+                    </label>
+                    <label class="option" onclick="selectOption(this, 1, 'ب')">
+                        <input type="radio" name="q1" value="ب">
+                        <span class="option-letter">ب</span>
+                        <span>الميتوكوندريا</span>
+                    </label>
+                    <label class="option" onclick="selectOption(this, 1, 'ج')">
+                        <input type="radio" name="q1" value="ج">
+                        <span class="option-letter">ج</span>
+                        <span>الريبوسومات</span>
+                    </label>
+                    <label class="option" onclick="selectOption(this, 1, 'د')">
+                        <input type="radio" name="q1" value="د">
+                        <span class="option-letter">د</span>
+                        <span>جهاز جولجي</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-number">3</div>
+                <div class="question-text">ما هو الناتج الرئيسي لعملية البناء الضوئي؟</div>
+                <div class="options">
+                    <label class="option" onclick="selectOption(this, 2, 'أ')">
+                        <input type="radio" name="q2" value="أ">
+                        <span class="option-letter">أ</span>
+                        <span>ثاني أكسيد الكربون</span>
+                    </label>
+                    <label class="option" onclick="selectOption(this, 2, 'ب')">
+                        <input type="radio" name="q2" value="ب">
+                        <span class="option-letter">ب</span>
+                        <span>الجلوكوز والأكسجين</span>
+                    </label>
+                    <label class="option" onclick="selectOption(this, 2, 'ج')">
+                        <input type="radio" name="q2" value="ج">
+                        <span class="option-letter">ج</span>
+                        <span>الماء فقط</span>
+                    </label>
+                    <label class="option" onclick="selectOption(this, 2, 'د')">
+                        <input type="radio" name="q2" value="د">
+                        <span class="option-letter">د</span>
+                        <span>البروتينات</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-number">4</div>
+                <div class="question-text">ما هي الصبغة المسؤولة عن اللون الأخضر في النباتات؟</div>
+                <div class="options">
+                    <label class="option" onclick="selectOption(this, 3, 'أ')">
+                        <input type="radio" name="q3" value="أ">
+                        <span class="option-letter">أ</span>
+                        <span>الكاروتين</span>
+                    </label>
+                    <label class="option" onclick="selectOption(this, 3, 'ب')">
+                        <input type="radio" name="q3" value="ب">
+                        <span class="option-letter">ب</span>
+                        <span>الزانثوفيل</span>
+                    </label>
+                    <label class="option" onclick="selectOption(this, 3, 'ج')">
+                        <input type="radio" name="q3" value="ج">
+                        <span class="option-letter">ج</span>
+                        <span>الكلوروفيل</span>
+                    </label>
+                    <label class="option" onclick="selectOption(this, 3, 'د')">
+                        <input type="radio" name="q3" value="د">
+                        <span class="option-letter">د</span>
+                        <span>الميلانين</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-number">5</div>
+                <div class="question-text">ما هي وحدة قياس الطاقة في النظام الدولي؟</div>
+                <div class="options">
+                    <label class="option" onclick="selectOption(this, 4, 'أ')">
+                        <input type="radio" name="q4" value="أ">
+                        <span class="option-letter">أ</span>
+                        <span>الواط</span>
+                    </label>
+                    <label class="option" onclick="selectOption(this, 4, 'ب')">
+                        <input type="radio" name="q4" value="ب">
+                        <span class="option-letter">ب</span>
+                        <span>الجول</span>
+                    </label>
+                    <label class="option" onclick="selectOption(this, 4, 'ج')">
+                        <input type="radio" name="q4" value="ج">
+                        <span class="option-letter">ج</span>
+                        <span>النيوتن</span>
+                    </label>
+                    <label class="option" onclick="selectOption(this, 4, 'د')">
+                        <input type="radio" name="q4" value="د">
+                        <span class="option-letter">د</span>
+                        <span>الباسكال</span>
+                    </label>
+                </div>
+            </div>
+
+            <button class="submit-btn" id="submitBtn" onclick="submitQuiz()" disabled>
+                📤 إرسال الإجابات
+            </button>
+        </div>
+
+        <div class="result-section" id="resultSection">
+            <div class="result-icon">🎉</div>
+            <div class="result-text">أحسنتِ! تم إرسال إجاباتك بنجاح</div>
+            <div class="result-score" id="scoreDisplay">0/5</div>
+        </div>
+
+        <div class="teacher-dashboard" id="teacherDashboard">
+            <div class="dashboard-header">
+                <h2>📊 لوحة متابعة المعلمة</h2>
+                <div>
+                    <button class="exit-btn" onclick="exitDashboard()">🚪 خروج</button>
+                    <button class="clear-btn" onclick="clearAllResponses()">🗑️ مسح الكل</button>
+                </div>
+            </div>
+
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <div class="stat-number" id="totalResponses">0</div>
+                    <div class="stat-label">عدد الإجابات</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="avgScore">0%</div>
+                    <div class="stat-label">متوسط الدرجات</div>
+                </div>
+            </div>
+
+            <div class="responses-list" id="responsesList">
+                <div class="no-responses">لا توجد إجابات بعد...</div>
+            </div>
+        </div>
+    </div>
+
+    <button class="teacher-btn" onclick="showPasswordModal()">🔐 شاشة المعلمة</button>
+
+    <div class="modal" id="passwordModal">
+        <div class="modal-content">
+            <h3>🔐 دخول
