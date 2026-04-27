@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>غلق الهدف - درس الشبكات | الصف السادس</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(135deg, #e0f7fa 0%, #f3e5f5 50%, #fff3e0 100%);
+            min-height: 100vh;
+            direction: rtl;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 30px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .header .school-name {
+            color: rgba(255,255,255,0.9);
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+
+        .header .teacher-name {
+            color: rgba(255,255,255,0.8);
+            font-size: 0.9rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 700;
+            color: #333;
+            font-size: 1.1rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-family: 'Tajawal', sans-serif;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn {
+            padding: 15px 40px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            font-family: 'Tajawal', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            width: 100%;
+        }
+
+        .btn-teacher {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 12px 30px;
+        }
+
+        .question-card {
+            background: #f8f9ff;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-right: 5px solid #667eea;
+        }
+
+        .question-number {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+
+        .question-text {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            padding: 15px 20px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .option:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .option.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .option-letter {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+
+        .option.selected .option-letter {
+            background: white;
+            color: #667eea;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .result-card {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .result-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+
+        .result-score {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .result-message {
+            font-size: 1.3rem;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .teacher-btn-container {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px dashed #e0e0e0;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .modal-content h3 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .modal-content input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-family: 'Tajawal', sans-serif;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .modal-buttons .btn {
+            flex: 1;
+        }
+
+        .btn-cancel {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .dashboard {
+            padding: 20px;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .dashboard-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #333;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .leaderboard {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .leaderboard h3 {
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 1.3rem;
+        }
+
+        .leader-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: #f8f9ff;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            gap: 15px;
+        }
+
+        .leader-rank {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.2rem;
+        }
+
+        .leader-rank.gold {
+            background: linear-gradient(135deg, #f7971e 0%, #ffd200 100%);
+            color: white;
+        }
+
+        .leader-rank.silver {
+            background: linear-gradient(135deg, #bdc3c7 0%, #a0a0a0 100%);
+            color: white;
+        }
+
+        .leader-rank.bronze {
+            background: linear-gradient(135deg, #cd7f32 0%, #b87333 100%);
+            color: white;
+        }
+
+        .leader-rank.normal {
+            background: #e0e0e0;
+            color: #666;
+        }
+
+        .leader-info {
+            flex: 1;
+        }
+
+        .leader-name {
+            font-weight: 700;
+            color: #333;
+        }
+
+        .leader-time {
+            font-size: 0.85rem;
+            color: #999;
+        }
+
+        .leader-score {
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: #667eea;
+        }
+
+        .responses-list {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        .responses-list h3 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .response-item {
+            padding: 15px;
+            background: #f8f9ff;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            border-right: 4px solid #667eea;
+        }
+
+        .response-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .response-name {
+            font-weight: 700;
+            color: #333;
+        }
+
+        .response-score-badge {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .score-high {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .score-medium {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .score-low {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .response-answers {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+            color: white;
+            padding: 10px 25px;
+        }
+
+        .btn-back {
+            background: #e0e0e0;
+            color: #333;
+            padding: 10px 25px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        .question-counter {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1.4rem;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .question-text {
+                font-size: 1.1rem;
+            }
+
+            .result-score {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- شاشة إدخال الاسم -->
+    <div id="nameScreen" class="container">
+        <div class="header">
+            <div class="school-name">مدرسة الكعبان الابتدائية الإعدادية الثانوية للبنات</div>
+            <h1>📡 اختبار غلق الهدف - درس الشبكات</h1>
+            <div class="teacher-name">المعلمة: هاجر قعاية</div>
+        </div>
+
+        <div class="card">
+            <div style="text-align: center; margin-bottom: 25px;">
+                <div style="font-size: 60px; margin-bottom: 15px;">🌐</div>
+                <h2 style="color: #333; margin-bottom: 10px;">مرحباً بك في اختبار الشبكات</h2>
+                <p style="color: #666;">الصف السادس - 3 أسئلة اختيار من متعدد</p>
+            </div>
+
+            <div class="form-group">
+                <label for="studentName">✏️ أدخلي اسمك الكامل:</label>
+                <input type="text" id="studentName" placeholder="مثال: فاطمة أحمد" autocomplete="off">
+            </div>
+
+            <button class="btn btn-primary" onclick="startQuiz()">
+                ابدأي الاختبار 🚀
+            </button>
+        </div>
+
+        <div class="teacher-btn-container">
+            <button class="btn btn-teacher" onclick="showPasswordModal()">
+                🔐 شاشة المعلمة
+            </button>
+        </div>
+    </div>
+
+    <!-- شاشة الأسئلة -->
+    <div id="quizScreen" class="container hidden">
+        <div class="header">
+            <h1>📡 اختبار درس الشبكات</h1>
+            <div class="teacher-name" id="welcomeStudent"></div>
+        </div>
+
+        <div class="card">
+            <div class="question-counter" id="questionCounter">السؤال 1 من 3</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            </div>
+
+            <div id="questionsContainer"></div>
+
+            <button class="btn btn-success hidden" id="submitBtn" onclick="submitQuiz()">
+                إرسال الإجابات ✅
+            </button>
+        </div>
+    </div>
+
+    <!-- شاشة النتيجة -->
+    <div id="resultScreen" class="container hidden">
+        <div class="header">
+            <h1>🎉 نتيجتك</h1>
+        </div>
+
+        <div class="card result-card">
+            <div class="result-icon" id="resultIcon">🌟</div>
+            <div class="result-score" id="resultScore">0/3</div>
+            <div class="result-message" id="resultMessage">أحسنت!</div>
+            
+            <div id="resultDetails" style="text-align: right; margin: 20px 0;"></div>
+
+            <button class="btn btn-primary" onclick="resetQuiz()">
+                إعادة الاختبار 🔄
+            </button>
+        </div>
+    </div>
+
+    <!-- شاشة المعلمة -->
+    <div id="teacherScreen" class="container hidden">
+        <div class="dashboard">
+            <div class="dashboard-header">
+                <div class="dashboard-title">📊 لوحة متابعة المعلمة</div>
+                <div>
+                    <button class="btn btn-back" onclick="backToMain()">رجوع ↩️</button>
+                    <button class="btn btn-danger" onclick="clearAllData()">مسح الكل 🗑️</button>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalStudents">0</div>
+                    <div class="stat-label">عدد الطالبات</div>
+                </div>
+                <div class="stat-card" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">
+                    <div class="stat-number" id="avgScore">0%</div>
+                    <div class="stat-label">متوسط الدرجات</div>
+                </div>
+                <div class="stat-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                    <div class="stat-number" id="fullScore">0</div>
+                    <div class="stat-label">درجة كاملة</div>
+                </div>
+            </div>
+
+            <div class="leaderboard">
+                <h3>🏆 المراكز الأولى</h3>
+                <div id="leaderboardList"></div>
+            </div>
+
+            <div class="responses-list">
+                <h3>📋 جميع الإجابات</h3>
+                <div id="responsesList"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة كلمة المرور -->
+    <div id="passwordModal" class="modal hidden">
+        <div class="modal-content">
+            <h3>🔐 دخول المعلمة</h3>
+            <input type="password" id="teacherPassword" placeholder="أدخلي كلمة المرور">
+            <div class="modal-buttons">
+                <button class="btn btn-primary" onclick="checkPassword()">دخول</button>
+                <button class="btn btn-cancel" onclick="hidePasswordModal()">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            databaseURL: "https://cyber-safety-class-b266a-default-rtdb.firebaseio.com"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        const dbPath = '/activity_goal_closure_710169';
+
+        // بيانات الأسئلة
+        const questions = [
+            {
+                question: "ما هي الشبكة الحاسوبية؟",
+                options: [
+                    "مجموعة من الحواسيب المتصلة ببعضها لتبادل البيانات",
+                    "جهاز واحد يعمل بشكل منفرد",
+                    "برنامج لتصفح الإنترنت",
+                    "نوع من أنواع الطابعات"
+                ],
+                correct: 0
+            },
+            {
+                question: "أي من التالي يُعد من فوائد الشبكات؟",
+                options: [
+                    "زيادة استهلاك الكهرباء",
+                    "مشاركة الملفات والطابعات بين الأجهزة",
+                    "إبطاء عمل الأجهزة",
+                    "منع التواصل بين المستخدمين"
+                ],
+                correct: 1
+            },
+            {
+                question: "ما اسم الشبكة التي تربط أجهزة في منطقة جغرافية صغيرة مثل المدرسة؟",
+                options: [
+                    "الشبكة الواسعة WAN",
+                    "الشبكة المحلية LAN",
+                    "شبكة الإنترنت",
+                    "الشبكة اللاسلكية فقط"
+                ],
+                correct: 1
+            }
+        ];
+
+        let currentStudent = '';
+        let selectedAnswers = [-1, -1, -1];
+        let currentQuestion = 0;
+
+        function startQuiz() {
+            const name = document.getElementById('studentName').value.trim();
+            if (!name) {
+                alert('الرجاء إدخال اسمك');
+                return;
+            }
+            currentStudent = name;
+            document.getElementById('welcomeStudent').textContent = `مرحباً: ${name}`;
+            document.getElementById('nameScreen').classList.add('hidden');
+            document.getElementById('quizScreen').classList.remove('hidden');
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const container = document.getElementById('questionsContainer');
+            const q = questions[currentQuestion];
+            
+            document.getElementById('questionCounter').textContent = `السؤال ${currentQuestion + 1} من ${questions.length}`;
+            document.getElementById('progressFill').style.width = `${((currentQuestion) / questions.length) * 100}%`;
+
+            let html = `
+                <div class="question-card">
+                    <div class="question-number">${currentQuestion + 1}</div>
+                    <div class="question-text">${q.question}</div>
+                    <div class="options">
+            `;
+
+            const letters = ['أ', 'ب', 'ج', 'د'];
+            q.options.forEach((option, idx) => {
+                const selected = selectedAnswers[currentQuestion] === idx ? 'selected' : '';
+                html += `
+                    <div class="option ${selected}" onclick="selectOption(${currentQuestion}, ${idx})">
+                        <div class="option-letter">${letters[idx]}</div>
+                        <div>${option}</div>
+                    </div>
+                `;
+            });
+
+            html += `</div></div>`;
+
+            // Navigation buttons
+            html += `<div style="display: flex; gap: 10px; margin-top: 20px;">`;
+            
+            if (currentQuestion > 0) {
+                html += `<button class="btn" style="background: #e0e0e0; color: #333; flex: 1;" onclick="prevQuestion()">السابق ⬅️</button>`;
+            }
+            
+            if (currentQuestion < questions.length - 1) {
+                html += `<button class="btn btn-primary" style="flex: 1;" onclick="nextQuestion()">التالي ➡️</button>`;
+            }
+            
+            html += `</div>`;
+
+            container.innerHTML = html;
+
+            // Show submit button on last question
+            const submitBtn = document.getElementById('submitBtn');
+            if (currentQuestion === questions.length - 1) {
+                submitBtn.classList.remove('hidden');
+            } else {
+                submitBtn.classList.add('hidden');
+            }
+        }
+
+        function selectOption(qIndex, optIndex) {
+            selectedAnswers[qIndex] = optIndex;
+            renderQuestion();
+        }
+
+        function nextQuestion() {
+            if (selectedAnswers[currentQuestion] === -1) {
+                alert('الرجاء اختيار إجابة');
+                return;
+            }
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                renderQuestion();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                renderQuestion();
+            }
+        }
+
+        function submitQuiz() {
+            // Check all questions answered
+            for (let i = 0; i < questions.length; i++) {
+                if (selectedAnswers[i] === -1) {
+                    alert(`الرجاء الإجابة على السؤال ${i + 1}`);
+                    currentQuestion = i;
+                    renderQuestion();
+                    return;
+                }
+            }
+
+            // Calculate score
+            let score = 0;
+            let answersText = [];
+            const letters = ['أ', 'ب', 'ج', 'د'];
+
+            questions.forEach((q, idx) => {
+                const isCorrect = selectedAnswers[idx] === q.correct;
+                if (isCorrect) score++;
+                answersText.push({
+                    question: idx + 1,
+                    selected: letters[selectedAnswers[idx]],
+                    correct: isCorrect
+                });
+            });
+
+            // Save to Firebase
+            const timestamp = new Date().toLocaleString('ar-EG', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+
+            const studentData = {
+                name: currentStudent,
+                score: score,
+                total: questions.length,
+                percentage: Math.round((score / questions.length) * 100),
+                answers: answersText,
+                timestamp: timestamp,
+                submittedAt: firebase.database.ServerValue.TIMESTAMP
+            };
+
+            database.ref(dbPath).push(studentData);
+
+            // Show result
+            showResult(score, answersText);
+        }
+
+        function showResult(score, answersText) {
+            document.getElementById('quizScreen').classList.add('hidden');
+            document.getElementById('resultScreen').classList.remove('hidden');
+
+            const percentage = Math.round((score / questions.length) * 100);
+            document.getElementById('resultScore').textContent = `${score}/${questions.length}`;
+
+            let icon, message;
+            if (percentage === 100) {
+                icon = '🏆';
+                message = 'ممتازة! درجة كاملة 🌟';
+            } else if (percentage >= 66) {
+                icon = '😊';
+                message = 'أحسنت! أداء جيد جداً';
+            } else if (percentage >= 33) {
+                icon = '💪';
+                message = 'جيد، حاولي مرة أخرى للتحسين';
+            } else {
+                icon = '📚';
+                message = 'راجعي الدرس وحاولي مرة أخرى';
+            }
+
+            document.getElementById('resultIcon').textContent = icon;
+            document.getElementById('resultMessage').textContent = message;
+
+            // Show answer details
+            let detailsHtml = '<h3 style="margin-bottom: 15px;">تفاصيل إجاباتك:</h3>';
+            answersText.forEach((ans, idx) => {
+                const status = ans.correct ? '✅' : '❌';
+                const correctLetter = ['أ', 'ب', 'ج', 'د'][questions[idx].correct];
+                detailsHtml += `
+                    <div style="padding: 10px; margin-bottom: 8px; background: ${ans.correct ? '#d4edda' : '#f8d7da'}; border-radius: 8px;">
+                        <strong>السؤال ${ans.question}:</strong> اخترتِ (${ans.selected}) ${status}
+                        ${!ans.correct ? `<br><small>الإجابة الصحيحة: (${correctLetter})</small>` : ''}
+                    </div>
+                `;
+            });
+            document.getElementById('resultDetails').innerHTML = detailsHtml;
+        }
+
+        function resetQuiz() {
+            currentStudent = '';
+            selectedAnswers = [-1, -1, -1];
+            currentQuestion = 0;
+            document.getElementById('studentName').value = '';
+            document.getElementById('resultScreen').classList.add('hidden');
+            document.getElementById('nameScreen').classList.remove('hidden');
+        }
+
+        function showPasswordModal() {
+            document.getElementById('passwordModal').classList.remove('hidden');
+            document.getElementById('teacherPassword').value = '';
+            document.getElementById('teacherPassword').focus();
+        }
