@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مولّد الأنشطة الذكي | ورشة Claude.ai</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:    #F6F4F0;
+  --white: #FFFFFF;
+  --ink:   #1A1714;
+  --ink2:  #3D3830;
+  --ink3:  #8A8078;
+  --border:#E4DDD5;
+  --b2:    #C8BFB5;
+  --teal:  #0A7A6C;
+  --t2:    #0C9480;
+  --teal3: #E3F3F0;
+  --teal4: #B2DDD7;
+  --amber: #B56315;
+  --ambl:  #FEF2E2;
+  --amb2:  #FCCF98;
+  --green: #16854A;
+  --grenl: #E1F5EB;
+  --gren2: #A2E3C0;
+  --red:   #C42828;
+  --redl:  #FEE2E2;
+  --purp:  #6741C4;
+  --purpl: #EDE8FF;
+  --purp2: #C2B2F6;
+  --blue:  #1B5FBA;
+  --bluel: #E6EFFC;
+  --blue2: #A8C4F0;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;}
+
+/* ── HEADER ── */
+.hdr{
+  background:var(--ink);padding:1.2rem 2rem;
+  display:flex;align-items:center;gap:14px;
+  position:relative;overflow:hidden;
+}
+.hdr::before{content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(45deg,transparent,transparent 28px,rgba(255,255,255,0.025) 28px,rgba(255,255,255,0.025) 56px);}
+.hdr-logo{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,var(--teal),#0D9480);
+  display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;
+  position:relative;z-index:1;box-shadow:0 4px 16px rgba(10,122,108,.4);}
+.hdr-text{position:relative;z-index:1;}
+.hdr-text h1{font-size:19px;font-weight:900;color:#fff;margin-bottom:1px;}
+.hdr-text p{font-size:12px;color:rgba(255,255,255,.45);}
+.hdr-right{margin-right:auto;position:relative;z-index:1;display:flex;align-items:center;gap:10px;}
+.admin-btn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:10px;
+  padding:7px 14px;font-family:'Tajawal',sans-serif;font-size:12.5px;color:rgba(255,255,255,.6);
+  cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px;}
+.admin-btn:hover{background:rgba(255,255,255,.14);color:#fff;}
+
+/* ── VIEWS ── */
+.view{display:none;max-width:860px;margin:0 auto;padding:2rem;}
+.view.on{display:block;}
+
+/* ── ADMIN VIEW ── */
+.admin-header{text-align:center;margin-bottom:2rem;}
+.admin-header .icon{font-size:40px;margin-bottom:.8rem;}
+.admin-header h2{font-size:22px;font-weight:900;margin-bottom:6px;}
+.admin-header p{font-size:14px;color:var(--ink3);line-height:1.8;}
+
+.admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:1.6rem;}
+@media(max-width:600px){.admin-grid{grid-template-columns:1fr;}}
+
+.admin-card{background:var(--white);border:1px solid var(--border);border-radius:20px;padding:1.5rem;}
+.admin-card h3{font-size:15px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px;color:var(--ink2);}
+.admin-card.full-width{grid-column:1/-1;}
+
+.field{display:flex;flex-direction:column;gap:5px;margin-bottom:10px;}
+.field label{font-size:12px;font-weight:700;color:var(--ink3);}
+.field input,.field textarea{
+  background:var(--bg);border:1.5px solid var(--border);
+  border-radius:10px;padding:10px 12px;
+  font-family:'Tajawal',sans-serif;font-size:14px;color:var(--ink);
+  outline:none;transition:all .2s;width:100%;
+}
+.field input:focus,.field textarea:focus{border-color:var(--teal);background:var(--white);}
+.field textarea{resize:none;min-height:60px;}
+.field input.ok{border-color:var(--green);background:var(--grenl);}
+
+.hint{background:var(--ambl);border:1px solid var(--amb2);border-radius:10px;
+  padding:10px 14px;font-size:13px;color:var(--amber);line-height:1.8;margin-bottom:12px;}
+.hint a{color:var(--amber);font-weight:700;}
+
+/* ── BUTTONS ── */
+.btn{border:none;border-radius:12px;padding:12px 24px;font-family:'Tajawal',sans-serif;
+  font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:7px;}
+.btn-teal{background:var(--teal);color:#fff;}
+.btn-teal:hover{background:var(--t2);transform:translateY(-1px);}
+.btn-teal:disabled{background:#B0BEC5;cursor:not-allowed;transform:none;}
+.btn-ghost{background:none;border:1.5px solid var(--border);color:var(--ink3);}
+.btn-ghost:hover{border-color:var(--teal);color:var(--teal);}
+.btn-full{width:100%;justify-content:center;padding:14px;}
+.btn-large{font-size:16px;padding:16px 32px;}
+
+/* ── TEACHER VIEW ── */
+.steps-bar{display:flex;gap:0;margin-bottom:2rem;background:var(--white);
+  border:1px solid var(--border);border-radius:16px;overflow:hidden;}
+.step-item{flex:1;padding:14px 10px;text-align:center;transition:all .2s;border-left:1px solid var(--border);position:relative;}
+.step-item:first-child{border-left:none;}
+.step-item.on{background:var(--teal3);}
+.step-item.done{background:var(--grenl);}
+.si-num{font-size:11px;font-weight:700;color:var(--ink3);margin-bottom:2px;}
+.si-title{font-size:13px;font-weight:700;color:var(--ink);}
+.step-item.on .si-num{color:var(--teal);}
+.step-item.on .si-title{color:var(--teal);}
+.step-item.done .si-num{color:var(--green);}
+.step-item.done .si-title{color:var(--green);}
+
+/* ── STEP CARDS ── */
+.step-card{background:var(--white);border:1px solid var(--border);border-radius:20px;padding:1.8rem;margin-bottom:1rem;}
+.step-card h2{font-size:18px;font-weight:900;margin-bottom:6px;}
+.step-card p{font-size:14px;color:var(--ink3);line-height:1.8;margin-bottom:1.4rem;}
+
+/* ── TYPE SELECTOR ── */
+.type-groups{display:flex;flex-direction:column;gap:1.2rem;}
+.type-group-label{font-size:12px;font-weight:700;color:var(--ink3);margin-bottom:8px;letter-spacing:.3px;}
+.type-options{display:flex;gap:10px;flex-wrap:wrap;}
+.type-opt{
+  flex:1;min-width:140px;padding:1rem;
+  background:var(--bg);border:2px solid var(--border);
+  border-radius:16px;text-align:center;cursor:pointer;transition:all .2s;
+}
+.type-opt:hover{border-color:var(--b2);transform:translateY(-2px);}
+.type-opt.on{border-width:2px;}
+.type-opt .to-icon{font-size:28px;margin-bottom:6px;display:block;}
+.type-opt .to-label{font-size:14px;font-weight:700;display:block;margin-bottom:4px;}
+.type-opt .to-desc{font-size:12px;color:var(--ink3);line-height:1.5;}
+
+/* Type colors */
+.type-ind.on{border-color:var(--blue);background:var(--bluel);}
+.type-pair.on{border-color:var(--purp);background:var(--purpl);}
+.type-grp.on{border-color:var(--teal);background:var(--teal3);}
+.type-goal.on{border-color:var(--amber);background:var(--ambl);}
+.type-close.on{border-color:var(--green);background:var(--grenl);}
+
+/* ── PROMPT TEXTAREA ── */
+.prompt-area{
+  width:100%;min-height:200px;
+  background:var(--bg);border:2px solid var(--border);
+  border-radius:14px;padding:16px;resize:none;
+  font-family:'Tajawal',sans-serif;font-size:14.5px;
+  color:var(--ink);line-height:1.85;outline:none;transition:all .2s;
+}
+.prompt-area:focus{border-color:var(--teal);background:var(--white);}
+.prompt-area::placeholder{color:var(--ink3);}
+
+.prompt-tips{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px;}
+.ptip{background:var(--bg);border:1px solid var(--border);border-radius:20px;
+  padding:5px 14px;font-size:12.5px;color:var(--ink3);cursor:pointer;transition:all .2s;}
+.ptip:hover{border-color:var(--teal);color:var(--teal);background:var(--teal3);}
+
+/* ── GENERATING ── */
+.gen-overlay{
+  background:var(--white);border:1px solid var(--border);
+  border-radius:20px;padding:2.5rem;text-align:center;
+}
+.gen-spinner{
+  width:52px;height:52px;border-radius:50%;margin:0 auto 1.2rem;
+  border:3px solid var(--border);border-top-color:var(--teal);
+  animation:spin 1s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+.gen-stage{font-size:16px;font-weight:700;color:var(--ink);margin-bottom:6px;}
+.gen-sub{font-size:13px;color:var(--ink3);line-height:1.8;}
+
+.gen-log{
+  background:var(--bg);border:1px solid var(--border);
+  border-radius:12px;padding:12px 16px;margin-top:1.2rem;
+  text-align:right;max-height:160px;overflow-y:auto;
+}
+.log-item{font-size:12.5px;color:var(--ink3);padding:3px 0;
+  border-bottom:1px solid var(--border);}
+.log-item:last-child{border-bottom:none;}
+.log-item.done{color:var(--green);}
+.log-item.fail{color:var(--red);}
+.log-item.active{color:var(--teal);font-weight:700;}
+
+/* ── RESULT ── */
+.result-box{
+  background:var(--white);border:2px solid var(--green);
+  border-radius:20px;padding:2rem;text-align:center;
+}
+.result-icon{font-size:52px;margin-bottom:.8rem;}
+.result-title{font-size:22px;font-weight:900;color:var(--ink);margin-bottom:6px;}
+.result-sub{font-size:14px;color:var(--ink3);line-height:1.8;margin-bottom:1.5rem;}
+
+.link-box{
+  display:flex;align-items:center;gap:10px;
+  background:var(--teal3);border:1px solid var(--teal4);
+  border-radius:14px;padding:12px 16px;margin-bottom:10px;text-align:right;
+}
+.lb-url{font-size:13px;color:var(--teal);flex:1;word-break:break-all;}
+.btn-copy-url{background:var(--teal);color:#fff;border:none;border-radius:8px;
+  padding:7px 16px;font-family:'Tajawal',sans-serif;font-size:13px;font-weight:700;
+  cursor:pointer;white-space:nowrap;transition:all .2s;}
+.btn-copy-url:hover{background:var(--t2);}
+
+.result-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:1.2rem;}
+
+/* ── CONFIG MISSING ── */
+.config-warn{
+  background:var(--ambl);border:1px solid var(--amb2);
+  border-radius:16px;padding:1.5rem;text-align:center;margin-bottom:1.4rem;
+}
+.config-warn .wi{font-size:36px;margin-bottom:.6rem;}
+.config-warn h3{font-size:16px;font-weight:700;color:var(--amber);margin-bottom:6px;}
+.config-warn p{font-size:13.5px;color:var(--amber);line-height:1.8;}
+
+/* ── MODAL ── */
+.modal-ov{display:none;position:fixed;inset:0;
+  background:rgba(26,23,20,.45);backdrop-filter:blur(6px);
+  z-index:200;align-items:center;justify-content:center;padding:1rem;}
+.modal-ov.show{display:flex;}
+.modal-box{background:var(--white);border-radius:22px;padding:2rem;
+  width:100%;max-width:360px;text-align:center;
+  box-shadow:0 16px 64px rgba(0,0,0,.14);
+  animation:popUp .3s cubic-bezier(.34,1.56,.64,1);}
+@keyframes popUp{from{opacity:0;transform:scale(.85);}to{opacity:1;transform:scale(1);}}
+.modal-icon{font-size:36px;margin-bottom:.7rem;}
+.modal-title{font-size:18px;font-weight:700;margin-bottom:4px;}
+.modal-sub{font-size:13px;color:var(--ink3);margin-bottom:1.2rem;}
+.pin-input{width:100%;background:var(--bg);border:1.5px solid var(--border);
+  border-radius:12px;padding:12px;font-size:24px;letter-spacing:10px;text-align:center;
+  font-family:'Tajawal',sans-serif;color:var(--ink);outline:none;transition:all .2s;}
+.pin-input:focus{border-color:var(--teal);}
+.pin-err{font-size:12.5px;color:var(--red);margin-top:7px;min-height:18px;}
+.modal-btns{display:flex;gap:10px;margin-top:1.2rem;}
+.mbt-ghost{flex:1;padding:11px;background:none;border:1.5px solid var(--border);
+  border-radius:11px;font-family:'Tajawal',sans-serif;font-size:14px;color:var(--ink3);cursor:pointer;}
+.mbt-ok{flex:2;padding:11px;background:var(--teal);color:#fff;border:none;border-radius:11px;
+  font-family:'Tajawal',sans-serif;font-size:14px;font-weight:700;cursor:pointer;}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(80px);
+  background:var(--ink);color:#fff;border-radius:30px;padding:10px 24px;
+  font-size:14px;font-weight:600;z-index:999;transition:transform .3s cubic-bezier(.34,1.56,.64,1);
+  pointer-events:none;white-space:nowrap;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+
+/* ── SAVED BADGE ── */
+.saved-row{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:.8rem;}
+.saved-badge{display:inline-flex;align-items:center;gap:6px;
+  background:var(--grenl);border:1px solid var(--gren2);
+  border-radius:20px;padding:5px 14px;font-size:12.5px;color:var(--green);font-weight:700;}
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast">✅ تم!</div>
+
+<!-- MODAL: PASSWORD -->
+<div class="modal-ov" id="modal">
+  <div class="modal-box">
+    <div class="modal-icon" id="modIcon">🔐</div>
+    <div class="modal-title" id="modTitle">لوحة الإدارة</div>
+    <div class="modal-sub" id="modSub">أدخل كلمة مرور المدير</div>
+    <input class="pin-input" id="pinInput" type="password" maxlength="20" placeholder="••••••" onkeydown="if(event.key==='Enter')checkPin()">
+    <div class="pin-err" id="pinErr"></div>
+    <div class="modal-btns">
+      <button class="mbt-ghost" onclick="closeModal()">إلغاء</button>
+      <button class="mbt-ok" onclick="checkPin()">دخول ←</button>
+    </div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="hdr-logo">🤖</div>
+  <div class="hdr-text">
+    <h1>مولّد الأنشطة الذكي</h1>
+    <p>صفي النشاط الذي تريدينه — Claude يبنيه وينشره تلقائياً</p>
+  </div>
+  <div class="hdr-right">
+    <button class="admin-btn" onclick="openModal('admin')">⚙️ إعدادات المدير</button>
+  </div>
+</div>
+
+<!-- ══ ADMIN VIEW ══ -->
+<div class="view" id="v-admin">
+  <div class="admin-header">
+    <div class="icon">⚙️</div>
+    <h2>لوحة إعدادات المدير</h2>
+    <p>هذه الإعدادات مخفية عن المعلمات — تُعدَّل فقط من هنا</p>
+  </div>
+
+  <div class="admin-grid">
+    <!-- Firebase -->
+    <div class="admin-card">
+      <h3>🔥 إعدادات Firebase</h3>
+      <div class="field">
+        <label>رابط Firebase Realtime Database</label>
+        <input type="text" id="fbUrl" placeholder="https://your-project-default-rtdb.firebaseio.com" value="https://cyber-safety-class-b266a-default-rtdb.firebaseio.com">
+      </div>
+    </div>
+    <!-- GitHub -->
+    <div class="admin-card">
+      <h3>🐙 إعدادات GitHub</h3>
+      <div class="field">
+        <label>GitHub Personal Access Token</label>
+        <input type="password" id="ghToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+      </div>
+      <div class="field">
+        <label>اسم المستخدم على GitHub</label>
+        <input type="text" id="ghOwner" placeholder="alkaabangirls2026-cpu" value="alkaabangirls2026-cpu">
+      </div>
+      <div class="field">
+        <label>اسم المستودع (Repository)</label>
+        <input type="text" id="ghRepo" placeholder="1234" value="1234">
+      </div>
+      <div class="hint" style="font-size:12px;">
+        احصلي على Token من: <a href="https://github.com/settings/tokens/new" target="_blank">github.com/settings/tokens/new</a><br>
+        اختاري: <b>repo</b> ← Generate token
+      </div>
+    </div>
+    <!-- Passwords -->
+    <div class="admin-card">
+      <h3>🔐 كلمات المرور</h3>
+      <div class="field">
+        <label>كلمة مرور المدير (الحالية: admin2024)</label>
+        <input type="password" id="adminPwd" placeholder="أدخل كلمة مرور جديدة للمدير">
+      </div>
+      <div class="field">
+        <label>كلمة مرور المعلمة (لشاشة المتابعة)</label>
+        <input type="text" id="teacherPwd" placeholder="1234" value="1234">
+      </div>
+    </div>
+    <!-- Claude API -->
+    <div class="admin-card">
+      <h3>🤖 Claude API</h3>
+      <div class="field">
+        <label>Anthropic API Key</label>
+        <input type="password" id="claudeKey" placeholder="sk-ant-api03-xxxx">
+      </div>
+      <div class="hint" style="font-size:12px;">
+        احصلي على المفتاح من <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a>
+      </div>
+    </div>
+    <!-- Custom Prompt Suffix -->
+    <div class="admin-card full-width">
+      <h3>📝 إضافة تعليمات ثابتة لجميع الأنشطة (اختياري)</h3>
+      <div class="field">
+        <label>هذا النص يُضاف تلقائياً لكل Prompt تُرسله المعلمة</label>
+        <textarea id="adminSuffix" placeholder="مثال: استهدف قطر المنهج والمصطلحات القطرية. الأنشطة للمرحلة الإعدادية..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center;">
+    <button class="btn btn-teal btn-large" onclick="saveAdmin()">💾 حفظ جميع الإعدادات</button>
+    <div class="saved-row" id="adminSavedRow" style="display:none;">
+      <span class="saved-badge">✅ تم الحفظ — الأداة جاهزة للمعلمات</span>
+      <button class="btn btn-ghost" onclick="closeAdmin()" style="font-size:13px;padding:7px 16px;">العودة للأداة ←</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TEACHER VIEW ══ -->
+<div class="view on" id="v-teacher">
+
+  <!-- Config warning -->
+  <div class="config-warn" id="configWarn" style="display:none;">
+    <div class="wi">⚠️</div>
+    <h3>الأداة تحتاج إعداداً من المدير</h3>
+    <p>يرجى طلب من المدير إدخال بيانات Firebase و GitHub و Claude API<br>
+    ثم ستعمل الأداة تلقائياً بدون أي خطوات تقنية منكِ</p>
+  </div>
+
+  <!-- Steps bar -->
+  <div class="steps-bar">
+    <div class="step-item on" id="s-bar-1"><div class="si-num">الخطوة 1</div><div class="si-title">نوع النشاط</div></div>
+    <div class="step-item" id="s-bar-2"><div class="si-num">الخطوة 2</div><div class="si-title">وصف النشاط</div></div>
+    <div class="step-item" id="s-bar-3"><div class="si-num">الخطوة 3</div><div class="si-title">التوليد والنشر</div></div>
+  </div>
+
+  <!-- STEP 1: TYPE -->
+  <div id="step1" class="step-card">
+    <h2>اختاري نوع النشاط</h2>
+    <p>ماذا تريدين أن تبني Claude لكِ؟</p>
+    <div class="type-groups">
+      <div>
+        <div class="type-group-label">🎯 استراتيجيات التعلم</div>
+        <div class="type-options">
+          <div class="type-opt type-ind" onclick="selectType('individual', this)" data-key="individual">
+            <span class="to-icon">👤</span>
+            <span class="to-label">فردي</span>
+            <span class="to-desc">نشاط يعمله الطالب منفرداً على جهازه</span>
+          </div>
+          <div class="type-opt type-pair" onclick="selectType('pair', this)" data-key="pair">
+            <span class="to-icon">👥</span>
+            <span class="to-label">ثنائي</span>
+            <span class="to-desc">تنسيق وتشارك بين طالبين عبر الكتابة</span>
+          </div>
+          <div class="type-opt type-grp" onclick="selectType('group', this)" data-key="group">
+            <span class="to-icon">👨‍👩‍👧‍👦</span>
+            <span class="to-label">جماعي</span>
+            <span class="to-desc">مجموعات تتشارك وتتنافس مع بعضها</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="type-group-label">📊 أنشطة التقييم</div>
+        <div class="type-options">
+          <div class="type-opt type-goal" onclick="selectType('goal_closure', this)" data-key="goal_closure">
+            <span class="to-icon">🎯</span>
+            <span class="to-label">غلق الهدف</span>
+            <span class="to-desc">تحقق فوري: هل تحقق الهدف التعليمي؟</span>
+          </div>
+          <div class="type-opt type-close" onclick="selectType('lesson_closure', this)" data-key="lesson_closure">
+            <span class="to-icon">🚪</span>
+            <span class="to-label">الغلق الختامي</span>
+            <span class="to-desc">Exit Ticket شامل في نهاية الدرس</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:1.4rem;text-align:left;">
+      <button class="btn btn-teal" id="nextStep1" onclick="goStep2()" disabled>التالي ←</button>
+    </div>
+  </div>
+
+  <!-- STEP 2: DESCRIBE -->
+  <div id="step2" style="display:none;">
+    <div class="step-card">
+      <h2>صفي النشاط الذي تريدينه</h2>
+      <p>كلما زادت التفاصيل، كلما كان النشاط أدق وأنسب لطلابك</p>
+      <textarea class="prompt-area" id="teacherPrompt" placeholder="اكتبي هنا وصف النشاط...
+
+مثال: أنا معلمة حاسب للصف السابع. موضوع الدرس: شبكات الحاسوب (LAN, WAN, MAN). أريد نشاطاً يطلب من الطالب مقارنة الأنواع الثلاثة في جدول ثم حل مسألة تطبيقية بسيطة."></textarea>
+
+      <!-- Quick tips -->
+      <div class="prompt-tips">
+        <div class="ptip" onclick="addTip('أنا معلمة ')">+ المادة والصف</div>
+        <div class="ptip" onclick="addTip('موضوع الدرس: ')">+ موضوع الدرس</div>
+        <div class="ptip" onclick="addTip('الهدف التعليمي: ')">+ الهدف</div>
+        <div class="ptip" onclick="addTip('عدد الطلاب: ')">+ عدد الطلاب</div>
+        <div class="ptip" onclick="addTip('المستوى: ')">+ المستوى</div>
+        <div class="ptip" onclick="addTip('مع مراعاة الفروق الفردية (3 مستويات)')">+ فروق فردية</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:space-between;">
+      <button class="btn btn-ghost" onclick="goStep1()">← رجوع</button>
+      <button class="btn btn-teal" onclick="goStep3()">🚀 توليد ونشر النشاط</button>
+    </div>
+  </div>
+
+  <!-- STEP 3: GENERATING + RESULT -->
+  <div id="step3" style="display:none;">
+
+    <!-- Generating state -->
+    <div class="gen-overlay" id="genOverlay">
+      <div class="gen-spinner"></div>
+      <div class="gen-stage" id="genStage">جاري توليد النشاط...</div>
+      <div class="gen-sub" id="genSub">Claude يبني نشاطاً مخصصاً لطلابك</div>
+      <div class="gen-log" id="genLog"></div>
+    </div>
+
+    <!-- Result state -->
+    <div class="result-box" id="resultBox" style="display:none;">
+      <div class="result-icon">🎉</div>
+      <div class="result-title">النشاط جاهز ومنشور!</div>
+      <div class="result-sub">أرسلي هذا الرابط لطلابك — يفتح مباشرة بدون تسجيل</div>
+
+      <div class="link-box">
+        <span class="lb-url" id="resultUrl">—</span>
+        <button class="btn-copy-url" onclick="copyUrl()">📋 نسخ</button>
+      </div>
+
+      <div style="background:var(--teal3);border:1px solid var(--teal4);border-radius:12px;padding:12px;font-size:13px;color:var(--teal);line-height:1.8;margin-bottom:1rem;text-align:right;">
+        🔐 <b>شاشة المتابعة:</b> افتحي الرابط وادخلي كلمة المرور <b id="showPwd">1234</b> لمتابعة إجابات الطلاب لحظياً
+      </div>
+
+      <div class="result-actions">
+        <a id="openBtn" href="#" target="_blank" class="btn btn-teal">🔗 فتح النشاط</a>
+        <button class="btn btn-ghost" onclick="resetTool()">+ نشاط جديد</button>
+      </div>
+    </div>
+
+    <!-- Error state -->
+    <div id="errorBox" style="display:none;">
+      <div class="config-warn">
+        <div class="wi">❌</div>
+        <h3>حدث خطأ</h3>
+        <p id="errorMsg">تأكدي من إعدادات المدير وحاولي مجدداً</p>
+      </div>
+      <button class="btn btn-ghost" onclick="goStep2()" style="margin-top:1rem;">← حاولي مجدداً</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════
+// STORAGE KEYS
+// ══════════════════════════════════════════════
+const K = {
+  fb:       'cfg_firebase',
+  ghToken:  'cfg_gh_token',
+  ghOwner:  'cfg_gh_owner',
+  ghRepo:   'cfg_gh_repo',
+  adminPwd: 'cfg_admin_pwd',
+  tPwd:     'cfg_teacher_pwd',
+  claude:   'cfg_claude_key',
+  suffix:   'cfg_suffix',
+};
+
+let selectedType = null;
+let modalTarget = 'admin';
+let pendingAdminActions = [];
+
+// ══════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════
+window.onload = () => {
+  // Load saved values into admin form
+  if (ls(K.fb))       document.getElementById('fbUrl').value    = ls(K.fb);
+  if (ls(K.ghToken))  document.getElementById('ghToken').value  = ls(K.ghToken);
+  if (ls(K.ghOwner))  document.getElementById('ghOwner').value  = ls(K.ghOwner);
+  if (ls(K.ghRepo))   document.getElementById('ghRepo').value   = ls(K.ghRepo);
+  if (ls(K.tPwd))     document.getElementById('teacherPwd').value= ls(K.tPwd);
+  if (ls(K.suffix))   document.getElementById('adminSuffix').value= ls(K.suffix);
+  if (ls(K.claude))   document.getElementById('claudeKey').value = ls(K.claude);
+  // Show config warning if not set
+  checkConfig();
+  // Display teacher pwd in result
+  document.getElementById('showPwd').textContent = ls(K.tPwd) || '1234';
+};
+
+function ls(key) { return localStorage.getItem(key) || ''; }
+function ss(key, val) { localStorage.setItem(key, val); }
+function isConfigured() {
+  return ls(K.fb) && ls(K.ghToken) && ls(K.ghOwner) && ls(K.ghRepo) && ls(K.claude);
+}
+function checkConfig() {
+  document.getElementById('configWarn').style.display = isConfigured() ? 'none' : 'block';
+}
+
+// ══════════════════════════════════════════════
+// MODAL (password)
+// ══════════════════════════════════════════════
+function openModal(target) {
+  modalTarget = target;
+  document.getElementById('modIcon').textContent = '🔐';
+  document.getElementById('modTitle').textContent = 'لوحة الإدارة';
+  document.getElementById('modSub').textContent = 'أدخل كلمة مرور المدير';
+  document.getElementById('pinErr').textContent = '';
+  document.getElementById('pinInput').value = '';
+  document.getElementById('modal').classList.add('show');
+  setTimeout(() => document.getElementById('pinInput').focus(), 100);
+}
+function closeModal() {
+  document.getElementById('modal').classList.remove('show');
+}
+function checkPin() {
+  const val = document.getElementById('pinInput').value;
+  const adminPwd = ls(K.adminPwd) || 'admin123';
+  if (val === adminPwd) {
+    closeModal();
+    showAdmin();
+  } else {
+    document.getElementById('pinErr').textContent = '❌ كلمة المرور غير صحيحة';
+    document.getElementById('pinInput').value = '';
+  }
+}
+
+// ══════════════════════════════════════════════
+// ADMIN
+// ══════════════════════════════════════════════
+function showAdmin() {
+  document.getElementById('v-teacher').classList.remove('on');
+  document.getElementById('v-admin').classList.add('on');
+}
+function closeAdmin() {
+  document.getElementById('v-admin').classList.remove('on');
+  document.getElementById('v-teacher').classList.add('on');
+  checkConfig();
+}
+function saveAdmin() {
+  const fb      = document.getElementById('fbUrl').value.trim();
+  const ghT     = document.getElementById('ghToken').value.trim();
+  const ghO     = document.getElementById('ghOwner').value.trim();
+  const ghR     = document.getElementById('ghRepo').value.trim();
+  const aPwd    = document.getElementById('adminPwd').value.trim();
+  const tPwd    = document.getElementById('teacherPwd').value.trim();
+  const claude  = document.getElementById('claudeKey').value.trim();
+  const suffix  = document.getElementById('adminSuffix').value.trim();
+
+  if (fb)     ss(K.fb, fb);
+  if (ghT)    ss(K.ghToken, ghT);
+  if (ghO)    ss(K.ghOwner, ghO);
+  if (ghR)    ss(K.ghRepo, ghR);
+  if (aPwd)   ss(K.adminPwd, aPwd);
+  if (tPwd)   ss(K.tPwd, tPwd);
+  if (claude) ss(K.claude, claude);
+  if (suffix !== undefined) ss(K.suffix, suffix);
+
+  document.getElementById('showPwd').textContent = tPwd || ls(K.tPwd) || '1234';
+  document.getElementById('adminSavedRow').style.display = 'flex';
+  toast('✅ تم حفظ الإعدادات');
+}
+
+// ══════════════════════════════════════════════
+// STEP NAVIGATION
+// ══════════════════════════════════════════════
+function setBar(step) {
+  [1,2,3].forEach(i => {
+    const el = document.getElementById('s-bar-'+i);
+    el.classList.remove('on','done');
+    if (i < step) el.classList.add('done');
+    if (i === step) el.classList.add('on');
+  });
+}
+function selectType(key, el) {
+  document.querySelectorAll('.type-opt').forEach(e => e.classList.remove('on'));
+  el.classList.add('on');
+  selectedType = key;
+  document.getElementById('nextStep1').disabled = false;
+}
+function goStep1() {
+  setBar(1);
+  document.getElementById('step1').style.display = '';
+  document.getElementById('step2').style.display = 'none';
+  document.getElementById('step3').style.display = 'none';
+}
+function goStep2() {
+  if (!selectedType) return;
+  setBar(2);
+  document.getElementById('step1').style.display = 'none';
+  document.getElementById('step2').style.display = '';
+  document.getElementById('step3').style.display = 'none';
+  document.getElementById('teacherPrompt').focus();
+}
+function goStep3() {
+  const p = document.getElementById('teacherPrompt').value.trim();
+  if (!p) { toast('❗ يرجى وصف النشاط أولاً'); return; }
+  if (!isConfigured()) { toast('❌ يرجى طلب إعداد الأداة من المدير'); return; }
+  setBar(3);
+  document.getElementById('step1').style.display = 'none';
+  document.getElementById('step2').style.display = 'none';
+  document.getElementById('step3').style.display = '';
+  document.getElementById('genOverlay').style.display = '';
+  document.getElementById('resultBox').style.display = 'none';
+  document.getElementById('errorBox').style.display = 'none';
+  generateAndPublish();
+}
+function resetTool() {
+  selectedType = null;
+  document.querySelectorAll('.type-opt').forEach(e => e.classList.remove('on'));
+  document.getElementById('nextStep1').disabled = true;
+  document.getElementById('teacherPrompt').value = '';
+  document.getElementById('genLog').innerHTML = '';
+  goStep1();
+}
+
+// ══════════════════════════════════════════════
+// QUICK TIPS
+// ══════════════════════════════════════════════
+function addTip(text) {
+  const ta = document.getElementById('teacherPrompt');
+  ta.value += (ta.value && !ta.value.endsWith('\n') ? '\n' : '') + text;
+  ta.focus();
+}
+
+// ══════════════════════════════════════════════
+// LOG
+// ══════════════════════════════════════════════
+let logItems = [];
+function log(msg, status='active') {
+  logItems.push({ msg, status });
+  const gl = document.getElementById('genLog');
+  gl.innerHTML = logItems.map(l =>
+    `<div class="log-item ${l.status}">${l.status==='done'?'✓':l.status==='fail'?'✗':'⟳'} ${l.msg}</div>`
+  ).join('');
+  gl.scrollTop = gl.scrollHeight;
+}
+function logDone(msg) { if(logItems.length>0) logItems[logItems.length-1].status='done'; if(msg) log(msg,'active'); renderLog(); }
+function renderLog() {
+  const gl = document.getElementById('genLog');
+  gl.innerHTML = logItems.map(l =>
+    `<div class="log-item ${l.status}">${l.status==='done'?'✓':l.status==='fail'?'✗':'⟳'} ${l.msg}</div>`
+  ).join('');
+  gl.scrollTop = gl.scrollHeight;
+}
+
+// ══════════════════════════════════════════════
+// TYPE LABELS
+// ══════════════════════════════════════════════
+const TYPE_META = {
+  individual:    { label:'فردي',         ar_desc:'نشاط فردي يعمله كل طالب منفرداً على جهازه' },
+  pair:          { label:'ثنائي',         ar_desc:'نشاط ثنائي — التنسيق بين طالبين يتم عبر الكتابة والإرسال في Firebase' },
+  group:         { label:'جماعي',         ar_desc:'نشاط جماعي — مجموعات تتشارك وتتنافس، التفاعل يتم كتابياً عبر Firebase' },
+  goal_closure:  { label:'غلق الهدف',     ar_desc:'تقييم تكويني قصير يتحقق من تحقق الهدف التعليمي المحدد' },
+  lesson_closure:{ label:'الغلق الختامي', ar_desc:'Exit Ticket شامل في نهاية الدرس — 3 أسئلة متدرجة + تقييم ذاتي' },
+};
+
+// ══════════════════════════════════════════════
+// GENERATE & PUBLISH
+// ══════════════════════════════════════════════
+async function generateAndPublish() {
+  logItems = [];
+  const firebase   = ls(K.fb);
+  const token      = ls(K.ghToken);
+  const owner      = ls(K.ghOwner);
+  const repo       = ls(K.ghRepo);
+  const claudeKey  = ls(K.claude);
+  const tPwd       = ls(K.tPwd) || '1234';
+  const suffix     = ls(K.suffix);
+  const userPrompt = document.getElementById('teacherPrompt').value.trim();
+  const typeMeta   = TYPE_META[selectedType];
+  const fbPath     = `/act_${selectedType}_${Date.now().toString().slice(-8)}`;
+
+  log('تحليل وصف النشاط...');
+  document.getElementById('genStage').textContent = 'تحليل النشاط...';
+
+  // ── TYPE-SPECIFIC INSTRUCTIONS ──
+  const typeInstructions = {
+    individual: `
+النشاط فردي:
+- الطالب يُدخل اسمه ثم يظهر له النشاط مباشرة
+- النشاط يحتوي على الأسئلة أو المهام المطلوبة من المعلمة بالضبط
+- كل سؤال له خانة كتابة واضحة
+- زر "إرسال" يحفظ كل الإجابات دفعة واحدة إلى Firebase
+- بعد الإرسال: رسالة شكر وتأكيد`,
+
+    pair: `
+النشاط ثنائي (التعلم عن بُعد - لا يجلسون سوياً):
+- المرحلة 1: الطالب يُدخل اسمه ويجيب بشكل فردي على السؤال (مؤقت 3 دقائق)
+- يُرسل إجابته إلى Firebase
+- المرحلة 2: تظهر له إجابة طالب آخر من Firebase (عشوائية)
+  ويكتب: "ماذا أضافت إجابة زميلي لتفكيري؟"
+- المرحلة 3: يكتب الخلاصة المشتركة ويُرسلها
+- مؤقت واضح لكل مرحلة`,
+
+    group: `
+النشاط جماعي (التعلم عن بُعد):
+- كل طالب يُدخل اسمه ورقم مجموعته (1-4)
+- يكتب مساهمته في مهمة المجموعة
+- يُرسل إلى Firebase
+- يرى على شاشته إجابات أعضاء مجموعته تتجمع لحظياً
+- في النهاية: زر "أرسل الخلاصة الجماعية"`,
+
+    goal_closure: `
+غلق الهدف (تقييم تكويني سريع 5 دقائق):
+- مؤقت 5 دقائق واضح في الأعلى
+- سؤالان أو ثلاثة مرتبطة مباشرة بالهدف التعليمي المذكور في الطلب
+- السؤال الأول: فهم (تعريف أو إكمال جملة)
+- السؤال الثاني: تطبيق (مثال من الحياة أو حل)
+- السؤال الثالث: تفكير ناقد (رأي أو مقارنة)
+- تقييم ذاتي: كيف تقيّم فهمك؟ (نجوم 1-5)
+- زر "أرسل" يحفظ الكل إلى Firebase`,
+
+    lesson_closure: `
+الغلق الختامي - Exit Ticket (نهاية الدرس):
+- مؤقت 5 دقائق
+- 3 أسئلة بالضبط متدرجة:
+  السؤال 1 (تذكر): "اكتب بكلماتك..."
+  السؤال 2 (تطبيق): "أعطِ مثالاً على..."
+  السؤال 3 (تفكير ناقد): "ما رأيك في... ولماذا؟"
+- خانة: "سؤال لا يزال عندي"
+- تقييم الحصة: 1-5 نجوم
+- زر "أرسل" يحفظ إلى Firebase`
+  };
+
+  // ── FIREBASE CODE TEMPLATE ──
+  const firebaseCode = `
+const DB = '${firebase}';
+const FB_PATH = '${fbPath}';
+
+async function saveToFirebase(data) {
+  const key = 'resp_' + Date.now();
+  const res = await fetch(DB + FB_PATH + '/' + key + '.json', {
+    method: 'PUT',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({...data, timestamp: Date.now()})
+  });
+  if (!res.ok) throw new Error('Firebase save failed');
+  return key;
+}
+
+async function loadFromFirebase() {
+  const res = await fetch(DB + FB_PATH + '.json');
+  return (await res.json()) || {};
+}
+
+async function deleteAllFirebase() {
+  await fetch(DB + FB_PATH + '.json', {method:'DELETE'});
+}
+
+function startLiveListener(callback) {
+  const evtSrc = new EventSource(DB + FB_PATH + '.json');
+  evtSrc.addEventListener('put', e => {
+    const {path, data} = JSON.parse(e.data);
+    callback(data || {});
+  });
+  evtSrc.onerror = () => {
+    evtSrc.close();
+    setInterval(async () => { callback(await loadFromFirebase()); }, 3000);
+  };
+  return evtSrc;
+}`;
+
+  // ── TEACHER DASHBOARD TEMPLATE ──
+  const dashboardCode = `
+// ── TEACHER DASHBOARD ──
+const TEACHER_PWD = '${tPwd}';
+
+function showTeacherBtn() {
+  const btn = document.getElementById('teacherBtn');
+  if (btn) btn.style.display = 'flex';
+}
+
+function openTeacherModal() {
+  document.getElementById('pwdModal').style.display = 'flex';
+  setTimeout(() => document.getElementById('pwdInput').focus(), 100);
+}
+
+function closeTeacherModal() {
+  document.getElementById('pwdModal').style.display = 'none';
+  document.getElementById('pwdInput').value = '';
+  document.getElementById('pwdErr').textContent = '';
+}
+
+function checkTeacherPwd() {
+  if (document.getElementById('pwdInput').value === TEACHER_PWD) {
+    closeTeacherModal();
+    openDashboard();
+  } else {
+    document.getElementById('pwdErr').textContent = '❌ كلمة المرور خاطئة';
+    document.getElementById('pwdInput').value = '';
+  }
+}
+
+function openDashboard() {
+  document.querySelectorAll('.student-view').forEach(v => v.style.display = 'none');
+  document.getElementById('dashboardView').style.display = 'block';
+  startLiveListener(renderDashboard);
+}
+
+function renderDashboard(data) {
+  const entries = Object.values(data).sort((a,b) => (b.timestamp||0)-(a.timestamp||0));
+  document.getElementById('responseCount').textContent = entries.length;
+  const grid = document.getElementById('responsesGrid');
+  if (!entries.length) {
+    grid.innerHTML = '<div style="text-align:center;padding:3rem;color:#888;">⏳ لا توجد إجابات بعد...</div>';
+    return;
+  }
+  grid.innerHTML = entries.map(e => \`
+    <div style="background:#fff;border:1px solid #e0e0e0;border-radius:12px;padding:1rem;margin-bottom:10px;">
+      <div style="font-weight:700;color:#1a1a1a;margin-bottom:6px;">👤 \${e.name || 'طالب'}</div>
+      <div style="font-size:12px;color:#888;margin-bottom:8px;">\${new Date(e.timestamp||0).toLocaleTimeString('ar')}</div>
+      \${Object.entries(e)
+        .filter(([k]) => !['name','timestamp'].includes(k))
+        .map(([k,v]) => \`<div style="font-size:13px;margin:4px 0;padding:6px 10px;background:#f5f5f5;border-radius:8px;"><b>\${k}:</b> \${v}</div>\`)
+        .join('')}
+    </div>\`).join('');
+}
+
+async function resetDashboard() {
+  if (!confirm('مسح جميع الإجابات؟')) return;
+  await deleteAllFirebase();
+  document.getElementById('responsesGrid').innerHTML = '<div style="text-align:center;padding:3rem;color:#888;">⏳ تم المسح...</div>';
+  document.getElementById('responseCount').textContent = '0';
+}`;
+
+  // ── FULL SYSTEM PROMPT ──
+  const systemPrompt = `أنت مطور خبير متخصص في بناء أنشطة تعليمية HTML تفاعلية للتعلم عن بُعد.
+
+مهمتك: بناء ملف HTML واحد كامل ومكتفٍ بذاته بناءً على وصف المعلمة.
+
+══════════════════════════════════════
+القواعد الصارمة — لا استثناء:
+══════════════════════════════════════
+
+1. أخرج كود HTML فقط — بدون أي شرح أو markdown أو backticks
+2. الكود يبدأ بـ <!DOCTYPE html> مباشرة
+3. خط Tajawal من Google Fonts — اتجاه RTL كامل
+4. تصميم: خلفية بيضاء أو فاتحة، ألوان جذابة، مناسب للطلاب
+5. يعمل على الهاتف والحاسب
+
+══════════════════════════════════════
+Firebase — استخدم هذا الكود بالضبط:
+══════════════════════════════════════
+${firebaseCode}
+
+══════════════════════════════════════
+شاشة المعلمة — استخدم هذا الكود بالضبط:
+══════════════════════════════════════
+${dashboardCode}
+
+══════════════════════════════════════
+بنية الصفحة الإلزامية:
+══════════════════════════════════════
+
+أ) شاشة الطالب (class="student-view"):
+   - خانة إدخال الاسم في البداية
+   - النشاط المطلوب بالضبط (حسب وصف المعلمة)
+   - زر "إرسال" يستدعي saveToFirebase()
+   - بعد الإرسال: رسالة شكر
+
+ب) لوحة المعلمة (id="dashboardView" style="display:none"):
+   - عنوان + عداد الإجابات (id="responseCount")
+   - شبكة الإجابات (id="responsesGrid")
+   - زر مسح الكل
+
+ج) نافذة كلمة المرور (id="pwdModal"):
+   - input (id="pwdInput" type="password")
+   - خانة الخطأ (id="pwdErr")
+   - زر تأكيد يستدعي checkTeacherPwd()
+   - زر إلغاء يستدعي closeTeacherModal()
+
+د) زر المعلمة (id="teacherBtn"):
+   - في أسفل الصفحة دائماً
+   - نص: "🔐 شاشة المعلمة"
+   - عند الضغط: openTeacherModal()
+
+══════════════════════════════════════
+نوع النشاط المطلوب: ${typeMeta.label}
+══════════════════════════════════════
+${typeInstructions[selectedType]}
+
+${suffix ? `\nتعليمات إضافية من المدير المدرسي:\n${suffix}` : ''}
+
+══════════════════════════════════════
+تذكر: النشاط يجب أن ينفذ بالضبط ما طلبته المعلمة — الأسئلة والمهام التي وصفتها تظهر كاملة في النشاط.
+══════════════════════════════════════`;
+
+  const fullUserPrompt = `المعلمة تطلب هذا النشاط:
+
+${userPrompt}
+
+نوع النشاط: ${typeMeta.label}
+
+المتطلب:
+- نفّذ بالضبط ما طلبته المعلمة (الأسئلة والمهام)
+- اتبع البنية الإلزامية الموضحة في التعليمات
+- Firebase مسار البيانات: ${fbPath}
+- كلمة مرور المعلمة: ${tPwd}
+
+أخرج كود HTML الكامل فقط، يبدأ بـ <!DOCTYPE html>`;
+
+  try {
+    log('إرسال الطلب إلى Claude AI...');
+    document.getElementById('genStage').textContent = 'Claude يبني النشاط...';
+    document.getElementById('genSub').textContent = 'قد تستغرق هذه الخطوة 30-60 ثانية';
+
+    const claudeRes = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': claudeKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true',
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-5',
+        max_tokens: 12000,
+        system: systemPrompt,
+        messages: [{ role: 'user', content: fullUserPrompt }]
+      })
+    });
+
+    if (!claudeRes.ok) {
+      const err = await claudeRes.json();
+      throw new Error('Claude API: ' + (err.error?.message || claudeRes.status));
+    }
+
+    const claudeData = await claudeRes.json();
+    let htmlContent = claudeData.content[0]?.text || '';
+
+    // Clean markdown wrappers
+    htmlContent = htmlContent
+      .replace(/^```html\s*/i, '')
+      .replace(/^```\s*/i, '')
+      .replace(/```\s*$/i, '')
+      .trim();
+
+    if (!htmlContent.toLowerCase().includes('<!doctype') && !htmlContent.toLowerCase().includes('<html')) {
+      throw new Error('الناتج لا يبدو ملف HTML صحيحاً — أعيدي المحاولة');
+    }
+
+    logItems[logItems.length-1].status = 'done';
+    log('رفع الملف على GitHub...', 'active');
+    document.getElementById('genStage').textContent = 'نشر على الإنترنت...';
+    document.getElementById('genSub').textContent = 'رفع الملف إلى GitHub Pages';
+    renderLog();
+
+    // Upload to GitHub
+    const fileName = `activity_${selectedType}_${Date.now()}.html`;
+    let sha = null;
+    try {
+      const check = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${fileName}`, {
+        headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' }
+      });
+      if (check.ok) { const j = await check.json(); sha = j.sha; }
+    } catch {}
+
+    const body = {
+      message: `نشاط: ${typeMeta.label} - ${new Date().toLocaleDateString('ar')}`,
+      content: btoa(unescape(encodeURIComponent(htmlContent)))
+    };
+    if (sha) body.sha = sha;
+
+    const ghRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${fileName}`, {
+      method: 'PUT',
+      headers: {
+        Authorization: `token ${token}`,
+        'Content-Type': 'application/json',
+        Accept: 'application/vnd.github.v3+json'
+      },
+      body: JSON.stringify(body)
+    });
+
+    if (!ghRes.ok) {
+      const err = await ghRes.json();
+      throw new Error('GitHub: ' + (err.message || ghRes.status));
+    }
+
+    logItems[logItems.length-1].status = 'done';
+    log('النشاط جاهز! 🎉', 'done');
+    renderLog();
+
+    const liveUrl = `https://${owner}.github.io/${repo}/${fileName}`;
+    document.getElementById('resultUrl').textContent = liveUrl;
+    document.getElementById('openBtn').href = liveUrl;
+    document.getElementById('showPwd').textContent = tPwd;
+
+    setTimeout(() => {
+      document.getElementById('genOverlay').style.display = 'none';
+      document.getElementById('resultBox').style.display = '';
+    }, 800);
+
+  } catch (err) {
+    if (logItems.length) logItems[logItems.length-1].status = 'fail';
+    renderLog();
+    log('فشل: ' + err.message, 'fail');
+    renderLog();
+    document.getElementById('errorMsg').textContent = err.message;
+    setTimeout(() => {
+      document.getElementById('genOverlay').style.display = 'none';
+      document.getElementById('errorBox').style.display = '';
+    }, 1000);
+  }
+}
+
+// ══════════════════════════════════════════════
+// UTILS
+// ══════════════════════════════════════════════
+function copyUrl() {
+  const url = document.getElementById('resultUrl').textContent;
+  navigator.clipboard.writeText(url).then(() => toast('✅ تم نسخ الرابط!'));
+}
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+</script>
+</body>
+</html>
