@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>خريطة ذهنية - مناطق قطر الجغرافية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(135deg, #e8f5e9 0%, #e3f2fd 50%, #fce4ec 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #1976d2, #7b1fa2);
+            padding: 25px;
+            border-radius: 20px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .school-name {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .student-input {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .student-input label {
+            font-weight: 700;
+            color: #1976d2;
+            font-size: 18px;
+        }
+
+        .student-input input {
+            flex: 1;
+            min-width: 200px;
+            padding: 12px 20px;
+            border: 3px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: 'Tajawal', sans-serif;
+            transition: all 0.3s;
+        }
+
+        .student-input input:focus {
+            outline: none;
+            border-color: #1976d2;
+            box-shadow: 0 0 10px rgba(25, 118, 210, 0.3);
+        }
+
+        .mindmap-container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            margin-bottom: 25px;
+            overflow-x: auto;
+        }
+
+        .mindmap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 100%;
+        }
+
+        .central-node {
+            background: linear-gradient(135deg, #673ab7, #9c27b0);
+            color: white;
+            padding: 25px 40px;
+            border-radius: 50px;
+            font-size: 24px;
+            font-weight: 800;
+            box-shadow: 0 10px 30px rgba(103, 58, 183, 0.4);
+            margin-bottom: 30px;
+            text-align: center;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .branches-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            width: 100%;
+        }
+
+        .branch {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            min-width: 250px;
+            max-width: 300px;
+            flex: 1;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border-top: 5px solid;
+            transition: all 0.3s;
+        }
+
+        .branch:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+
+        .branch-1 { border-color: #e91e63; }
+        .branch-2 { border-color: #2196f3; }
+        .branch-3 { border-color: #4caf50; }
+        .branch-4 { border-color: #ff9800; }
+        .branch-5 { border-color: #9c27b0; }
+
+        .branch-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            cursor: pointer;
+        }
+
+        .branch-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: white;
+        }
+
+        .branch-1 .branch-icon { background: #e91e63; }
+        .branch-2 .branch-icon { background: #2196f3; }
+        .branch-3 .branch-icon { background: #4caf50; }
+        .branch-4 .branch-icon { background: #ff9800; }
+        .branch-5 .branch-icon { background: #9c27b0; }
+
+        .branch-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .branch-content {
+            padding-right: 10px;
+        }
+
+        .sub-branch {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: #f5f5f5;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+
+        .sub-branch:hover {
+            background: #eeeeee;
+        }
+
+        .sub-branch input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Tajawal', sans-serif;
+            transition: all 0.3s;
+        }
+
+        .sub-branch input:focus {
+            outline: none;
+            border-color: #1976d2;
+        }
+
+        .delete-btn {
+            background: #f44336;
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .delete-btn:hover {
+            background: #d32f2f;
+            transform: scale(1.1);
+        }
+
+        .add-sub-btn {
+            background: linear-gradient(135deg, #4caf50, #8bc34a);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            font-family: 'Tajawal', sans-serif;
+            font-weight: 600;
+            margin-top: 10px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .add-sub-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+        }
+
+        .submit-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #1976d2, #2196f3);
+            color: white;
+            border: none;
+            padding: 18px 50px;
+            border-radius: 30px;
+            font-size: 20px;
+            font-family: 'Tajawal', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(25, 118, 210, 0.4);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(25, 118, 210, 0.5);
+        }
+
+        .submit-btn:disabled {
+            background: #bdbdbd;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .success-message {
+            display: none;
+            background: linear-gradient(135deg, #4caf50, #8bc34a);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: 700;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .teacher-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, #607d8b, #455a64);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-family: 'Tajawal', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .teacher-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .modal h3 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .modal input {
+            padding: 12px 20px;
+            border: 3px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 18px;
+            font-family: 'Tajawal', sans-serif;
+            text-align: center;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .modal-btns {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .modal-btn {
+            padding: 10px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-family: 'Tajawal', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .modal-btn.confirm {
+            background: #4caf50;
+            color: white;
+        }
+
+        .modal-btn.cancel {
+            background: #f44336;
+            color: white;
+        }
+
+        .teacher-panel {
+            display: none;
+            background: linear-gradient(135deg, #263238, #37474f);
+            padding: 30px;
+            border-radius: 20px;
+            margin-top: 30px;
+            color: white;
+        }
+
+        .teacher-panel h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            background: rgba(255,255,255,0.1);
+            padding: 15px 30px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: 800;
+            color: #4caf50;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .responses-container {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .response-card {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            border-right: 4px solid #4caf50;
+        }
+
+        .response-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .student-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: #4caf50;
+        }
+
+        .response-time {
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        .response-content {
+            background: rgba(0,0,0,0.2);
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .branch-response {
+            margin-bottom: 10px;
+            padding: 10px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+        }
+
+        .branch-response-title {
+            font-weight: 700;
+            color: #ffeb3b;
+            margin-bottom: 5px;
+        }
+
+        .branch-response-items {
+            padding-right: 15px;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .clear-btn {
+            background: #f44336;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-family: 'Tajawal', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .close-panel-btn {
+            background: #9e9e9e;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-family: 'Tajawal', sans-serif;
+            cursor: pointer;
+            margin-top: 15px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .no-responses {
+            text-align: center;
+            padding: 40px;
+            opacity: 0.6;
+            font-size: 18px;
+        }
+
+        .instructions {
+            background: #fff3e0;
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border-right: 4px solid #ff9800;
+        }
+
+        .instructions h4 {
+            color: #e65100;
+            margin-bottom: 8px;
+        }
+
+        .instructions ul {
+            padding-right: 20px;
+            color: #5d4037;
+        }
+
+        .instructions li {
+            margin-bottom: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 22px;
+            }
+
+            .central-node {
+                font-size: 20px;
+                padding: 20px 30px;
+            }
+
+            .branch {
+                min-width: 100%;
+            }
+
+            .submit-btn {
+                width: 100%;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="school-name">🏫 مدرسة الكعبان الابتدائية الإعدادية الثانوية للبنات - هاجر قعاية</div>
+        <h1>🗺️ خريطة ذهنية - مناطق قطر الجغرافية</h1>
+        <p>الصف السادس | مادة الدراسات الاجتماعية</p>
+    </div>
+
+    <div class="student-input">
+        <label>👩‍🎓 اسم الطالبة:</label>
+        <input type="text" id="studentName" placeholder="اكتبي اسمك الكامل هنا...">
+    </div>
+
+    <div class="instructions">
+        <h4>📝 تعليمات النشاط:</h4>
+        <ul>
+            <li>اضغطي على كل فرع واكتبي معلومة عن المنطقة</li>
+            <li>يمكنك إضافة أفرع فرعية جديدة بالضغط على زر «+ إضافة معلومة»</li>
+            <li>بعد الانتهاء، اضغطي على «أرسلي خريطتك للمعلمة»</li>
+        </ul>
+    </div>
+
+    <div class="mindmap-container">
+        <div class="mindmap">
+            <div class="central-node">🇶🇦 مناطق قطر</div>
+            
+            <div class="branches-container">
+                <!-- المنطقة الشمالية -->
+                <div class="branch branch-1" data-branch="north">
+                    <div class="branch-header">
+                        <div class="branch-icon">🏔️</div>
+                        <div class="branch-title">المنطقة الشمالية</div>
+                    </div>
+                    <div class="branch-content" id="north-content">
+                        <div class="sub-branch">
+                            <input type="text" placeholder="اكتبي معلومة عن المنطقة الشمالية...">
+                            <button class="delete-btn" onclick="deleteSubBranch(this)">×</button>
+                        </div>
+                    </div>
+                    <button class="add-sub-btn" onclick="addSubBranch('north')">+ إضافة معلومة</button>
+                </div>
+
+                <!-- المنطقة الوسطى -->
+                <div class="branch branch-2" data-branch="central">
+                    <div class="branch-header">
+                        <div class="branch-icon">🏜️</div>
+                        <div class="branch-title">المنطقة الوسطى</div>
+                    </div>
+                    <div class="branch-content" id="central-content">
+                        <div class="sub-branch">
+                            <input type="text" placeholder="اكتبي معلومة عن المنطقة الوسطى...">
+                            <button class="delete-btn" onclick="deleteSubBranch(this)">×</button>
+                        </div>
+                    </div>
+                    <button class="add-sub-btn" onclick="addSubBranch('central')">+ إضافة معلومة</button>
+                </div>
+
+                <!-- المنطقة الجنوبية -->
+                <div class="branch branch-3" data-branch="south">
+                    <div class="branch-header">
+                        <div class="branch-icon">🌴</div>
+                        <div class="branch-title">المنطقة الجنوبية</div>
+                    </div>
+                    <div class="branch-content" id="south-content">
+                        <div class="sub-branch">
+                            <input type="text" placeholder="اكتبي معلومة عن المنطقة الجنوبية...">
+                            <button class="delete-btn" onclick="deleteSubBranch(this)">×</button>
+                        </div>
+                    </div>
+                    <button class="add-sub-btn" onclick="addSubBranch('south')">+ إضافة معلومة</button>
+                </div>
+
+                <!-- العاصمة الدوحة -->
+                <div class="branch branch-4" data-branch="doha">
+                    <div class="branch-header">
+                        <div class="branch-icon">🏙️</div>
+                        <div class="branch-title">العاصمة الدوحة</div>
+                    </div>
+                    <div class="branch-content" id="doha-content">
+                        <div class="sub-branch">
+                            <input type="text" placeholder="اكتبي معلومة عن الدوحة...">
+                            <button class="delete-btn" onclick="deleteSubBranch(this)">×</button>
+                        </div>
+                    </div>
+                    <button class="add-sub-btn" onclick="addSubBranch('doha')">+ إضافة معلومة</button>
+                </div>
+
+                <!-- السواحل -->
+                <div class="branch branch-5" data-branch="coast">
+                    <div class="branch-header">
+                        <div class="branch-icon">🏖️</div>
+                        <div class="branch-title">السواحل</div>
+                    </div>
+                    <div class="branch-content" id="coast-content">
+                        <div class="sub-branch">
+                            <input type="text" placeholder="اكتبي معلومة عن السواحل...">
+                            <button class="delete-btn" onclick="deleteSubBranch(this)">×</button>
+                        </div>
+                    </div>
+                    <button class="add-sub-btn" onclick="addSubBranch('coast')">+ إضافة معلومة</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="submit-container">
+        <button class="submit-btn" onclick="submitMindMap()">📤 أرسلي خريطتك للمعلمة</button>
+        <div class="success-message" id="successMessage">
+            ✅ تم إرسال خريطتك بنجاح! أحسنتِ يا بطلة! 🌟
+        </div>
+    </div>
+
+    <button class="teacher-btn" onclick="showPasswordModal()">🔐 شاشة المعلمة</button>
+
+    <div class="modal-overlay" id="passwordModal">
+        <div class="modal">
+            <h3>🔐 أدخلي كلمة المرور</h3>
+            <input type="password" id="passwordInput" placeholder="كلمة المرور">
+            <div class="modal-btns">
+                <button class="modal-btn confirm" onclick="checkPassword()">دخول</button>
+                <button class="modal-btn cancel" onclick="hidePasswordModal()">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="teacher-panel" id="teacherPanel">
+        <h2>📊 لوحة متابعة المعلمة</h2>
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-number" id="totalResponses">0</div>
+                <div class="stat-label">إجمالي الإرسالات</div>
+            </div>
+        </div>
+        <div class="responses-container" id="responsesContainer">
+            <div class="no-responses">لا توجد إرسالات بعد...</div>
+        </div>
+        <button class="clear-btn" onclick="clearAllResponses()">🗑️ مسح جميع الإرسالات</button>
+        <button class="close-panel-btn" onclick="closeTeacherPanel()">إغلاق اللوحة</button>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script>
+        const firebaseConfig = {
+            databaseURL: "https://cyber-safety-class-b266a-default-rtdb.firebaseio.com"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        const activityPath = "/activity_mindmap_qatar_regions_486814";
+
+        const branchNames = {
+            'north': 'المنطقة الشمالية',
+            'central': 'المنطقة الوسطى',
+            'south': 'المنطقة الجنوبية',
+            'doha': 'العاصمة الدوحة',
+            'coast': 'السواحل'
+        };
+
+        function addSubBranch(branchId) {
+            const content = document.getElementById(branchId + '-content');
+            const newSubBranch = document.createElement('div');
+            newSubBranch.className = 'sub-branch';
+            newSubBranch.innerHTML = `
+                <input type="text" placeholder="اكتبي معلومة جديدة...">
+                <button class="delete-btn" onclick="deleteSubBranch(this)">×</button>
+            `;
+            content.appendChild(newSubBranch);
+            newSubBranch.querySelector('input').focus();
+        }
+
+        function deleteSubBranch(btn) {
+            const subBranch = btn.parentElement;
+            const content = subBranch.parentElement;
+            if (content.querySelectorAll('.sub-branch').length > 1) {
+                subBranch.remove();
+            } else {
+                alert('يجب أن يبقى فرع واحد على الأقل!');
+            }
+        }
+
+        function collectMindMapData() {
+            const data = {};
+            const branches = ['north', 'central', 'south', 'doha', 'coast'];
+            
+            branches.forEach(branchId => {
+                const content = document.getElementById(branchId + '-content');
+                const inputs = content.querySelectorAll('input');
+                const items = [];
+                inputs.forEach(input => {
+                    if (input.value.trim()) {
+                        items.push(input.value.trim());
+                    }
+                });
+                data[branchId] = {
+                    name: branchNames[branchId],
+                    items: items
+                };
+            });
+            
+            return data;
+        }
+
+        function mindMapToText(data) {
+            let text = '';
+            for (const key in data) {
+                if (data[key].items.length > 0) {
+                    text += `【${data[key].name}】: ${data[key].items.join(' | ')}\n`;
+                }
+            }
+            return text || 'لم يتم إدخال أي معلومات';
+        }
+
+        function submitMindMap() {
+            const studentName = document.getElementById('studentName').value.trim();
+            
+            if (!studentName) {
+                alert('الرجاء كتابة اسمك أولاً! 📝');
+                document.getElementById('studentName').focus();
+                return;
+            }
+
+            const mindMapData = collectMindMapData();
+            const hasContent = Object.values(mindMapData).some(branch => branch.items.length > 0);
+            
+            if (!hasContent) {
+                alert('الرجاء كتابة معلومة واحدة على الأقل في الخريطة الذهنية! 🗺️');
+                return;
+            }
+
+            const submitBtn = document.querySelector('.submit-btn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'جارٍ الإرسال...';
+
+            const submission = {
+                studentName: studentName,
+                mindMapData: mindMapData,
+                mindMapText: mindMapToText(mindMapData),
+                timestamp: new Date().toLocaleString('ar-EG', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                }),
+                timestampValue: Date.now()
+            };
+
+            database.ref(activityPath).push(submission)
+                .then(() => {
+                    document.getElementById('successMessage').style.display = 'block';
+                    submitBtn.textContent = '✅ تم الإرسال بنجاح!';
+                    submitBtn.style.background = 'linear-gradient(135deg, #4caf50, #8bc34a)';
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    alert('حدث خطأ أثناء الإرسال. حاولي مرة أخرى.');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = '📤 أرسلي خريطتك للمعلمة';
+                });
+        }
+
+        function showPasswordModal() {
+            document.getElementById('passwordModal').style.display = 'flex';
+            document.getElementById('passwordInput').value = '';
