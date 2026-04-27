@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نشاط ثنائي - أنواع شبكات الحاسوب</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(135deg, #e0f7fa 0%, #f3e5f5 50%, #fff3e0 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1565c0, #7b1fa2);
+            color: white;
+            padding: 25px;
+            border-radius: 20px;
+            text-align: center;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(21, 101, 192, 0.3);
+        }
+
+        .school-name {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+
+        .teacher-info {
+            background: rgba(255,255,255,0.2);
+            padding: 8px 15px;
+            border-radius: 10px;
+            display: inline-block;
+            margin-top: 10px;
+            font-size: 0.95rem;
+        }
+
+        .student-form {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .form-group input, .form-group select {
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: 'Tajawal', sans-serif;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #1565c0;
+            box-shadow: 0 0 10px rgba(21, 101, 192, 0.2);
+        }
+
+        .pair-info {
+            background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border: 2px dashed #7b1fa2;
+        }
+
+        .pair-info h3 {
+            color: #7b1fa2;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pair-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+        }
+
+        .pair-item {
+            background: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .levels-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .level-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .level-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .level-1 {
+            border-top: 5px solid #4caf50;
+        }
+
+        .level-2 {
+            border-top: 5px solid #ff9800;
+        }
+
+        .level-3 {
+            border-top: 5px solid #f44336;
+        }
+
+        .level-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .level-badge {
+            padding: 8px 15px;
+            border-radius: 20px;
+            color: white;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .level-1 .level-badge { background: #4caf50; }
+        .level-2 .level-badge { background: #ff9800; }
+        .level-3 .level-badge { background: #f44336; }
+
+        .level-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .question {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+
+        .question-text {
+            font-size: 1.05rem;
+            color: #333;
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+
+        .question-hint {
+            background: #fff3cd;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: #856404;
+            margin-bottom: 15px;
+        }
+
+        .answer-area {
+            width: 100%;
+            min-height: 100px;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-family: 'Tajawal', sans-serif;
+            font-size: 1rem;
+            resize: vertical;
+            transition: all 0.3s;
+        }
+
+        .answer-area:focus {
+            outline: none;
+            border-color: #1565c0;
+        }
+
+        .partner-section {
+            background: linear-gradient(135deg, #e8f5e9, #e3f2fd);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+
+        .partner-section h4 {
+            color: #2e7d32;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+        }
+
+        .partner-answer {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            min-height: 80px;
+            border: 2px dashed #81c784;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #1565c0, #7b1fa2);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            font-family: 'Tajawal', sans-serif;
+            cursor: pointer;
+            display: block;
+            margin: 30px auto;
+            transition: all 0.3s;
+            box-shadow: 0 5px 20px rgba(21, 101, 192, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 30px rgba(21, 101, 192, 0.4);
+        }
+
+        .submit-btn:disabled {
+            background: #bdbdbd;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .info-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .info-card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .info-card h3 {
+            color: #1565c0;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .network-type {
+            background: #f5f5f5;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .network-type strong {
+            color: #7b1fa2;
+        }
+
+        .teacher-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, #d32f2f, #c2185b);
+            color: white;
+            padding: 15px 25px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 700;
+            font-family: 'Tajawal', sans-serif;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(211, 47, 47, 0.3);
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+
+        .teacher-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 1000px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #d32f2f, #c2185b);
+            color: white;
+            padding: 20px 25px;
+            border-radius: 20px 20px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            font-size: 1.3rem;
+        }
+
+        .close-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .close-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .password-section {
+            padding: 30px;
+            text-align: center;
+        }
+
+        .password-input {
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-family: 'Tajawal', sans-serif;
+            width: 200px;
+            text-align: center;
+            margin: 15px 0;
+        }
+
+        .password-submit {
+            background: linear-gradient(135deg, #d32f2f, #c2185b);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 700;
+            font-family: 'Tajawal', sans-serif;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .teacher-dashboard {
+            display: none;
+            padding: 25px;
+        }
+
+        .teacher-dashboard.active {
+            display: block;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .stats {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
+            padding: 15px 25px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #1565c0;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .clear-btn {
+            background: #f44336;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 700;
+            font-family: 'Tajawal', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .clear-btn:hover {
+            background: #d32f2f;
+        }
+
+        .responses-grid {
+            display: grid;
+            gap: 15px;
+        }
+
+        .response-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            border-right: 5px solid #1565c0;
+        }
+
+        .response-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .student-name {
+            font-weight: 700;
+            color: #1565c0;
+            font-size: 1.1rem;
+        }
+
+        .response-time {
+            color: #666;
+            font-size: 0.85rem;
+            background: #e0e0e0;
+            padding: 5px 12px;
+            border-radius: 15px;
+        }
+
+        .response-meta {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+        }
+
+        .meta-badge {
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .pair-badge {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .level-badge-small {
+            background: #fff3e0;
+            color: #e65100;
+        }
+
+        .response-content {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+
+        .response-content h4 {
+            color: #7b1fa2;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        .response-content p {
+            color: #333;
+            line-height: 1.7;
+        }
+
+        .success-message {
+            display: none;
+            background: linear-gradient(135deg, #4caf50, #8bc34a);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 20px 0;
+            animation: slideIn 0.5s ease;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .waiting-partner {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            color: #856404;
+            margin-top: 15px;
+        }
+
+        .partner-received {
+            background: #d4edda;
+            padding: 15px;
+            border-radius: 10px;
+            color: #155724;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .levels-section {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .teacher-btn {
+                bottom: 10px;
+                left: 10px;
+                padding: 12px 20px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="school-name">مدرسة الكعبان الابتدائية الإعدادية الثانوية للبنات</div>
+            <h1>🌐 نشاط ثنائي: أنواع شبكات الحاسوب</h1>
+            <p>الصف العاشر - مادة الحاسب الآلي</p>
+            <div class="teacher-info">👩‍🏫 المعلمة: هاجر قعاية</div>
+        </header>
+
+        <!-- معلومات تعليمية -->
+        <div class="info-cards">
+            <div class="info-card">
+                <h3>📡 أنواع الشبكات حسب النطاق الجغرافي</h3>
+                <div class="network-type">
+                    <strong>LAN (شبكة محلية):</strong> تغطي مساحة صغيرة مثل مبنى أو مدرسة
+                </div>
+                <div class="network-type">
+                    <strong>MAN (شبكة حضرية):</strong> تغطي مدينة أو منطقة جغرافية
+                </div>
+                <div class="network-type">
+                    <strong>WAN (شبكة واسعة):</strong> تغطي مساحات كبيرة مثل الإنترنت
+                </div>
+            </div>
+            <div class="info-card">
+                <h3>🔌 أنواع الشبكات حسب طريقة الاتصال</h3>
+                <div class="network-type">
+                    <strong>شبكة سلكية:</strong> تستخدم كابلات للاتصال
+                </div>
+                <div class="network-type">
+                    <strong>شبكة لاسلكية:</strong> تستخدم موجات الراديو (WiFi)
+                </div>
+                <div class="network-type">
+                    <strong>شبكة هجينة:</strong> تجمع بين السلكية واللاسلكية
+                </div>
+            </div>
+        </div>
+
+        <!-- نموذج بيانات الطالبة -->
+        <div class="student-form">
+            <h3 style="margin-bottom: 20px; color: #1565c0;">📝 بيانات الطالبة</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>اسم الطالبة:</label>
+                    <input type="text" id="studentName" placeholder="أدخلي اسمك الكامل">
+                </div>
+                <div class="form-group">
+                    <label>رقم المجموعة الثنائية:</label>
+                    <select id="pairNumber">
+                        <option value="">اختاري رقم مجموعتك</option>
+                        <option value="1">المجموعة 1</option>
+                        <option value="2">المجموعة 2</option>
+                        <option value="3">المجموعة 3</option>
+                        <option value="4">المجموعة 4</option>
+                        <option value="5">المجموعة 5</option>
+                        <option value="6">المجموعة 6</option>
+                        <option value="7">المجموعة 7</option>
+                        <option value="8">المجموعة 8</option>
+                        <option value="9">المجموعة 9</option>
+                        <option value="10">المجموعة 10</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>المستوى:</label>
+                    <select id="levelSelect">
+                        <option value="">اختاري مستواك</option>
+                        <option value="1">المستوى الأول (أساسي)</option>
+                        <option value="2">المستوى الثاني (متوسط)</option>
+                        <option value="3">المستوى الثالث (متقدم)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>الدور في المجموعة:</label>
+                    <select id="roleSelect">
+                        <option value="">اختاري دورك</option>
+                        <option value="A">الطالبة أ (تبدأ بالسؤال الأول)</option>
+                        <option value="B">الطالبة ب (تبدأ بالسؤال الثاني)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- معلومات المجموعات -->
+        <div class="pair-info">
+            <h3>👭 توزيع المجموعات الثنائية (10 مجموعات لـ 20 طالبة)</h3>
+            <p style="margin-bottom: 15px; color: #666;">كل مجموعة تتكون من طالبتين تتعاونان في حل الأسئلة - تنسقا معاً عبر الهاتف أو الرسائل</p>
+            <div class="pair-list">
+                <div class="pair-item">👭 المجموعة 1: طالبة أ + طالبة ب</div>
+                <div class="pair-item">👭 المجموعة 2: طالبة أ + طالبة ب</div>
+                <div class="pair-item">👭 المجموعة 3: طالبة أ + طالبة ب</div>
+                <div class="pair-item">👭 المجموعة 4: طالبة أ + طالبة ب</div>
+                <div class="pair-item">👭 المجموعة 5: طالبة أ + طالبة ب</div>
+                <div class="pair-item">👭 المجموعة 6: طالبة أ + طالبة ب</div>
+                <div class="pair-item">👭 المجموعة 7: طالبة أ + طالبة ب</div>
+                <div class="pair-item">👭 المجموعة 8: طالبة أ + طالبة ب</div>
+                <div class="pair-item">👭 المجموعة 9: طالبة أ + طالبة ب</div>
+                <div class="pair-item">👭 المجموعة 10: طالبة أ + طالبة ب</div>
+            </div>
+        </div>
+
+        <!-- مستويات الأسئلة -->
+        <div class="levels-section">
+            <!-- المستوى الأول -->
+            <div class="level-card level-1" id="level1Card">
+                <div class="level-header">
+                    <span class="level-badge">المستوى الأول</span>
+                    <span class="level-title">🌟 أساسي</span>
+                </div>
+                
+                <div class="question">
+                    <div class="question-text">
+                        <strong>السؤال 1 (للطالبة أ):</strong><br>
+                        ما هو نوع الشبكة المستخدمة في مدرستك؟ وما هي مميزاتها؟
+                    </div>
+                    <div class="question-hint">💡 تلميح: فكري في الأجهزة المتصلة داخل المدرسة</div>
+                    <textarea class="answer-area" id="level1_q1" placeholder="اكتبي إجابتك هنا..."></textarea>
+                    <div class="partner-section">
+                        <h4>📨 إجابة زميلتك ستظهر هنا:</h4>
+                        <div class="partner-answer" id="partner1_q1">في انتظار إجابة زميلتك...</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-text">
+                        <strong>السؤال 2 (للطالبة ب):</strong><br>
+                        اذكري الفرق بين الشبكة السلكية واللاسلكية مع مثال لكل منهما.
+                    </div>
+                    <div class="question-hint">💡 تلميح: فكري في طريقة توصيل الأجهزة</div>
+                    <textarea class="answer-area" id="level1_q2" placeholder="اكتبي إجابتك هنا..."></textarea>
+                    <div class="partner-section">
+                        <h4>📨 إجابة زميلتك ستظهر هنا:</h4>
+                        <div class="partner-answer" id="partner1_q2">في انتظار إجابة زميلتك...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- المستوى الثاني -->
+            <div class="level-card level-2" id="level2Card">
+                <div class="level-header">
+                    <span class="level-badge">المستوى الثاني</span>
+                    <span class="level-title">⭐ متوسط</span>
+                </div>
+                
+                <div class="question">
+                    <div class="question-text">
+                        <strong>السؤال 1 (للطالبة أ):</strong><br>
+                        قارني بين شبكة LAN وشبكة WAN من حيث: النطاق، السرعة، التكلفة.
+                    </div>
+                    <div class="question-hint">💡 تلميح: استخدمي جدول للمقارنة</div>
+                    <textarea class="answer-area" id="level2_q1" placeholder="اكتبي إجابتك هنا..."></textarea>
+                    <div class="partner-section">
+                        <h4>📨 إجابة زميلتك ستظهر هنا:</h4>
+                        <div class="partner-answer" id="partner2_q1">في انتظار إجابة زميلتك...</div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-text">
+                        <strong>السؤال 2 (للطالبة ب):</strong><br>
+                        ما هي شبكة MAN؟ اذكري مثالاً واقعياً عليها وكيف تختلف عن الشبكات الأخرى.
+                    </div>
+                    <div class="question-hint">💡 تلميح: فكري في شبكات المدن والجامعات</div>
+                    <textarea class="answer-area" id="level2_q2" placeholder="اكتبي إجابتك هنا..."></textarea>
+                    <div class="partner-section">
+                        <h4>📨 إجابة زميلتك ستظهر هنا:</h4>
+                        <div class="partner-answer" id="partner2_q2">في انتظار إجابة زميلتك...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- المستوى الثالث -->
+            <div class="level-card level-3" id="level3Card">
+                <div class="level-header">
+                    <span class="level-badge">المستوى الثالث</span>
+                    <span class="level-title">🏆 متقدم</span>
+                </div>
+                
+                <div class="question">
+                    <div class="
