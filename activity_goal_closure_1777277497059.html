@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الفرق بين LAN و WAN - نشاط غلق الدرس</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Tajawal', sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  padding: 20px;
+  direction: rtl;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 24px;
+  padding: 2rem;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 3px solid #667eea;
+}
+
+.header h1 {
+  color: #667eea;
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+.header p {
+  color: #666;
+  font-size: 1.1rem;
+}
+
+.timer {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 16px;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  box-shadow: 0 8px 20px rgba(245,87,108,0.3);
+}
+
+.name-section {
+  background: #f8f9ff;
+  padding: 2rem;
+  border-radius: 16px;
+  margin-bottom: 2rem;
+}
+
+.name-section label {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.name-section input {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.1rem;
+  font-family: 'Tajawal', sans-serif;
+  border: 2px solid #667eea;
+  border-radius: 12px;
+  transition: all 0.3s;
+}
+
+.name-section input:focus {
+  outline: none;
+  border-color: #764ba2;
+  box-shadow: 0 0 0 3px rgba(102,126,234,0.2);
+}
+
+.question-card {
+  background: #fff;
+  border: 2px solid #e0e0e0;
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  transition: all 0.3s;
+}
+
+.question-card:hover {
+  border-color: #667eea;
+  box-shadow: 0 8px 20px rgba(102,126,234,0.15);
+}
+
+.question-number {
+  display: inline-block;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 40px;
+  font-weight: 700;
+  margin-left: 10px;
+  font-size: 1.2rem;
+}
+
+.question-text {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 1rem;
+  display: inline-block;
+}
+
+.options {
+  margin-top: 1rem;
+}
+
+.option-label {
+  display: block;
+  padding: 1rem;
+  margin-bottom: 0.8rem;
+  background: #f8f9ff;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 1.05rem;
+}
+
+.option-label:hover {
+  background: #eef1ff;
+  border-color: #667eea;
+}
+
+.option-label input[type="radio"] {
+  margin-left: 10px;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+textarea {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.05rem;
+  font-family: 'Tajawal', sans-serif;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  resize: vertical;
+  min-height: 100px;
+  transition: all 0.3s;
+}
+
+textarea:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102,126,234,0.2);
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 1.2rem;
+  font-size: 1.3rem;
+  font-weight: 700;
+  font-family: 'Tajawal', sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-top: 2rem;
+}
+
+.submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(102,126,234,0.4);
+}
+
+.submit-btn:active {
+  transform: translateY(0);
+}
+
+.success-message {
+  text-align: center;
+  padding: 3rem;
+}
+
+.success-message h2 {
+  color: #667eea;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.success-message p {
+  color: #666;
+  font-size: 1.3rem;
+}
+
+#teacherBtn {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+  padding: 1rem 1.5rem;
+  border-radius: 50px;
+  border: none;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(245,87,108,0.4);
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 1000;
+}
+
+#teacherBtn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(245,87,108,0.5);
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.7);
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.modal-content h3 {
+  color: #667eea;
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.modal-content input {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.1rem;
+  font-family: 'Tajawal', sans-serif;
+  border: 2px solid #667eea;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.modal-btns {
+  display: flex;
+  gap: 10px;
+  margin-top: 1.5rem;
+}
+
+.modal-btns button {
+  flex: 1;
+  padding: 0.8rem;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: 'Tajawal', sans-serif;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.confirm-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.cancel-btn {
+  background: #e0e0e0;
+  color: #333;
+}
+
+.error-msg {
+  color: #f5576c;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+  font-weight: 600;
+}
+
+#dashboardView {
+  display: none;
+}
+
+.dashboard-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 2rem;
+  border-radius: 16px;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.dashboard-header h2 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.stats {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.stat-box {
+  background: rgba(255,255,255,0.2);
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+}
+
+.stat-number {
+  font-size: 2.5rem;
+  font-weight: 800;
+}
+
+.stat-label {
+  font-size: 1rem;
+  opacity: 0.9;
+}
+
+.dashboard-controls {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.dashboard-controls button {
+  flex: 1;
+  padding: 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: 'Tajawal', sans-serif;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s;
+  min-width: 150px;
+}
+
+.reset-btn {
+  background: #f5576c;
+  color: white;
+}
+
+.close-dashboard-btn {
+  background: #e0e0e0;
+  color: #333;
+}
+
+#responsesGrid {
+  display: grid;
+  gap: 1rem;
+}
+
+.response-card {
+  background: #fff;
+  border: 2px solid #e0e0e0;
+  border-radius: 16px;
+  padding: 1.5rem;
+  transition: all 0.3s;
+}
+
+.response-card:hover {
+  border-color: #667eea;
+  box-shadow: 0 8px 20px rgba(102,126,234,0.15);
+}
+
+.response-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.student-name {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #667eea;
+}
+
+.response-time {
+  font-size: 0.9rem;
+  color: #888;
+}
+
+.response-answers {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.answer-item {
+  background: #f8f9ff;
+  padding: 0.8rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+
+.answer-label {
+  font-weight: 600;
+  color: #333;
+  margin-left: 5px;
+}
+
+.top-students {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+  padding: 2rem;
+  border-radius: 16px;
+  margin-bottom: 2rem;
+}
+
+.top-students h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.podium {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.podium-place {
+  background: rgba(255,255,255,0.2);
+  backdrop-filter: blur(10px);
+  padding: 1rem;
+  border-radius: 12px;
+  text-align: center;
+  min-width: 120px;
+}
+
+.place-number {
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+.place-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.place-time {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  margin-top: 0.3rem;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1.5rem;
+  }
+  
+  .header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .timer {
+    font-size: 1.2rem;
+    padding: 0.8rem 1.5rem;
+  }
+  
+  .question-text {
+    font-size: 1.05rem;
+  }
+  
+  #teacherBtn {
+    bottom: 10px;
+    left: 10px;
+    padding: 0.8rem 1.2rem;
+    font-size: 0.9rem;
+  }
+  
+  .podium {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="container student-view" id="activityView">
+  <div class="header">
+    <h1>🌐 نشاط غلق الدرس: الفرق بين LAN و WAN</h1>
+    <p>أجب عن الأسئلة التالية لتقييم فهمك للدرس</p>
+  </div>
+  
+  <div class="timer" id="timer">⏱️ الوقت المتبقي: 3:00</div>
+  
+  <div class="name-section">
+    <label for="studentName">👤 أدخل اسمك أولاً:</label>
+    <input type="text" id="studentName" placeholder="اكتب اسمك هنا..." required>
+  </div>
+  
+  <form id="activityForm">
+    <div class="question-card">
+      <span class="question-number">1</span>
+      <span class="question-text">ما هو الفرق الرئيسي بين شبكة LAN وشبكة WAN؟</span>
+      <div class="options">
+        <label class="option-label">
+          <input type="radio" name="q1" value="LAN تغطي مساحة صغيرة مثل المنزل أو المدرسة، بينما WAN تغطي مساحة واسعة مثل المدن والدول" required>
+          LAN تغطي مساحة صغيرة مثل المنزل أو المدرسة، بينما WAN تغطي مساحة واسعة مثل المدن والدول
+        </label>
+        <label class="option-label">
+          <input type="radio" name="q1" value="LAN أسرع من WAN" required>
+          LAN أسرع من WAN فقط
+        </label>
+        <label class="option-label">
+          <input type="radio" name="q1" value="لا يوجد فرق بينهما" required>
+          لا يوجد فرق بينهما
+        </label>
+        <label class="option-label">
+          <input type="radio" name="q1" value="WAN تستخدم في المنازل فقط" required>
+          WAN تستخدم في المنازل فقط
+        </label>
+      </div>
+    </div>
+    
+    <div class="question-card">
+      <span class="question-number">2</span>
+      <span class="question-text">أعط مثالاً واقعياً على استخدام شبكة LAN في حياتك اليومية:</span>
+      <textarea name="q2" placeholder="مثال: شبكة الواي فاي في المنزل التي تربط الحاسوب والهاتف..." required></textarea>
+    </div>
+    
+    <div class="question-card">
+      <span class="question-number">3</span>
+      <span class="question-text">في رأيك، أيهما أكثر أهمية للشركات الكبيرة: LAN أم WAN؟ ولماذا؟</span>
+      <div class="options">
+        <label class="option-label">
+          <input type="radio" name="q3" value="WAN لأنها تربط فروع الشركة في مدن ودول مختلفة" required>
+          WAN لأنها تربط فروع الشركة في مدن ودول مختلفة
+        </label>
+        <label class="option-label">
+          <input type="radio" name="q3" value="LAN لأنها أسرع وأرخص" required>
+          LAN لأنها أسرع وأرخص
+        </label>
+        <label class="option-label">
+          <input type="radio" name="q3" value="كلاهما مهم: LAN للمكاتب الداخلية و WAN للربط بين الفروع" required>
+          كلاهما مهم: LAN للمكاتب الداخلية و WAN للربط بين الفروع
+        </label>
+        <label class="option-label">
+          <input type="radio" name="q3" value="لا تحتاج الشركات لأي منهما" required>
+          لا تحتاج الشركات لأي منهما
+        </label>
+      </div>
+    </div>
+    
+    <button type="submit" class="submit-btn">📤 إرسال الإجابات</button>
+  </form>
+</div>
+
+<div class="container student-view" id="successView" style="display:none;">
+  <div class="success-message">
+    <h2>✅ تم إرسال إجاباتك بنجاح!</h2>
+    <p>شكراً لك على المشاركة 🌟</p>
+    <p style="margin-top:1rem;color:#888;">يمكنك الآن إغلاق الصفحة</p>
+  </div>
+</div>
+
+<div class="container" id="dashboardView">
+  <div class="dashboard-header">
+    <h2>🎯 لوحة تحكم المعلمة</h2>
+    <div class="stats">
+      <div class="stat-box">
+        <div class="stat-number" id="responseCount">0</div>
+        <div class="stat-label">إجابة مستلمة</div>
+      </div>
+    </div>
+  </div>
+  
+  <div id="topStudentsSection"></div>
+  
+  <div class="dashboard-controls">
+    <button class="reset-btn" onclick="resetDashboard()">🗑️ مسح جميع الإجابات</button>
+    <button class="close-dashboard-btn" onclick="closeDashboard()">❌ إغلاق اللوحة</button>
+  </div>
+  
+  <div id="responsesGrid"></div>
+</div>
+
+<button id="teacherBtn" onclick="openTeacherModal()" style="display:flex;">🔐 شاشة المعلمة</button>
+
+<div class="modal" id="pwdModal">
+  <div class="modal-content">
+    <h3>🔒 أدخل كلمة المرور</h3>
+    <input type="password" id="pwdInput" placeholder="كلمة المرور" onkeypress="if(event.key==='Enter') checkTeacherPwd()">
+    <div class="error-msg" id="pwdErr"></div>
+    <div class="modal-btns">
+      <button class="confirm-btn" onclick="checkTeacherPwd()">✓ تأكيد</button>
+      <button class="cancel-btn" onclick="closeTeacherModal()">✗ إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const DB = 'https://cyber-safety-class-b266a-default-rtdb.firebaseio.com';
+const FB_PATH = '/act_goal_closure_77406616';
+
+async function saveToFirebase(data) {
+  const key = 'resp_' + Date.now();
+  const res = await fetch(DB + FB_PATH + '/' + key + '.json', {
+    method: 'PUT',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({...data, timestamp: Date.now()})
+  });
+  if (!res.ok) throw new Error('Firebase save failed');
+  return key;
+}
+
+async function loadFromFirebase() {
+  const res = await fetch(DB + FB_PATH + '.json');
+  return (await res.json()) || {};
+}
+
+async function deleteAllFirebase() {
+  await fetch(DB + FB_PATH + '.json', {method:'DELETE'});
+}
+
+function startLiveListener(callback) {
+  const evtSrc = new EventSource(DB + FB_PATH + '.json');
+  evtSrc.addEventListener('put', e => {
+    const {path, data} = JSON.parse(e.data);
+    callback(data || {});
+  });
+  evtSrc.onerror = () => {
+    evtSrc.close();
+    setInterval(async () => { callback(await loadFromFirebase()); }, 3000);
+  };
+  return evtSrc;
+}
+
+const TEACHER_PWD = '1234';
+
+function showTeacherBtn() {
+  const btn = document.getElementById('teacherBtn');
+  if (btn) btn.style.display = 'flex';
+}
+
+function openTeacherModal() {
+  document.getElementById('pwdModal').style.display = 'flex';
+  setTimeout(() => document.getElementById('pwdInput').focus(), 100);
+}
+
+function closeTeacherModal() {
+  document.getElementById('pwdModal').style.display = 'none';
+  document.getElementById('pwdInput').value = '';
+  document.getElementById('pwdErr').textContent = '';
+}
+
+function checkTeacherPwd() {
+  if (document.getElementById('pwdInput').value === TEACHER_PWD) {
+    closeTeacherModal();
+    openDashboard();
+  } else {
+    document.getElementById('pwdErr').textContent = '❌ كلمة المرور خاطئة';
+    document.getElementById('pwdInput').value = '';
+  }
+}
+
+function openDashboard() {
+  document.querySelectorAll('.student-view').forEach(v => v.style.display = 'none');
+  document.getElementById('dashboardView').style.display = 'block';
+  startLiveListener(renderDashboard);
+}
+
+function closeDashboard() {
+  document.getElementById('dashboardView').style.display = 'none';
+  document.getElementById('activityView').style.display = 'block';
+  location.reload();
+}
+
+function renderDashboard(data) {
+  const entries = Object.entries(data).map(([key, val]) => ({
+    key,
+    ...val,
+    completionTime: val.completionTime || 180000
+  })).sort((a,b) => a.completionTime - b.completionTime);
+  
+  document.getElementById('responseCount').textContent = entries.length;
+  
+  // عرض المراكز الثلاثة الأولى
+  const topStudentsHtml = entries.length > 0 ? `
+    <div class="top-students">
+      <h3>🏆 المراكز الأولى (الأسرع في الإجابة)</h3>
+      <div class="podium">
+        ${entries.slice(0, 3).map((e, i) => `
+          <div class="podium-place">
+            <div class="place-number">${['🥇', '🥈', '🥉'][i]}</div>
+            <div class="place-name">${e.name || 'طالب'}</div>
+            <div class="place-time">${Math.floor(e.completionTime / 1000)} ثانية</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  ` : '';
+  
+  document.getElementById('topStudentsSection').innerHTML = topStudentsHtml;
+  
+  const grid = document.getElementById('responsesGrid');
+  if (!entries.length) {
+    grid.innerHTML = '<div style="text-align:center;padding:3rem;color:#888;">⏳ لا توجد إجابات بعد...</div>';
+    return;
+  }
+  
+  grid.innerHTML = entries.map((e, index) => `
+    <div class="response-card">
+      <div class="response-header">
+        <div class="student-name">${index + 1}. 👤 ${e.name || 'طالب'}</div>
+        <div class="response-time">⏱️ ${Math.floor(e.completionTime / 1000)} ثانية | ${new Date(e.timestamp||0).toLocaleTimeString('ar')}</div>
+      </div>
+      <div class="response-answers">
+        <div class="answer-item">
+          <span class="answer-label">السؤال 1:</span>
+          ${e.q1 || 'لم يجب'}
+        </div>
+        <div class="answer-item">
+          <span class="answer-label">السؤال 2:</span>
+          ${e.q2 || 'لم يجب'}
+        </div>
+        <div class="answer-item">
+          <span class="answer-label">السؤال 3:</span>
+          ${e.q3 || 'لم يجب'}
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+async function resetDashboard() {
+  if (!confirm('هل أنت متأكدة من مسح جميع الإجابات؟')) return;
+  await deleteAllFirebase();
+  document.getElementById('responsesGrid').innerHTML = '<div style="text-align:center;padding:3rem;color:#888;">⏳ تم المسح...</div>';
+  document.getElementById('responseCount').textContent = '0';
+  document.getElementById('topStudentsSection').innerHTML = '';
+}
+
+// المؤقت
+let timeLeft = 180;
+let timerInterval;
+let startTime;
+
+function startTimer() {
+  startTime = Date.now();
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
+    document.getElementById('timer').textContent = `⏱️ الوقت المتبقي: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+    
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      alert('⏰ انتهى الوقت! سيتم إرسال إجاباتك الآن.');
+      document.getElementById('activityForm').dispatchEvent(new Event('submit'));
+    }
+  }, 1000);
+}
+
+// بدء النشاط
+document.getElementById('activityForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  
+  const name = document.getElementById('studentName').value.trim();
+  if (!name) {
+    alert('⚠️ الرجاء إدخال اسمك أولاً');
+    document.getElementById('studentName').focus();
+    return;
+  }
+  
+  clearInterval(timerInterval);
+  const completionTime = Date.now() - startTime;
+  
+  const formData = new FormData(this);
+  const data = {
+    name: name,
+    completionTime: completionTime
+  };
+  
+  formData.forEach((value, key) => {
+    data[key] = value;
+  });
+  
+  try {
+    await saveToFirebase(data);
+    document.getElementById('activityView').style.display = 'none';
+    document.getElementById('successView').style.display = 'block';
+  } catch (err) {
+    alert('❌ حدث خطأ في الإرسال. حاول مرة أخرى.');
+    console.error(err);
+  }
+});
+
+// بدء المؤقت عند بدء الكتابة
+document.getElementById('studentName').addEventListener('input', function() {
+  if (!timerInterval && this.value.length > 0) {
+    startTimer();
+  }
+});
+
+showTeacherBtn();
+</script>
+
+</body>
+</html>
