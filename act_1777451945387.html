@@ -1,0 +1,323 @@
+<!DOCTYPE html><html lang="ar" dir="rtl"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>استراتيجية تعليمية</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Tajawal,sans-serif;background:#F3F1ED;color:#1C1814;min-height:100vh;direction:rtl}
+.wrap{max-width:680px;margin:0 auto;padding:1.5rem}
+input,textarea,select{font-family:Tajawal,sans-serif}
+#tbtn{position:fixed;bottom:1.2rem;left:1.2rem;background:#fff;border:2px solid #0A7A6C;border-radius:28px;padding:9px 18px;font-family:Tajawal,sans-serif;font-size:13px;font-weight:700;color:#0A7A6C;cursor:pointer;box-shadow:0 3px 14px rgba(10,122,108,.2);z-index:100}
+#tbtn:hover{background:#0A7A6C;color:#fff}
+.ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center}
+.ov.on{display:flex}
+.mb{background:#fff;border-radius:18px;padding:1.8rem;width:90%;max-width:340px;text-align:center}
+.mb h3{font-size:17px;font-weight:700;margin-bottom:.3rem}
+.mb p{font-size:13px;color:#888;margin-bottom:1rem}
+.mb input{width:100%;padding:11px;border:2px solid #ddd;border-radius:10px;font-size:20px;letter-spacing:8px;text-align:center;outline:none}
+.mb input:focus{border-color:#0A7A6C}
+.mbe{font-size:12.5px;color:#dc2626;margin-top:6px;min-height:16px}
+.mbr{display:flex;gap:8px;margin-top:.9rem}
+.mbr button{flex:1;padding:10px;border-radius:9px;font-family:Tajawal,sans-serif;font-size:14px;font-weight:700;cursor:pointer;border:none}
+#dp{display:none;padding:1.5rem}
+.dh{background:linear-gradient(135deg,#0A7A6C,#158048);border-radius:14px;padding:1.4rem;color:#fff;text-align:center;margin-bottom:1.4rem}
+.dh h2{font-size:20px;font-weight:900;margin-bottom:.4rem}
+.dc{font-size:38px;font-weight:900;display:block;margin:.3rem 0}
+.da{display:flex;gap:10px;margin-bottom:1.4rem;flex-wrap:wrap}
+.da button{flex:1;padding:11px;color:#fff;border:none;border-radius:10px;font-family:Tajawal,sans-serif;font-size:14px;font-weight:700;cursor:pointer;min-width:100px}
+.rc{background:#fff;border:1px solid #E2D9D0;border-radius:12px;padding:1rem 1.2rem;margin-bottom:10px}
+.rn{font-size:15px;font-weight:700;margin-bottom:4px}
+.rt{font-size:11px;color:#aaa;margin-bottom:8px}
+.rf{background:#F3F1ED;border-radius:8px;padding:7px 11px;margin:3px 0;font-size:13px;border-right:3px solid #0A7A6C}
+.rl{font-size:11px;font-weight:700;color:#0A7A6C;margin-bottom:2px}
+.em{text-align:center;padding:3rem;color:#aaa;font-size:14px}
+</style></head><body>
+<div class="ov" id="pov">
+<div class="mb">
+<div style="font-size:28px;margin-bottom:.4rem">&#128274;</div>
+<h3>شاشة المعلمة</h3><p>ادخلي كلمة المرور</p>
+<input type="password" id="pi" maxlength="20" placeholder="&bull;&bull;&bull;&bull;" onkeydown="if(event.key==='Enter')cp()">
+<div class="mbe" id="pe"></div>
+<div class="mbr">
+<button style="background:#f5f5f5;color:#666" onclick="cv()">الغاء</button>
+<button style="background:#0A7A6C;color:#fff" onclick="cp()">دخول &#8592;</button>
+</div></div></div>
+<div id="sp">
+<div style="font-family: 'Tajawal', sans-serif; direction: rtl; text-align: right; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px;">
+  <style>
+    body { margin: 0; padding: 0; }
+    .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; padding: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+    .header { text-align: center; margin-bottom: 30px; }
+    .header h1 { color: #667eea; font-size: 2em; margin: 10px 0; }
+    .timer { background: #ff6b6b; color: white; padding: 15px; border-radius: 15px; text-align: center; font-size: 1.5em; font-weight: bold; margin-bottom: 20px; }
+    .phase-box { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 25px; border-radius: 15px; margin-bottom: 20px; }
+    .question-card { background: #fff; border: 3px solid #667eea; border-radius: 15px; padding: 20px; margin: 15px 0; cursor: pointer; transition: all 0.3s; }
+    .question-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(102,126,234,0.3); background: #f0f4ff; }
+    .question-card.selected { background: #667eea; color: white; border-color: #764ba2; }
+    input[type="text"], textarea { width: 100%; padding: 15px; border: 2px solid #667eea; border-radius: 10px; font-family: 'Tajawal', sans-serif; font-size: 1em; margin: 10px 0; box-sizing: border-box; }
+    .btn { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 15px 40px; border-radius: 25px; font-size: 1.1em; cursor: pointer; font-family: 'Tajawal', sans-serif; font-weight: bold; transition: all 0.3s; width: 100%; margin-top: 15px; }
+    .btn:hover { transform: scale(1.05); box-shadow: 0 8px 20px rgba(102,126,234,0.4); }
+    .btn:disabled { background: #ccc; cursor: not-allowed; transform: none; }
+    .role-badge { display: inline-block; padding: 8px 20px; border-radius: 20px; font-weight: bold; margin: 5px; }
+    .detective { background: #4ecdc4; color: white; }
+    .suspect { background: #ff6b6b; color: white; }
+    .waiting { background: #ffe66d; padding: 20px; border-radius: 15px; text-align: center; font-size: 1.2em; color: #333; margin: 20px 0; }
+    .answer-box { background: #f8f9ff; border-right: 5px solid #667eea; padding: 20px; border-radius: 10px; margin: 15px 0; }
+    .emoji { font-size: 3em; text-align: center; margin: 20px 0; }
+    @media (max-width: 600px) {
+      .container { padding: 15px; }
+      .header h1 { font-size: 1.5em; }
+      .timer { font-size: 1.2em; }
+    }
+  </style>
+
+  <div class="container">
+    <div class="header">
+      <div class="emoji">🔍🕵️</div>
+      <h1>المحقق والمتهم</h1>
+      <p style="color: #666; font-size: 1.1em;">جهاز قياس الحرارة اليدوي</p>
+    </div>
+
+    <div class="timer" id="timer">⏱️ 10:00</div>
+
+    <!-- مرحلة اختيار الاسم -->
+    <div id="phase-name">
+      <div class="phase-box">
+        <h2 style="margin-top:0;">👋 مرحباً بك!</h2>
+        <p>أدخلي اسمك للبدء في النشاط</p>
+      </div>
+      <input type="text" id="studentName" placeholder="اكتبي اسمك هنا..." />
+      <button class="btn" onclick="startActivity()">ابدأ النشاط</button>
+    </div>
+
+    <!-- مرحلة 1: اختيار السؤال وإرساله -->
+    <div id="phase1" style="display:none;">
+      <div class="phase-box">
+        <div class="role-badge detective">🔍 أنتِ المحققة</div>
+        <h2>اختاري سؤالاً لإرساله إلى زميلتك</h2>
+        <p>اختاري سؤالاً واحداً من الأسئلة التالية:</p>
+      </div>
+      
+      <div id="questions-list">
+        <div class="question-card" onclick="selectQuestion(0)">
+          <strong>❓ السؤال 1:</strong> ما الفرق بين قياس الحرارة يدوياً وآلياً؟
+        </div>
+        <div class="question-card" onclick="selectQuestion(1)">
+          <strong>❓ السؤال 2:</strong> لماذا قد تكون القراءات اليدوية غير دقيقة؟
+        </div>
+        <div class="question-card" onclick="selectQuestion(2)">
+          <strong>❓ السؤال 3:</strong> كيف يؤثر التدخل البشري على دقة البيانات؟
+        </div>
+        <div class="question-card" onclick="selectQuestion(3)">
+          <strong>❓ السؤال 4:</strong> ما أهمية تسجيل الحرارة بانتظام على مدار اليوم؟
+        </div>
+        <div class="question-card" onclick="selectQuestion(4)">
+          <strong>❓ السؤال 5:</strong> ما الصعوبات التي قد تواجه القياس اليدوي المستمر؟
+        </div>
+      </div>
+      
+      <button class="btn" id="sendBtn" onclick="sendQuestion()" disabled>أرسل السؤال إلى زميلتي</button>
+    </div>
+
+    <!-- مرحلة 2: الانتظار واستقبال سؤال -->
+    <div id="phase2" style="display:none;">
+      <div class="phase-box">
+        <div class="role-badge suspect">🎯 أنتِ المتهمة</div>
+        <h2>استقبلتِ سؤالاً من زميلتك المحققة</h2>
+      </div>
+      
+      <div class="answer-box">
+        <h3 style="color: #667eea;">السؤال المطروح عليك:</h3>
+        <p id="receivedQuestion" style="font-size: 1.2em; font-weight: bold;"></p>
+      </div>
+      
+      <label style="font-weight: bold; color: #667eea; display: block; margin-top: 20px;">✍️ اكتبي إجابتك:</label>
+      <textarea id="answer" rows="5" placeholder="اكتبي إجابتك هنا..."></textarea>
+      
+      <button class="btn" onclick="submitAnswer()">إرسال الإجابة</button>
+    </div>
+
+    <!-- مرحلة 3: عرض إجابة الزميلة -->
+    <div id="phase3" style="display:none;">
+      <div class="phase-box">
+        <h2>📬 إجابة زميلتك على سؤالك</h2>
+      </div>
+      
+      <div class="answer-box">
+        <h3 style="color: #667eea;">السؤال الذي أرسلتِه:</h3>
+        <p id="sentQuestion" style="font-size: 1.1em; font-weight: bold;"></p>
+      </div>
+      
+      <div class="answer-box" style="border-right-color: #4ecdc4;">
+        <h3 style="color: #4ecdc4;">إجابة زميلتك:</h3>
+        <p id="partnerAnswer" style="font-size: 1.1em;"></p>
+      </div>
+      
+      <div class="emoji">✅</div>
+      <h2 style="text-align: center; color: #667eea;">تم إكمال النشاط بنجاح!</h2>
+    </div>
+
+    <!-- حالة الانتظار -->
+    <div id="waiting" class="waiting" style="display:none;">
+      <div style="font-size: 2em; margin-bottom: 10px;">⏳</div>
+      <strong>جارٍ الانتظار...</strong>
+      <p>يتم الآن البحث عن زميلة لك للإجابة على سؤالك</p>
+    </div>
+  </div>
+
+  <script>
+    let studentName = '';
+    let selectedQuestionIndex = -1;
+    let myQuestion = '';
+    let timeLeft = 600;
+    
+    const questions = [
+      'ما الفرق بين قياس الحرارة يدوياً وآلياً؟',
+      'لماذا قد تكون القراءات اليدوية غير دقيقة؟',
+      'كيف يؤثر التدخل البشري على دقة البيانات؟',
+      'ما أهمية تسجيل الحرارة بانتظام على مدار اليوم؟',
+      'ما الصعوبات التي قد تواجه القياس اليدوي المستمر؟'
+    ];
+
+    // بدء المؤقت
+    setInterval(() => {
+      if (timeLeft > 0) {
+        timeLeft--;
+        const mins = Math.floor(timeLeft / 60);
+        const secs = timeLeft % 60;
+        document.getElementById('timer').textContent = `⏱️ ${mins}:${secs.toString().padStart(2, '0')}`;
+      }
+    }, 1000);
+
+    function startActivity() {
+      const name = document.getElementById('studentName').value.trim();
+      if (!name) {
+        alert('الرجاء إدخال اسمك');
+        return;
+      }
+      studentName = name;
+      document.getElementById('phase-name').style.display = 'none';
+      document.getElementById('phase1').style.display = 'block';
+    }
+
+    function selectQuestion(index) {
+      selectedQuestionIndex = index;
+      myQuestion = questions[index];
+      
+      document.querySelectorAll('.question-card').forEach((card, i) => {
+        card.classList.toggle('selected', i === index);
+      });
+      
+      document.getElementById('sendBtn').disabled = false;
+    }
+
+    async function sendQuestion() {
+      if (selectedQuestionIndex === -1) return;
+      
+      document.getElementById('phase1').style.display = 'none';
+      document.getElementById('waiting').style.display = 'block';
+      
+      // حفظ السؤال في Firebase
+      await window.FBSAVE({
+        name: studentName,
+        phase: 1,
+        question: myQuestion,
+        timestamp: Date.now(),
+        answered: false
+      });
+      
+      // الانتظار لاستقبال سؤال من زميلة
+      checkForQuestion();
+    }
+
+    async function checkForQuestion() {
+      const maxAttempts = 30;
+      let attempts = 0;
+      
+      const interval = setInterval(async () => {
+        attempts++;
+        
+        // تحميل سؤال من زميلة
+        const partnerData = await window.FBLOAD();
+        
+        if (partnerData && partnerData.name !== studentName && !partnerData.answered) {
+          clearInterval(interval);
+          document.getElementById('waiting').style.display = 'none';
+          document.getElementById('phase2').style.display = 'block';
+          document.getElementById('receivedQuestion').textContent = partnerData.question;
+          
+          // تحديث حالة السؤال كـ "تم الإجابة عليه"
+          window.partnerKey = partnerData.key;
+        } else if (attempts >= maxAttempts) {
+          clearInterval(interval);
+          alert('عذراً، لم نتمكن من إيجاد زميلة متاحة. الرجاء المحاولة مرة أخرى.');
+          location.reload();
+        }
+      }, 2000);
+    }
+
+    async function submitAnswer() {
+      const answer = document.getElementById('answer').value.trim();
+      if (!answer) {
+        alert('الرجاء كتابة إجابتك');
+        return;
+      }
+      
+      // حفظ الإجابة
+      await window.FBSAVE({
+        name: studentName,
+        phase: 2,
+        answer: answer,
+        questionAnswered: document.getElementById('receivedQuestion').textContent,
+        timestamp: Date.now()
+      });
+      
+      document.getElementById('phase2').style.display = 'none';
+      document.getElementById('waiting').style.display = 'block';
+      
+      // انتظار إجابة الزميلة على سؤالي
+      checkForMyAnswer();
+    }
+
+    async function checkForMyAnswer() {
+      const maxAttempts = 30;
+      let attempts = 0;
+      
+      const interval = setInterval(async () => {
+        attempts++;
+        
+        const partnerAnswer = await window.FBLOAD();
+        
+        if (partnerAnswer && partnerAnswer.questionAnswered === myQuestion) {
+          clearInterval(interval);
+          document.getElementById('waiting').style.display = 'none';
+          document.getElementById('phase3').style.display = 'block';
+          document.getElementById('sentQuestion').textContent = myQuestion;
+          document.getElementById('partnerAnswer').textContent = partnerAnswer.answer;
+        } else if (attempts >= maxAttempts) {
+          clearInterval(interval);
+          document.getElementById('waiting').style.display = 'none';
+          document.getElementById('phase3').style.display = 'block';
+          document.getElementById('sentQuestion').textContent = myQuestion;
+          document.getElementById('partnerAnswer').textContent = 'لم تتمكن زميلتك من الإجابة في الوقت المحدد.';
+        }
+      }, 2000);
+    }
+  </script>
+</div>
+</div>
+<div id="dp">
+<div class="dh"><h2>&#127919; لوحة المعلمة</h2>
+<span class="dc" id="dc">0</span>
+<span style="font-size:13px;opacity:.85">اجابة مستلمة</span></div>
+<div class="da">
+<button style="background:#0A7A6C" onclick="lr()">تحديث</button>
+<button style="background:#dc2626" onclick="da()">مسح الكل</button>
+<button style="background:#888" onclick="cd()">اغلاق</button>
+</div>
+<div id="dg"><div class="em">&#9200; لا توجد اجابات بعد...</div></div>
+</div>
+<button id="tbtn" onclick="ov()">&#128274; شاشة المعلمة</button>
+<script>var _D="https://cyber-safety-class-b266a-default-rtdb.firebaseio.com",_P="/act_7451894631",_W="1234",_I=null;window.FBSAVE=async function(obj){var k="r"+Date.now();var u=_D+_P+"/"+k+".json";var b=Object.assign({},obj,{_t:Date.now()});var r=await fetch(u,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(b)});if(!r.ok)throw new Error("save failed "+r.status);return k;};window.FBLOAD=async function(){var r=await fetch(_D+_P+".json");var d=await r.json()||{};var v=Object.values(d).filter(function(x){return x&&x.phase==="1";});return v.length?v[Math.floor(Math.random()*v.length)]:null;};window.FBLISTEN=function(gn,cb){return setInterval(async function(){var r=await fetch(_D+_P+".json");var d=await r.json()||{};cb(Object.values(d).filter(function(x){return String(x.group)===String(gn);}));},3000);};function ov(){document.getElementById("pov").classList.add("on");setTimeout(function(){document.getElementById("pi").focus();},80);}function cv(){document.getElementById("pov").classList.remove("on");document.getElementById("pi").value="";document.getElementById("pe").textContent="";}function cp(){if(document.getElementById("pi").value===_W){cv();od();}else{document.getElementById("pe").textContent="كلمة المرور خاطئة";document.getElementById("pi").value="";}}function od(){document.getElementById("sp").style.display="none";document.getElementById("tbtn").style.display="none";document.getElementById("dp").style.display="block";lr();_I=setInterval(lr,4000);}function cd(){if(_I)clearInterval(_I);document.getElementById("dp").style.display="none";document.getElementById("sp").style.display="block";document.getElementById("tbtn").style.display="block";}async function lr(){try{var r=await fetch(_D+_P+".json");var d=await r.json()||{};var arr=Object.values(d).sort(function(a,b){return(b._t||0)-(a._t||0);});document.getElementById("dc").textContent=arr.length;var el=document.getElementById("dg");if(!arr.length){el.innerHTML='<div class="em">&#9200; لا توجد اجابات بعد...</div>';return;}var h="";arr.forEach(function(e){var f="";Object.keys(e).forEach(function(k){if(k!=="_t"&&k!=="name")f+='<div class="rf"><div class="rl">'+k+'</div>'+e[k]+'</div>';});var t=e._t?new Date(e._t).toLocaleTimeString("ar",{hour:"2-digit",minute:"2-digit"}):"";h+='<div class="rc"><div class="rn">&#128100; '+(e.name||"طالب")+'</div><div class="rt">'+ t +'</div>'+f+'</div>';});el.innerHTML=h;}catch(e){console.error(e);}}async function da(){if(!confirm("مسح جميع الاجابات؟"))return;await fetch(_D+_P+".json",{method:"DELETE"});document.getElementById("dg").innerHTML='<div class="em">&#10003; تم المسح</div>';document.getElementById("dc").textContent="0";}</script>
+</body></html>
