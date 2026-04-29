@@ -1,0 +1,539 @@
+<!DOCTYPE html><html lang="ar" dir="rtl"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>الغلق الختامي</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Tajawal,sans-serif;background:#F3F1ED;color:#1C1814;min-height:100vh;direction:rtl}
+.wrap{max-width:680px;margin:0 auto;padding:1.5rem}
+input,textarea,select{font-family:Tajawal,sans-serif}
+#tbtn{position:fixed;bottom:1.2rem;left:1.2rem;background:#fff;border:2px solid #0A7A6C;border-radius:28px;padding:9px 18px;font-family:Tajawal,sans-serif;font-size:13px;font-weight:700;color:#0A7A6C;cursor:pointer;box-shadow:0 3px 14px rgba(10,122,108,.2);z-index:100}
+#tbtn:hover{background:#0A7A6C;color:#fff}
+.ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center}
+.ov.on{display:flex}
+.mb{background:#fff;border-radius:18px;padding:1.8rem;width:90%;max-width:340px;text-align:center}
+.mb h3{font-size:17px;font-weight:700;margin-bottom:.3rem}
+.mb p{font-size:13px;color:#888;margin-bottom:1rem}
+.mb input{width:100%;padding:11px;border:2px solid #ddd;border-radius:10px;font-size:20px;letter-spacing:8px;text-align:center;outline:none}
+.mb input:focus{border-color:#0A7A6C}
+.mbe{font-size:12.5px;color:#dc2626;margin-top:6px;min-height:16px}
+.mbr{display:flex;gap:8px;margin-top:.9rem}
+.mbr button{flex:1;padding:10px;border-radius:9px;font-family:Tajawal,sans-serif;font-size:14px;font-weight:700;cursor:pointer;border:none}
+#dp{display:none;padding:1.5rem}
+.dh{background:linear-gradient(135deg,#0A7A6C,#158048);border-radius:14px;padding:1.4rem;color:#fff;text-align:center;margin-bottom:1.4rem}
+.dh h2{font-size:20px;font-weight:900;margin-bottom:.4rem}
+.dc{font-size:38px;font-weight:900;display:block;margin:.3rem 0}
+.da{display:flex;gap:10px;margin-bottom:1.4rem;flex-wrap:wrap}
+.da button{flex:1;padding:11px;color:#fff;border:none;border-radius:10px;font-family:Tajawal,sans-serif;font-size:14px;font-weight:700;cursor:pointer;min-width:100px}
+.rc{background:#fff;border:1px solid #E2D9D0;border-radius:12px;padding:1rem 1.2rem;margin-bottom:10px}
+.rn{font-size:15px;font-weight:700;margin-bottom:4px}
+.rt{font-size:11px;color:#aaa;margin-bottom:8px}
+.rf{background:#F3F1ED;border-radius:8px;padding:7px 11px;margin:3px 0;font-size:13px;border-right:3px solid #0A7A6C}
+.rl{font-size:11px;font-weight:700;color:#0A7A6C;margin-bottom:2px}
+.em{text-align:center;padding:3rem;color:#aaa;font-size:14px}
+</style></head><body>
+<div class="ov" id="pov">
+<div class="mb">
+<div style="font-size:28px;margin-bottom:.4rem">&#128274;</div>
+<h3>شاشة المعلمة</h3><p>ادخلي كلمة المرور</p>
+<input type="password" id="pi" maxlength="20" placeholder="&bull;&bull;&bull;&bull;" onkeydown="if(event.key==='Enter')cp()">
+<div class="mbe" id="pe"></div>
+<div class="mbr">
+<button style="background:#f5f5f5;color:#666" onclick="cv()">الغاء</button>
+<button style="background:#0A7A6C;color:#fff" onclick="cp()">دخول &#8592;</button>
+</div></div></div>
+<div id="sp">
+<div dir="rtl" style="font-family: 'Tajawal', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; box-sizing: border-box;">
+  
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Tajawal', sans-serif;
+    }
+    
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #667eea;
+    }
+    
+    .header h1 {
+      font-size: 2em;
+      margin-bottom: 10px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .timer {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      color: white;
+      padding: 15px;
+      border-radius: 15px;
+      text-align: center;
+      font-size: 1.5em;
+      font-weight: bold;
+      margin-bottom: 25px;
+      box-shadow: 0 5px 15px rgba(245, 87, 108, 0.4);
+    }
+    
+    .phase-indicator {
+      background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+      padding: 12px;
+      border-radius: 12px;
+      text-align: center;
+      margin-bottom: 25px;
+      font-weight: bold;
+      color: #333;
+      font-size: 1.1em;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: bold;
+      color: #333;
+      font-size: 1.1em;
+    }
+    
+    .form-group select,
+    .form-group textarea,
+    .form-group input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      font-family: 'Tajawal', sans-serif;
+      font-size: 1em;
+      transition: all 0.3s;
+    }
+    
+    .form-group select:focus,
+    .form-group textarea:focus,
+    .form-group input:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    
+    .form-group textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+    
+    .btn {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 15px 40px;
+      border-radius: 10px;
+      font-size: 1.1em;
+      font-weight: bold;
+      cursor: pointer;
+      width: 100%;
+      transition: transform 0.2s, box-shadow 0.2s;
+      font-family: 'Tajawal', sans-serif;
+    }
+    
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+    }
+    
+    .btn:active {
+      transform: translateY(0);
+    }
+    
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .partner-info {
+      background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    
+    .partner-info h3 {
+      color: #d64545;
+      margin-bottom: 10px;
+    }
+    
+    .question-received {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 10px;
+      border-right: 4px solid #667eea;
+      margin: 15px 0;
+    }
+    
+    .success-message {
+      background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+      color: #006633;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+    
+    .loading {
+      text-align: center;
+      padding: 20px;
+      color: #667eea;
+      font-size: 1.2em;
+    }
+    
+    .teams-display {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      font-size: 0.9em;
+      color: #666;
+    }
+    
+    @media (max-width: 600px) {
+      .container {
+        padding: 20px;
+      }
+      
+      .header h1 {
+        font-size: 1.5em;
+      }
+      
+      .timer {
+        font-size: 1.2em;
+        padding: 12px;
+      }
+    }
+  </style>
+
+  <div class="container">
+    <div class="header">
+      <h1>🌟 نشاط الغلق الختامي الثنائي 🌟</h1>
+      <p>تبادل الأسئلة مع زميلتك</p>
+    </div>
+    
+    <div class="timer" id="timer">⏱️ 10:00</div>
+    
+    <div class="phase-indicator" id="phaseIndicator">
+      📝 المرحلة 1: اختيار الاسم وتكوين الفريق
+    </div>
+    
+    <div id="content">
+      <!-- Phase 1: Name Selection -->
+      <div id="phase1">
+        <div class="form-group">
+          <label>👤 اختاري اسمك:</label>
+          <select id="studentName">
+            <option value="">-- اختاري اسمك --</option>
+            <option value="ابتهاج حسين السالم">ابتهاج حسين السالم</option>
+            <option value="اسماء حسن العبادي">اسماء حسن العبادي</option>
+            <option value="العنود عبدالباسط">العنود عبدالباسط</option>
+            <option value="امنه عبدالرحمان تنك ريز">امنه عبدالرحمان تنك ريز</option>
+            <option value="ايمان احمد اليوسف">ايمان احمد اليوسف</option>
+            <option value="تيما حازم عمر">تيما حازم عمر</option>
+            <option value="جنى جمعه محمدطه يسن عويس">جنى جمعه محمدطه يسن عويس</option>
+            <option value="جنى عبدالرزاق الابراهيم">جنى عبدالرزاق الابراهيم</option>
+            <option value="جنى محمد عبدالفتاح على حبيب">جنى محمد عبدالفتاح على حبيب</option>
+            <option value="جنى محمود على عبدالمعبود محمد">جنى محمود على عبدالمعبود محمد</option>
+            <option value="جويريه ولي محمد">جويريه ولي محمد</option>
+            <option value="حياة بلال حسين القلم المراحلي">حياة بلال حسين القلم المراحلي</option>
+            <option value="رتاج عزو العلي">رتاج عزو العلي</option>
+            <option value="رزان محمد عثمان محمد ادم">رزان محمد عثمان محمد ادم</option>
+            <option value="رنا رزق محمد الفاخري">رنا رزق محمد الفاخري</option>
+            <option value="رؤى احمد العبد الطعمه">رؤى احمد العبد الطعمه</option>
+            <option value="ريتاج حسين السالم">ريتاج حسين السالم</option>
+            <option value="ريم احمد بخيت محمد عمر">ريم احمد بخيت محمد عمر</option>
+            <option value="ريما عمير راشد البطى الكعبى">ريما عمير راشد البطى الكعبى</option>
+            <option value="ساره حكيم محمدي نزاد كادستانه">ساره حكيم محمدي نزاد كادستانه</option>
+            <option value="شروق عمرو النوبي عبدالله احمد">شروق عمرو النوبي عبدالله احمد</option>
+            <option value="شهد اسماعيل">شهد اسماعيل</option>
+            <option value="شهد وليد عبدالحكم محمد محمود">شهد وليد عبدالحكم محمد محمود</option>
+            <option value="عايشة عبدالله عامر بن ديه الكعبي">عايشة عبدالله عامر بن ديه الكعبي</option>
+            <option value="فاطمه عبدالله الفاضل احمد">فاطمه عبدالله الفاضل احمد</option>
+            <option value="فاطمه عدنان زم">فاطمه عدنان زم</option>
+            <option value="فاطمه محمد النوراني بشاره">فاطمه محمد النوراني بشاره</option>
+            <option value="فريدة محمد محمدى محمد العوضى">فريدة محمد محمدى محمد العوضى</option>
+            <option value="لمار بلال جبر رصرص">لمار بلال جبر رصرص</option>
+            <option value="ماسه مصطفى هاشم يوسف عبدالمجيد">ماسه مصطفى هاشم يوسف عبدالمجيد</option>
+            <option value="مروه صالح المجود">مروه صالح المجود</option>
+            <option value="مليكه محمود معوض حسن عبدالمقصود">مليكه محمود معوض حسن عبدالمقصود</option>
+            <option value="ميسم عبداللطيف علي الامين">ميسم عبداللطيف علي الامين</option>
+            <option value="نوره علم محمد حاجى خان">نوره علم محمد حاجى خان</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label>👭 اختاري زميلتك في الفريق:</label>
+          <select id="partnerName">
+            <option value="">-- اختاري زميلتك --</option>
+          </select>
+        </div>
+        
+        <button class="btn" onclick="confirmTeam()" id="confirmBtn" disabled>تأكيد الفريق والبدء</button>
+      </div>
+      
+      <!-- Phase 2: Send Question -->
+      <div id="phase2" style="display: none;">
+        <div class="partner-info">
+          <h3>👭 فريقك</h3>
+          <p id="teamInfo"></p>
+        </div>
+        
+        <div class="form-group">
+          <label>❓ اكتبي سؤالاً لزميلتك:</label>
+          <textarea id="questionText" placeholder="اكتبي سؤالاً يتعلق بموضوع الدرس..."></textarea>
+        </div>
+        
+        <button class="btn" onclick="sendQuestion()" id="sendQuestionBtn">إرسال السؤال ✉️</button>
+      </div>
+      
+      <!-- Phase 3: Answer Partner's Question -->
+      <div id="phase3" style="display: none;">
+        <div class="loading" id="waitingMessage">⏳ انتظري حتى ترسل زميلتك سؤالها...</div>
+        
+        <div id="answerSection" style="display: none;">
+          <div class="partner-info">
+            <h3>📩 سؤال من زميلتك</h3>
+            <div class="question-received" id="receivedQuestion"></div>
+          </div>
+          
+          <div class="form-group">
+            <label>✍️ إجابتك على سؤال زميلتك:</label>
+            <textarea id="answerText" placeholder="اكتبي إجابتك هنا..."></textarea>
+          </div>
+          
+          <button class="btn" onclick="sendAnswer()" id="sendAnswerBtn">إرسال الإجابة 📤</button>
+        </div>
+      </div>
+      
+      <!-- Phase 4: Complete -->
+      <div id="phase4" style="display: none;">
+        <div class="success-message">
+          <h2>🎉 أحسنتِ!</h2>
+          <p>تم إرسال جميع إجاباتك بنجاح</p>
+          <p>شكراً لمشاركتك الفعالة 💚</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let studentName = '';
+    let partnerName = '';
+    let teamId = '';
+    let myQuestion = '';
+    let partnerQuestion = '';
+    let checkInterval;
+    
+    // Timer
+    let timeLeft = 600; // 10 minutes in seconds
+    const timerElement = document.getElementById('timer');
+    
+    setInterval(() => {
+      if (timeLeft > 0) {
+        timeLeft--;
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        timerElement.textContent = `⏱️ ${minutes}:${seconds.toString().padStart(2, '0')}`;
+        
+        if (timeLeft <= 60) {
+          timerElement.style.background = 'linear-gradient(135deg, #f5576c 0%, #f093fb 100%)';
+        }
+      }
+    }, 1000);
+    
+    // Populate partner dropdown when student is selected
+    document.getElementById('studentName').addEventListener('change', function() {
+      const selected = this.value;
+      const partnerSelect = document.getElementById('partnerName');
+      const confirmBtn = document.getElementById('confirmBtn');
+      
+      // Clear partner dropdown
+      partnerSelect.innerHTML = '<option value="">-- اختاري زميلتك --</option>';
+      
+      if (selected) {
+        // Add all students except the selected one
+        const options = Array.from(this.options).filter(opt => opt.value && opt.value !== selected);
+        options.forEach(opt => {
+          const newOption = document.createElement('option');
+          newOption.value = opt.value;
+          newOption.textContent = opt.value;
+          partnerSelect.appendChild(newOption);
+        });
+        partnerSelect.disabled = false;
+      } else {
+        partnerSelect.disabled = true;
+        confirmBtn.disabled = true;
+      }
+    });
+    
+    // Enable confirm button when both are selected
+    document.getElementById('partnerName').addEventListener('change', function() {
+      const studentSelected = document.getElementById('studentName').value;
+      const partnerSelected = this.value;
+      const confirmBtn = document.getElementById('confirmBtn');
+      
+      confirmBtn.disabled = !(studentSelected && partnerSelected);
+    });
+    
+    async function confirmTeam() {
+      studentName = document.getElementById('studentName').value;
+      partnerName = document.getElementById('partnerName').value;
+      
+      if (!studentName || !partnerName) {
+        alert('الرجاء اختيار اسمك واسم زميلتك');
+        return;
+      }
+      
+      // Create team ID (alphabetically sorted to ensure same ID for both partners)
+      const names = [studentName, partnerName].sort();
+      teamId = `team_${names[0]}_${names[1]}`.replace(/\s/g, '_');
+      
+      document.getElementById('phase1').style.display = 'none';
+      document.getElementById('phase2').style.display = 'block';
+      document.getElementById('phaseIndicator').textContent = '✍️ المرحلة 2: اكتبي سؤالاً لزميلتك';
+      document.getElementById('teamInfo').textContent = `أنتِ: ${studentName} | زميلتك: ${partnerName}`;
+    }
+    
+    async function sendQuestion() {
+      const questionText = document.getElementById('questionText').value.trim();
+      
+      if (!questionText) {
+        alert('الرجاء كتابة السؤال');
+        return;
+      }
+      
+      myQuestion = questionText;
+      document.getElementById('sendQuestionBtn').disabled = true;
+      document.getElementById('sendQuestionBtn').textContent = 'جاري الإرسال...';
+      
+      try {
+        await window.FBSAVE({
+          teamId: teamId,
+          senderName: studentName,
+          receiverName: partnerName,
+          question: questionText,
+          phase: 'question_sent',
+          timestamp: Date.now()
+        });
+        
+        document.getElementById('phase2').style.display = 'none';
+        document.getElementById('phase3').style.display = 'block';
+        document.getElementById('phaseIndicator').textContent = '📩 المرحلة 3: أجيبي على سؤال زميلتك';
+        
+        // Start checking for partner's question
+        checkForPartnerQuestion();
+      } catch (error) {
+        console.error('Error sending question:', error);
+        alert('حدث خطأ في الإرسال، الرجاء المحاولة مرة أخرى');
+        document.getElementById('sendQuestionBtn').disabled = false;
+        document.getElementById('sendQuestionBtn').textContent = 'إرسال السؤال ✉️';
+      }
+    }
+    
+    async function checkForPartnerQuestion() {
+      checkInterval = setInterval(async () => {
+        try {
+          const data = await window.FBLOAD();
+          
+          if (data) {
+            // Look for partner's question
+            for (let key in data) {
+              const record = data[key];
+              if (record.teamId === teamId && 
+                  record.senderName === partnerName && 
+                  record.receiverName === studentName &&
+                  record.phase === 'question_sent') {
+                
+                partnerQuestion = record.question;
+                document.getElementById('waitingMessage').style.display = 'none';
+                document.getElementById('answerSection').style.display = 'block';
+                document.getElementById('receivedQuestion').textContent = partnerQuestion;
+                clearInterval(checkInterval);
+                break;
+              }
+            }
+          }
+        } catch (error) {
+          console.error('Error checking for partner question:', error);
+        }
+      }, 2000);
+    }
+    
+    async function sendAnswer() {
+      const answerText = document.getElementById('answerText').value.trim();
+      
+      if (!answerText) {
+        alert('الرجاء كتابة الإجابة');
+        return;
+      }
+      
+      document.getElementById('sendAnswerBtn').disabled = true;
+      document.getElementById('sendAnswerBtn').textContent = 'جاري الإرسال...';
+      
+      try {
+        await window.FBSAVE({
+          teamId: teamId,
+          studentName: studentName,
+          partnerName: partnerName,
+          myQuestion: myQuestion,
+          partnerQuestion: partnerQuestion,
+          myAnswer: answerText,
+          phase: 'completed',
+          timestamp: Date.now()
+        });
+        
+        document.getElementById('phase3').style.display = 'none';
+        document.getElementById('phase4').style.display = 'block';
+        document.getElementById('phaseIndicator').textContent = '✅ اكتمل النشاط';
+      } catch (error) {
+        console.error('Error sending answer:', error);
+        alert('حدث خطأ في الإرسال، الرجاء المحاولة مرة أخرى');
+        document.getElementById('sendAnswerBtn').disabled = false;
+        document.getElementById('sendAnswerBtn').textContent = 'إرسال الإجابة 📤';
+      }
+    }
+  </script>
+</div>
+</div>
+<div id="dp">
+<div class="dh"><h2>&#127919; لوحة المعلمة</h2>
+<span class="dc" id="dc">0</span>
+<span style="font-size:13px;opacity:.85">اجابة مستلمة</span></div>
+<div class="da">
+<button style="background:#0A7A6C" onclick="lr()">تحديث</button>
+<button style="background:#dc2626" onclick="da()">مسح الكل</button>
+<button style="background:#888" onclick="cd()">اغلاق</button>
+</div>
+<div id="dg"><div class="em">&#9200; لا توجد اجابات بعد...</div></div>
+</div>
+<button id="tbtn" onclick="ov()">&#128274; شاشة المعلمة</button>
+<script>var _D="https://cyber-safety-class-b266a-default-rtdb.firebaseio.com",_P="/act_7452285214",_W="1234",_I=null;window.FBSAVE=async function(obj){var k="r"+Date.now();var u=_D+_P+"/"+k+".json";var b=Object.assign({},obj,{_t:Date.now()});var r=await fetch(u,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(b)});if(!r.ok)throw new Error("save failed "+r.status);return k;};window.FBLOAD=async function(){var r=await fetch(_D+_P+".json");var d=await r.json()||{};var v=Object.values(d).filter(function(x){return x&&x.phase==="1";});return v.length?v[Math.floor(Math.random()*v.length)]:null;};window.FBLISTEN=function(gn,cb){return setInterval(async function(){var r=await fetch(_D+_P+".json");var d=await r.json()||{};cb(Object.values(d).filter(function(x){return String(x.group)===String(gn);}));},3000);};function ov(){document.getElementById("pov").classList.add("on");setTimeout(function(){document.getElementById("pi").focus();},80);}function cv(){document.getElementById("pov").classList.remove("on");document.getElementById("pi").value="";document.getElementById("pe").textContent="";}function cp(){if(document.getElementById("pi").value===_W){cv();od();}else{document.getElementById("pe").textContent="كلمة المرور خاطئة";document.getElementById("pi").value="";}}function od(){document.getElementById("sp").style.display="none";document.getElementById("tbtn").style.display="none";document.getElementById("dp").style.display="block";lr();_I=setInterval(lr,4000);}function cd(){if(_I)clearInterval(_I);document.getElementById("dp").style.display="none";document.getElementById("sp").style.display="block";document.getElementById("tbtn").style.display="block";}async function lr(){try{var r=await fetch(_D+_P+".json");var d=await r.json()||{};var arr=Object.values(d).sort(function(a,b){return(b._t||0)-(a._t||0);});document.getElementById("dc").textContent=arr.length;var el=document.getElementById("dg");if(!arr.length){el.innerHTML='<div class="em">&#9200; لا توجد اجابات بعد...</div>';return;}var h="";arr.forEach(function(e){var f="";Object.keys(e).forEach(function(k){if(k!=="_t"&&k!=="name")f+='<div class="rf"><div class="rl">'+k+'</div>'+e[k]+'</div>';});var t=e._t?new Date(e._t).toLocaleTimeString("ar",{hour:"2-digit",minute:"2-digit"}):"";h+='<div class="rc"><div class="rn">&#128100; '+(e.name||"طالب")+'</div><div class="rt">'+ t +'</div>'+f+'</div>';});el.innerHTML=h;}catch(e){console.error(e);}}async function da(){if(!confirm("مسح جميع الاجابات؟"))return;await fetch(_D+_P+".json",{method:"DELETE"});document.getElementById("dg").innerHTML='<div class="em">&#10003; تم المسح</div>';document.getElementById("dc").textContent="0";}</script>
+</body></html>
