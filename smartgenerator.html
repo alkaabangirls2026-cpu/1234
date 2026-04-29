@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>مولّد الأنشطة | Claude.ai</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Tajawal',sans-serif;background:#F3F1ED;color:#1C1814;min-height:100vh}
+/* header */
+.hdr{background:#1C1814;padding:1rem 1.5rem;display:flex;align-items:center;gap:12px}
+.hdr-logo{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#0A7A6C,#0D9180);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.hdr h1{font-size:16px;font-weight:900;color:#fff}
+.hdr p{font-size:11px;color:rgba(255,255,255,.45);margin-top:1px}
+.hdr-btn{margin-right:auto;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:6px 14px;font-family:'Tajawal',sans-serif;font-size:12px;color:rgba(255,255,255,.65);cursor:pointer}
+.hdr-btn:hover{background:rgba(255,255,255,.15);color:#fff}
+/* modal */
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:999;align-items:center;justify-content:center;padding:1rem}
+.modal.open{display:flex}
+.mbox{background:#fff;border-radius:18px;padding:1.8rem;width:100%;max-width:380px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.mbox .icon{font-size:28px;margin-bottom:.5rem}
+.mbox h3{font-size:17px;font-weight:700;margin-bottom:.3rem}
+.mbox p{font-size:13px;color:#888;margin-bottom:1.2rem}
+.mbox input{width:100%;padding:11px;border:2px solid #ddd;border-radius:10px;font-size:20px;letter-spacing:8px;text-align:center;font-family:'Tajawal',sans-serif;outline:none}
+.mbox input:focus{border-color:#0A7A6C}
+.merr{font-size:12.5px;color:#dc2626;margin-top:6px;min-height:18px}
+.mbtns{display:flex;gap:10px;margin-top:1rem}
+.mbtns button{flex:1;padding:11px;border-radius:9px;font-family:'Tajawal',sans-serif;font-size:14px;font-weight:700;cursor:pointer;border:none}
+.mbtns .cancel{background:#f5f5f5;color:#666}
+.mbtns .ok{background:#0A7A6C;color:#fff}
+/* views */
+.view{display:none;max-width:800px;margin:0 auto;padding:1.5rem}
+.view.active{display:block}
+/* cards */
+.card{background:#fff;border:1px solid #E2D9D0;border-radius:16px;padding:1.4rem;margin-bottom:1rem}
+.card h2{font-size:17px;font-weight:900;margin-bottom:.4rem}
+.card .sub{font-size:13px;color:#8A7F75;line-height:1.7;margin-bottom:1.2rem}
+/* steps bar */
+.steps{display:flex;background:#fff;border:1px solid #E2D9D0;border-radius:12px;overflow:hidden;margin-bottom:1.2rem}
+.step{flex:1;padding:11px 6px;text-align:center;border-right:1px solid #E2D9D0}
+.step:last-child{border-right:none}
+.step .sn{font-size:10px;font-weight:700;color:#8A7F75}
+.step .st{font-size:12.5px;font-weight:700;color:#1C1814}
+.step.cur{background:#E2F3F0}
+.step.cur .sn,.step.cur .st{color:#0A7A6C}
+.step.done{background:#E0F5EB}
+.step.done .sn,.step.done .st{color:#158048}
+/* option buttons */
+.opts{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:.8rem}
+.opt{flex:1;min-width:120px;background:#F3F1ED;border:2px solid #E2D9D0;border-radius:12px;padding:.9rem .6rem;text-align:center;cursor:pointer;transition:all .15s;user-select:none}
+.opt:hover{border-color:#8A7F75}
+.opt .oi{font-size:24px;display:block;margin-bottom:5px}
+.opt .ot{font-size:13px;font-weight:700;display:block;margin-bottom:2px}
+.opt .od{font-size:11px;color:#8A7F75;line-height:1.4}
+/* selected states */
+.opt[data-sel="true"].tc{border-color:#0A7A6C;background:#E2F3F0}
+.opt[data-sel="true"].ac{border-color:#B5620A;background:#FEF1E0}
+.opt[data-sel="true"].gc{border-color:#158048;background:#E0F5EB}
+.opt[data-sel="true"].bc{border-color:#1A5CB8;background:#E5EEFB}
+.opt[data-sel="true"].pc{border-color:#6340C0;background:#EDEAFF}
+/* textarea */
+.tarea{width:100%;min-height:140px;background:#F3F1ED;border:2px solid #E2D9D0;border-radius:11px;padding:12px;font-family:'Tajawal',sans-serif;font-size:14px;color:#1C1814;outline:none;resize:vertical;display:block}
+.tarea:focus{border-color:#0A7A6C;background:#fff}
+/* chips */
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+.chip{background:#F3F1ED;border:1px solid #E2D9D0;border-radius:20px;padding:4px 12px;font-size:12px;color:#8A7F75;cursor:pointer}
+.chip:hover{border-color:#0A7A6C;color:#0A7A6C;background:#E2F3F0}
+/* image zone */
+.imgz{border:2px dashed #C5BAB0;border-radius:12px;padding:1.5rem;text-align:center;cursor:pointer;background:#F3F1ED;position:relative;margin-bottom:1rem}
+.imgz:hover{border-color:#0A7A6C;background:#E2F3F0}
+.imgz input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.imgz .zi{font-size:32px;margin-bottom:6px}
+.imgz .zt{font-size:14px;font-weight:700;color:#45403A}
+.imgz .zs{font-size:12px;color:#8A7F75;margin-top:2px}
+/* range slider */
+.rrow{display:flex;align-items:center;gap:14px;margin-bottom:.5rem}
+.rrow input[type=range]{flex:1;accent-color:#0A7A6C}
+.rval{font-size:18px;font-weight:900;color:#0A7A6C;min-width:80px;text-align:center}
+.rticks{display:flex;justify-content:space-between;font-size:11px;color:#8A7F75}
+/* toggles */
+.tog-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid #E2D9D0}
+.tog-row:last-child{border-bottom:none}
+.tog-info h4{font-size:14px;font-weight:700}
+.tog-info p{font-size:12px;color:#8A7F75;margin-top:2px}
+.sw{position:relative;width:42px;height:23px;flex-shrink:0}
+.sw input{opacity:0;width:0;height:0}
+.sw span{position:absolute;inset:0;background:#ddd;border-radius:23px;cursor:pointer;transition:.3s}
+.sw span:before{content:'';position:absolute;width:17px;height:17px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.3s}
+.sw input:checked+span{background:#0A7A6C}
+.sw input:checked+span:before{transform:translateX(19px)}
+/* buttons */
+.btn{border:none;border-radius:11px;padding:11px 22px;font-family:'Tajawal',sans-serif;font-size:14px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:all .15s}
+.btn-teal{background:#0A7A6C;color:#fff}
+.btn-teal:hover{background:#0D9180}
+.btn-teal:disabled{background:#aaa;cursor:not-allowed}
+.btn-ghost{background:none;border:1.5px solid #E2D9D0;color:#8A7F75}
+.btn-ghost:hover{border-color:#0A7A6C;color:#0A7A6C}
+.btnrow{display:flex;justify-content:space-between;align-items:center}
+/* generating */
+.gcard{background:#fff;border:1px solid #E2D9D0;border-radius:16px;padding:2.5rem;text-align:center}
+.spinner{width:46px;height:46px;border-radius:50%;border:3px solid #E2D9D0;border-top-color:#0A7A6C;animation:spin 1s linear infinite;margin:0 auto 1.2rem}
+@keyframes spin{to{transform:rotate(360deg)}}
+.gtit{font-size:17px;font-weight:700;margin-bottom:5px}
+.gsub{font-size:13px;color:#8A7F75}
+.glog{background:#F3F1ED;border:1px solid #E2D9D0;border-radius:10px;padding:10px 14px;margin-top:1rem;text-align:right;max-height:130px;overflow-y:auto}
+.ll{font-size:12.5px;padding:3px 0;border-bottom:1px solid #E2D9D0;display:flex;align-items:center;gap:6px}
+.ll:last-child{border-bottom:none}
+.ll.a{color:#0A7A6C;font-weight:700}
+.ll.d{color:#158048}
+.ll.f{color:#dc2626}
+/* result */
+.rcard{background:#fff;border:2px solid #158048;border-radius:16px;padding:2rem;text-align:center}
+.rcard .ri{font-size:50px;margin-bottom:.7rem}
+.rcard h2{font-size:20px;font-weight:900;margin-bottom:.4rem}
+.rcard .rs{font-size:13.5px;color:#8A7F75;line-height:1.8;margin-bottom:1.4rem}
+.linkbox{display:flex;align-items:center;gap:10px;background:#E2F3F0;border:1px solid #AFDDD7;border-radius:11px;padding:11px 14px;margin-bottom:10px;text-align:right}
+.linkbox .lu{font-size:12.5px;color:#0A7A6C;flex:1;word-break:break-all}
+.linkbox .lc{background:#0A7A6C;color:#fff;border:none;border-radius:8px;padding:7px 14px;font-family:'Tajawal',sans-serif;font-size:12.5px;font-weight:700;cursor:pointer;white-space:nowrap}
+.pwdinfo{background:#E2F3F0;border:1px solid #AFDDD7;border-radius:10px;padding:10px 14px;font-size:13px;color:#0A7A6C;margin-bottom:1rem}
+.rbtns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:1rem}
+/* error */
+.ebox{background:#FEE2E2;border:1px solid #FCA5A5;border-radius:12px;padding:1.2rem;text-align:center;margin-bottom:1rem}
+.ebox h3{font-size:15px;font-weight:700;color:#dc2626;margin-bottom:5px}
+.ebox p{font-size:13px;color:#dc2626}
+/* warn */
+.warn{background:#FEF1E0;border:1px solid #FAC990;border-radius:12px;padding:1rem;text-align:center;margin-bottom:1.2rem}
+.warn h3{font-size:14px;font-weight:700;color:#B5620A}
+.warn p{font-size:13px;color:#B5620A;margin-top:3px;line-height:1.7}
+/* hint */
+.hint{background:#FEF1E0;border:1px solid #FAC990;border-radius:9px;padding:9px 13px;font-size:12.5px;color:#B5620A;line-height:1.75;margin-bottom:9px}
+.hint a{color:#B5620A;font-weight:700}
+/* admin grid */
+.agrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:1.2rem}
+@media(max-width:560px){.agrid{grid-template-columns:1fr}}
+.agrid .wide{grid-column:1/-1}
+.afield{display:flex;flex-direction:column;gap:4px;margin-bottom:9px}
+.afield label{font-size:12px;font-weight:700;color:#8A7F75}
+.afield input,.afield textarea{background:#F3F1ED;border:1.5px solid #E2D9D0;border-radius:9px;padding:9px 11px;font-family:'Tajawal',sans-serif;font-size:13.5px;color:#1C1814;outline:none;width:100%}
+.afield input:focus,.afield textarea:focus{border-color:#0A7A6C;background:#fff}
+.afield textarea{resize:none;min-height:58px}
+/* toast */
+.toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(100px);background:#1C1814;color:#fff;border-radius:30px;padding:10px 22px;font-size:13.5px;font-weight:600;z-index:9999;transition:transform .3s cubic-bezier(.34,1.56,.64,1);pointer-events:none;white-space:nowrap}
+.toast.show{transform:translateX(-50%) translateY(0)}
+/* img preview */
+.ipreview{margin-top:10px;display:none;position:relative}
+.ipreview img{max-width:100%;border-radius:8px;max-height:180px;object-fit:contain}
+.ipreview .rem{position:absolute;top:5px;right:5px;background:#dc2626;color:#fff;border:none;border-radius:6px;padding:3px 10px;font-size:11px;cursor:pointer}
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+
+<!-- ADMIN MODAL -->
+<div class="modal" id="adminModal">
+  <div class="mbox">
+    <div class="icon">⚙️</div>
+    <h3>لوحة المدير</h3>
+    <p>أدخل كلمة مرور المدير</p>
+    <input type="password" id="adminPinInput" maxlength="20" placeholder="••••••"
+      onkeydown="if(event.key==='Enter')checkAdminPin()">
+    <div class="merr" id="adminPinErr"></div>
+    <div class="mbtns">
+      <button class="cancel" onclick="closeAdminModal()">إلغاء</button>
+      <button class="ok" onclick="checkAdminPin()">دخول ←</button>
+    </div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="hdr-logo">🤖</div>
+  <div>
+    <h1>مولّد الأنشطة الذكي</h1>
+    <p>صفي النشاط — Claude يبنيه وينشره تلقائياً</p>
+  </div>
+  <button class="hdr-btn" onclick="openAdminModal()">⚙️ المدير</button>
+</div>
+
+<!-- ══ ADMIN VIEW ══ -->
+<div class="view" id="vAdmin">
+  <div style="text-align:center;margin-bottom:1.5rem">
+    <h2 style="font-size:20px;font-weight:900">⚙️ إعدادات المدير</h2>
+    <p style="font-size:13px;color:#8A7F75;margin-top:4px">تُعدَّل مرة واحدة — المعلمات لا يرين هذه الصفحة</p>
+  </div>
+  <div class="agrid">
+    <div class="card">
+      <h2 style="font-size:14px;margin-bottom:12px">🔥 Firebase</h2>
+      <div class="afield">
+        <label>رابط Realtime Database</label>
+        <input type="text" id="cfgFb" value="https://cyber-safety-class-b266a-default-rtdb.firebaseio.com">
+      </div>
+    </div>
+    <div class="card">
+      <h2 style="font-size:14px;margin-bottom:12px">🔐 كلمات المرور</h2>
+      <div class="afield">
+        <label>كلمة مرور المدير الجديدة (اتركها فارغة للإبقاء على الحالية)</label>
+        <input type="password" id="cfgAdminPwd" placeholder="كلمة مرور جديدة">
+      </div>
+      <div class="afield">
+        <label>كلمة مرور المعلمة للوحة المتابعة</label>
+        <input type="text" id="cfgTeacherPwd" value="1234">
+      </div>
+    </div>
+    <div class="card">
+      <h2 style="font-size:14px;margin-bottom:8px">🐙 GitHub</h2>
+      <div class="hint">
+        احصلي على Token من:
+        <a href="https://github.com/settings/tokens/new" target="_blank">github.com/settings/tokens</a>
+        ← علّمي <b>repo</b> ← Generate token
+      </div>
+      <div class="afield">
+        <label>GitHub Token (يبدأ بـ ghp_)</label>
+        <input type="password" id="cfgGhToken" placeholder="ghp_xxxxxxxxxxxx">
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div class="afield">
+          <label>GitHub Username</label>
+          <input type="text" id="cfgGhOwner" value="alkaabangirls2026-cpu">
+        </div>
+        <div class="afield">
+          <label>Repository</label>
+          <input type="text" id="cfgGhRepo" value="1234">
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h2 style="font-size:14px;margin-bottom:8px">🤖 Claude API</h2>
+      <div class="hint">
+        من <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a>
+        ← API Keys ← Create Key
+      </div>
+      <div class="afield">
+        <label>Anthropic API Key (يبدأ بـ sk-ant-)</label>
+        <input type="password" id="cfgClaude" placeholder="sk-ant-api03-xxxx">
+      </div>
+    </div>
+    <div class="card wide">
+      <h2 style="font-size:14px;margin-bottom:8px">📝 تعليمات إضافية (تُضاف لكل نشاط)</h2>
+      <div class="afield">
+        <label>مثال: المنهج القطري، الفصل الدراسي الثاني...</label>
+        <textarea id="cfgSuffix" placeholder="اكتبي هنا أي تعليمات ثابتة..."></textarea>
+      </div>
+    </div>
+  </div>
+  <div style="text-align:center">
+    <button class="btn btn-teal" style="font-size:15px;padding:13px 32px" onclick="saveAdmin()">
+      💾 حفظ الإعدادات
+    </button>
+    <div id="adminOK" style="display:none;margin-top:12px">
+      <span style="background:#E0F5EB;border:1px solid #9FE3BE;border-radius:20px;padding:5px 16px;font-size:13px;color:#158048;font-weight:700">
+        ✅ تم الحفظ
+      </span>
+      <br><br>
+      <button class="btn btn-ghost" onclick="closeAdmin()">← العودة للأداة</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TEACHER VIEW ══ -->
+<div class="view active" id="vTeacher">
+
+  <div class="warn" id="cfgWarn" style="display:none">
+    <h3>⚠️ الأداة تحتاج إعداداً</h3>
+    <p>اضغط ⚙️ المدير في الأعلى وأدخل بيانات Firebase و GitHub و Claude API</p>
+  </div>
+
+  <!-- Steps bar -->
+  <div class="steps">
+    <div class="step cur" id="s1"><div class="sn">الخطوة 1</div><div class="st">نوع النشاط</div></div>
+    <div class="step" id="s2"><div class="sn">الخطوة 2</div><div class="st">محتوى الدرس</div></div>
+    <div class="step" id="s3"><div class="sn">الخطوة 3</div><div class="st">الإعدادات</div></div>
+    <div class="step" id="s4"><div class="sn">الخطوة 4</div><div class="st">النشر</div></div>
+  </div>
+
+  <!-- STEP 1 -->
+  <div id="pg1">
+    <div class="card">
+      <h2>اختاري نوع النشاط</h2>
+      <div class="sub">اختاري نوع النشاط ونوع التفاعل ثم اضغطي التالي</div>
+
+      <div style="font-size:12px;font-weight:700;color:#8A7F75;margin-bottom:8px">📚 النشاط</div>
+      <div class="opts" id="grp_atype">
+        <div class="opt tc" data-group="atype" data-val="strategy" onclick="pickOpt(this)">
+          <span class="oi">🎯</span><span class="ot">استراتيجية تعليمية</span>
+          <span class="od">نشاط تعلم وتفاعل</span>
+        </div>
+        <div class="opt ac" data-group="atype" data-val="goal" onclick="pickOpt(this)">
+          <span class="oi">🏁</span><span class="ot">غلق الهدف</span>
+          <span class="od">تحقق من تحقق الهدف</span>
+        </div>
+        <div class="opt gc" data-group="atype" data-val="closure" onclick="pickOpt(this)">
+          <span class="oi">🚪</span><span class="ot">الغلق الختامي</span>
+          <span class="od">Exit Ticket نهاية الدرس</span>
+        </div>
+      </div>
+
+      <div style="font-size:12px;font-weight:700;color:#8A7F75;margin:12px 0 8px">👥 نوع التفاعل</div>
+      <div class="opts" id="grp_itype">
+        <div class="opt bc" data-group="itype" data-val="individual" onclick="pickOpt(this)">
+          <span class="oi">👤</span><span class="ot">فردي</span>
+          <span class="od">كل طالب بمفرده</span>
+        </div>
+        <div class="opt pc" data-group="itype" data-val="pair" onclick="pickOpt(this)">
+          <span class="oi">👥</span><span class="ot">ثنائي</span>
+          <span class="od">تعاون بين طالبين</span>
+        </div>
+        <div class="opt tc" data-group="itype" data-val="group" onclick="pickOpt(this)">
+          <span class="oi">👨‍👩‍👧‍👦</span><span class="ot">جماعي</span>
+          <span class="od">مجموعات تتشارك</span>
+        </div>
+      </div>
+    </div>
+    <div class="btnrow">
+      <span></span>
+      <button class="btn btn-teal" id="btn1" onclick="goPage(2)" disabled>التالي ←</button>
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div id="pg2" style="display:none">
+    <div class="card">
+      <h2>محتوى الدرس</h2>
+      <div class="sub">أرفقي صورة من الكتاب أو اكتبي وصف الدرس — أو كليهما</div>
+
+      <div style="font-size:12.5px;font-weight:700;color:#8A7F75;margin-bottom:7px">📷 صورة من الكتاب (اختياري)</div>
+      <div class="imgz" id="imgZone" onclick="document.getElementById('imgInput').click()"
+        ondragover="event.preventDefault();this.style.borderColor='#0A7A6C'"
+        ondragleave="this.style.borderColor='#C5BAB0'"
+        ondrop="dropImg(event)">
+        <input type="file" accept="image/*" id="imgInput" style="display:none"
+          onchange="pickImg(this.files[0])">
+        <div id="imgPH">
+          <div class="zi">📷</div>
+          <div class="zt">اسحبي صورة أو اضغطي للاختيار</div>
+          <div class="zs">صفحة من الكتاب، الشرح...</div>
+        </div>
+        <div class="ipreview" id="imgPrev">
+          <img id="imgThumb" src="" alt="">
+          <button class="rem" onclick="clearImg(event)">✕ إزالة</button>
+        </div>
+      </div>
+
+      <div style="font-size:12.5px;font-weight:700;color:#8A7F75;margin-bottom:7px">✍️ وصف الدرس والنشاط</div>
+      <textarea class="tarea" id="lessonTxt"
+        placeholder="مثال: أنا معلمة حاسب للصف السابع. درسي عن شبكات الحاسوب (LAN, WAN, MAN). أريد نشاطاً يطلب من الطالب مقارنة الأنواع الثلاثة في جدول مع مثال على كل نوع."></textarea>
+      <div class="chips">
+        <div class="chip" onclick="addTxt('أنا معلمة ')">+ المادة والصف</div>
+        <div class="chip" onclick="addTxt('موضوع الدرس: ')">+ الموضوع</div>
+        <div class="chip" onclick="addTxt('الهدف: أن يستطيع الطالب ')">+ الهدف</div>
+        <div class="chip" onclick="addTxt('مع فروق فردية 3 مستويات')">+ فروق فردية</div>
+      </div>
+    </div>
+    <div class="btnrow">
+      <button class="btn btn-ghost" onclick="goPage(1)">← رجوع</button>
+      <button class="btn btn-teal" onclick="goPage(3)">التالي ←</button>
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div id="pg3" style="display:none">
+    <div class="card">
+      <h2>إعدادات النشاط</h2>
+      <div class="sub">اضبطي مدة النشاط والخيارات</div>
+
+      <div style="font-size:13px;font-weight:700;color:#45403A;margin-bottom:10px">⏱ مدة النشاط</div>
+      <div class="rrow">
+        <input type="range" id="durR" min="5" max="30" step="5" value="10"
+          oninput="document.getElementById('durV').textContent=this.value+' دقيقة'">
+        <span class="rval" id="durV">10 دقيقة</span>
+      </div>
+      <div class="rticks"><span>5</span><span>10</span><span>15</span><span>20</span><span>25</span><span>30</span></div>
+
+      <div style="font-size:13px;font-weight:700;color:#45403A;margin:1.2rem 0 .5rem">⚙️ خيارات</div>
+      <div class="tog-row">
+        <div class="tog-info">
+          <h4>🔐 شاشة المعلمة + جمع إجابات الطلاب</h4>
+          <p>تُظهر إجابات الطلاب لحظياً في لوحة محمية بكلمة مرور</p>
+        </div>
+        <label class="sw"><input type="checkbox" id="togDB" checked><span></span></label>
+      </div>
+      <div class="tog-row">
+        <div class="tog-info">
+          <h4>🌈 فروق فردية (3 مستويات)</h4>
+          <p>أساسي / متوسط / متقدم</p>
+        </div>
+        <label class="sw"><input type="checkbox" id="togDF"><span></span></label>
+      </div>
+      <div class="tog-row">
+        <div class="tog-info">
+          <h4>⏲ مؤقت زمني</h4>
+          <p>عداد تنازلي يظهر للطلاب</p>
+        </div>
+        <label class="sw"><input type="checkbox" id="togTM" checked><span></span></label>
+      </div>
+    </div>
+    <div class="btnrow">
+      <button class="btn btn-ghost" onclick="goPage(2)">← رجوع</button>
+      <button class="btn btn-teal" onclick="generate()">🚀 توليد ونشر</button>
+    </div>
+  </div>
+
+  <!-- STEP 4 -->
+  <div id="pg4" style="display:none">
+    <div class="gcard" id="genCard">
+      <div class="spinner"></div>
+      <div class="gtit" id="genTit">جاري التوليد...</div>
+      <div class="gsub" id="genSub">Claude يبني نشاطاً مخصصاً</div>
+      <div class="glog" id="genLog"></div>
+    </div>
+    <div id="resCard" style="display:none"></div>
+    <div id="errCard" style="display:none"></div>
+  </div>
+
+</div>
+
+<script>
+// ══ STORAGE ══
+var C = {
+  fb:'c_fb', gh:'c_gh', own:'c_own', rep:'c_rep',
+  apwd:'c_apwd', tpwd:'c_tpwd', clau:'c_clau', suf:'c_suf'
+};
+function g(k){return localStorage.getItem(k)||''}
+function s(k,v){if(v!==null&&v!==undefined)localStorage.setItem(k,v)}
+function ready(){return g(C.fb)&&g(C.gh)&&g(C.own)&&g(C.rep)&&g(C.clau)}
+
+// ══ INIT ══
+window.onload = function(){
+  if(g(C.fb)) document.getElementById('cfgFb').value=g(C.fb)
+  if(g(C.gh)) document.getElementById('cfgGhToken').value=g(C.gh)
+  if(g(C.own)) document.getElementById('cfgGhOwner').value=g(C.own)
+  if(g(C.rep)) document.getElementById('cfgGhRepo').value=g(C.rep)
+  if(g(C.tpwd)) document.getElementById('cfgTeacherPwd').value=g(C.tpwd)
+  if(g(C.suf)) document.getElementById('cfgSuffix').value=g(C.suf)
+  if(g(C.clau)) document.getElementById('cfgClaude').value=g(C.clau)
+  document.getElementById('cfgWarn').style.display = ready()?'none':'block'
+}
+
+// ══ ADMIN ══
+function openAdminModal(){
+  document.getElementById('adminModal').classList.add('open')
+  setTimeout(function(){document.getElementById('adminPinInput').focus()},100)
+}
+function closeAdminModal(){
+  document.getElementById('adminModal').classList.remove('open')
+  document.getElementById('adminPinInput').value=''
+  document.getElementById('adminPinErr').textContent=''
+}
+function checkAdminPin(){
+  var pwd = g(C.apwd)||'admin123'
+  if(document.getElementById('adminPinInput').value===pwd){
+    closeAdminModal()
+    document.getElementById('vTeacher').classList.remove('active')
+    document.getElementById('vAdmin').classList.add('active')
+  } else {
+    document.getElementById('adminPinErr').textContent='❌ كلمة المرور خاطئة'
+    document.getElementById('adminPinInput').value=''
+  }
+}
+function saveAdmin(){
+  s(C.fb, document.getElementById('cfgFb').value.trim())
+  s(C.gh, document.getElementById('cfgGhToken').value.trim())
+  s(C.own, document.getElementById('cfgGhOwner').value.trim())
+  s(C.rep, document.getElementById('cfgGhRepo').value.trim())
+  var ap = document.getElementById('cfgAdminPwd').value.trim()
+  if(ap) s(C.apwd, ap)
+  s(C.tpwd, document.getElementById('cfgTeacherPwd').value.trim())
+  s(C.clau, document.getElementById('cfgClaude').value.trim())
+  s(C.suf, document.getElementById('cfgSuffix').value.trim())
+  document.getElementById('adminOK').style.display='block'
+  toast('✅ تم حفظ الإعدادات')
+}
+function closeAdmin(){
+  document.getElementById('vAdmin').classList.remove('active')
+  document.getElementById('vTeacher').classList.add('active')
+  document.getElementById('cfgWarn').style.display = ready()?'none':'block'
+}
+
+// ══ OPTION PICKER ══
+// selected values
+var sel = {atype:null, itype:null}
+
+function pickOpt(el){
+  var group = el.getAttribute('data-group')
+  var val = el.getAttribute('data-val')
+  // deselect all in same group
+  document.querySelectorAll('[data-group="'+group+'"]').forEach(function(o){
+    o.setAttribute('data-sel','false')
+  })
+  // select this one
+  el.setAttribute('data-sel','true')
+  sel[group] = val
+  // enable next if both selected
+  document.getElementById('btn1').disabled = !(sel.atype && sel.itype)
+}
+
+// ══ PAGES ══
+function goPage(n){
+  for(var i=1;i<=4;i++){
+    document.getElementById('pg'+i).style.display = i===n?'block':'none'
+    var st = document.getElementById('s'+i)
+    st.className = 'step'
+    if(i===n) st.className='step cur'
+    else if(i<n) st.className='step done'
+  }
+}
+
+// ══ IMAGE ══
+var imgB64=null, imgMime=null
+function dropImg(event){
+  event.preventDefault()
+  event.currentTarget.style.borderColor='#C5BAB0'
+  var f=event.dataTransfer.files[0]
+  if(f&&f.type.startsWith('image/')) pickImg(f)
+}
+function pickImg(f){
+  if(!f) return
+  var r=new FileReader()
+  r.onload=function(e){
+    imgB64=e.target.result.split(',')[1]
+    imgMime=f.type
+    document.getElementById('imgThumb').src=e.target.result
+    document.getElementById('imgPH').style.display='none'
+    var pr=document.getElementById('imgPrev')
+    pr.style.display='block'
+  }
+  r.readAsDataURL(f)
+}
+function clearImg(event){
+  event.stopPropagation()
+  imgB64=null; imgMime=null
+  document.getElementById('imgInput').value=''
+  document.getElementById('imgThumb').src=''
+  document.getElementById('imgPH').style.display='block'
+  document.getElementById('imgPrev').style.display='none'
+}
+function addTxt(t){
+  var ta=document.getElementById('lessonTxt')
+  if(ta.value && !ta.value.endsWith('\n')) ta.value+='\n'
+  ta.value+=t
+  ta.focus()
+}
+
+// ══ LOG ══
+var logs=[]
+function addLog(m,st){logs.push({m:m,s:st||'a'});drawLog()}
+function okLog(){if(logs.length)logs[logs.length-1].s='d';drawLog()}
+function failLog(){if(logs.length)logs[logs.length-1].s='f';drawLog()}
+function drawLog(){
+  var ic={a:'⟳',d:'✓',f:'✗'}
+  document.getElementById('genLog').innerHTML=logs.map(function(l){
+    return '<div class="ll '+l.s+'">'+ic[l.s]+' '+l.m+'</div>'
+  }).join('')
+  document.getElementById('genLog').scrollTop=9999
+}
+
+// ══ GENERATE ══
+async function generate(){
+  if(!ready()){toast('❌ أكملي إعدادات المدير أولاً');return}
+  logs=[]
+  goPage(4)
+  document.getElementById('genCard').style.display='block'
+  document.getElementById('resCard').style.display='none'
+  document.getElementById('errCard').style.display='none'
+
+  var firebase = g(C.fb)
+  var token    = g(C.gh)
+  var owner    = g(C.own)
+  var repo     = g(C.rep)
+  var apiKey   = g(C.clau)
+  var tPwd     = g(C.tpwd)||'1234'
+  var suffix   = g(C.suf)
+  var txt      = document.getElementById('lessonTxt').value.trim()
+  var dur      = document.getElementById('durR').value
+  var wDB      = document.getElementById('togDB').checked
+  var wDF      = document.getElementById('togDF').checked
+  var wTM      = document.getElementById('togTM').checked
+  var fbPath   = '/act_'+Date.now().toString().slice(-10)
+
+  var atLbl = {strategy:'استراتيجية تعليمية',goal:'غلق الهدف',closure:'الغلق الختامي'}
+  var itLbl = {individual:'فردي',pair:'ثنائي',group:'جماعي'}
+  var aLbl = atLbl[sel.atype]||'نشاط'
+  var iLbl = itLbl[sel.itype]||'فردي'
+
+  // Build system prompt
+  var sys = 'أنت مصمم تعليمي متخصص. مهمتك بناء نشاط HTML تعليمي تفاعلي.\n\n'
+  sys += 'البيئة: التعلم عن بُعد. الطلاب على أجهزة منزلية. التفاعل بالكتابة فقط.\n'
+  sys += 'نوع النشاط: '+aLbl+' / '+iLbl+'\n'
+  sys += 'المدة: '+dur+' دقيقة\n'
+  if(wDF) sys += 'الفروق الفردية: أضف 3 مستويات (أساسي/متوسط/متقدم) يختار الطالب مستواه\n'
+  if(wTM) sys += 'المؤقت: أضف عداداً تنازلياً من '+dur+' دقيقة\n'
+  sys += '\n'
+  if(sel.itype==='individual'){
+    sys += 'بنية النشاط الفردي:\n1. خانة إدخال الاسم\n2. الأسئلة أو المهام المطلوبة\n'
+    sys += '3. زر إرسال يستدعي: window.FBSAVE({name:..., ...})\n'
+    sys += '4. بعد الإرسال: رسالة شكر\n'
+  } else if(sel.itype==='pair'){
+    sys += 'بنية النشاط الثنائي:\n'
+    sys += 'مرحلة 1: الطالب يكتب منفرداً ثم يستدعي window.FBSAVE({name, phase:"1", answer})\n'
+    sys += 'مرحلة 2: يظهر له سؤال ثانٍ للمقارنة مع إجابة زميل\n'
+    sys += 'مرحلة 3: يكتب الخلاصة ثم window.FBSAVE({name, phase:"3", summary})\n'
+  } else {
+    sys += 'بنية النشاط الجماعي:\n'
+    sys += '1. الطالب يدخل اسمه ورقم مجموعته (1-4)\n'
+    sys += '2. يكتب مساهمته\n3. window.FBSAVE({name, group, contribution})\n'
+  }
+  sys += '\nالدوال المتاحة (معرّفة مسبقاً في الصفحة):\n'
+  sys += 'window.FBSAVE(obj) — يحفظ في Firebase ويرجع Promise\n'
+  if(sel.itype==='pair') sys += 'window.FBLOAD() — يرجع إجابة عشوائية من Firebase\n'
+  if(sel.itype==='group') sys += 'window.FBLISTEN(groupNum, callback) — يستمع لإجابات المجموعة\n'
+  sys += '\nمتطلبات التصميم:\n'
+  sys += '- خط Tajawal (محمّل مسبقاً)\n- RTL عربي كامل\n'
+  sys += '- ألوان جذابة مناسبة للطلاب\n- يعمل على الهاتف والحاسب\n'
+  sys += '- أخرج HTML يبدأ بـ <div> مباشرة (بدون DOCTYPE)\n'
+  sys += '- اتبع بالضبط ما طلبته المعلمة\n'
+  if(suffix) sys += '\nتعليمات إضافية: '+suffix+'\n'
+
+  var userParts = []
+  var mainTxt = ''
+  if(txt){
+    mainTxt = 'وصف الدرس:\n'+txt+'\n\n'
+  }
+  mainTxt += 'النشاط المطلوب: '+aLbl+' / '+iLbl
+  mainTxt += '\nالمدة: '+dur+' دقيقة'
+  if(wDF) mainTxt += '\nمطلوب: 3 مستويات للفروق الفردية'
+  mainTxt += '\n\nاستخدم window.FBSAVE() للحفظ. أخرج HTML يبدأ بـ <div> فقط.'
+  userParts.push({type:'text',text:mainTxt})
+  if(imgB64){
+    userParts[0].text = 'انظر الصورة المرفقة ثم:\n\n'+mainTxt
+    userParts.push({type:'image',source:{type:'base64',media_type:imgMime,data:imgB64}})
+  }
+
+  try{
+    addLog('Claude يبني النشاط...')
+    document.getElementById('genTit').textContent='Claude يبني النشاط...'
+
+    var r = await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'x-api-key':apiKey,
+        'anthropic-version':'2023-06-01',
+        'anthropic-dangerous-direct-browser-access':'true'
+      },
+      body:JSON.stringify({
+        model:'claude-sonnet-4-5',
+        max_tokens:8000,
+        system:sys,
+        messages:[{role:'user',content:userParts}]
+      })
+    })
+
+    if(!r.ok){
+      var e=await r.json()
+      throw new Error('Claude: '+(e.error?e.error.message:r.status))
+    }
+    var d=await r.json()
+    var actHTML = d.content[0].text||''
+    actHTML = actHTML.replace(/^```html\s*/i,'').replace(/^```\s*/i,'').replace(/```\s*$/i,'').trim()
+    if(!actHTML.includes('<')) throw new Error('لم يُنتج Claude HTML صحيحاً')
+    okLog()
+
+    addLog('تجميع الملف النهائي...')
+    var html = makeHTML(actHTML, firebase, fbPath, tPwd, aLbl, wDB)
+    okLog()
+
+    addLog('رفع على GitHub...')
+    document.getElementById('genTit').textContent='نشر على الإنترنت...'
+
+    var fname = 'act_'+Date.now()+'.html'
+    var sha = null
+    try{
+      var ck=await fetch('https://api.github.com/repos/'+owner+'/'+repo+'/contents/'+fname,{
+        headers:{Authorization:'token '+token}
+      })
+      if(ck.ok){sha=(await ck.json()).sha}
+    }catch(e){}
+
+    var body = {
+      message: 'نشاط: '+aLbl,
+      content: toB64(html)
+    }
+    if(sha) body.sha=sha
+
+    var gr = await fetch('https://api.github.com/repos/'+owner+'/'+repo+'/contents/'+fname,{
+      method:'PUT',
+      headers:{
+        Authorization:'token '+token,
+        'Content-Type':'application/json'
+      },
+      body:JSON.stringify(body)
+    })
+    if(!gr.ok){
+      var ge=await gr.json()
+      throw new Error('GitHub: '+(ge.message||gr.status))
+    }
+    okLog()
+    addLog('جاهز!','d')
+    drawLog()
+
+    var url='https://'+owner+'.github.io/'+repo+'/'+fname
+    document.getElementById('genCard').style.display='none'
+    var rc = document.getElementById('resCard')
+    rc.style.display='block'
+    var pwdHtml = wDB ? '<div class="pwdinfo">🔐 كلمة مرور شاشة المعلمة: <b>'+tPwd+'</b></div>' : ''
+    rc.innerHTML = '<div class="rcard">'
+      +'<div class="ri">🎉</div>'
+      +'<h2>النشاط جاهز ومنشور!</h2>'
+      +'<div class="rs">أرسلي هذا الرابط لطلابك — يفتح مباشرة بدون تسجيل</div>'
+      +'<div class="linkbox">'
+      +'<span class="lu" id="pubUrl">'+url+'</span>'
+      +'<button class="lc" onclick="cpUrl()">📋 نسخ</button>'
+      +'</div>'
+      +pwdHtml
+      +'<div style="background:#FEF1E0;border:1px solid #FAC990;border-radius:9px;padding:9px 13px;font-size:12.5px;color:#B5620A;margin-bottom:1rem">'
+      +'💡 قد يستغرق الرابط دقيقتين حتى يعمل في أول مرة (GitHub Pages)'
+      +'</div>'
+      +'<div class="rbtns">'
+      +'<a href="'+url+'" target="_blank" class="btn btn-teal">🔗 فتح النشاط</a>'
+      +'<button class="btn btn-ghost" onclick="restart()">+ نشاط جديد</button>'
+      +'</div></div>'
+
+  }catch(err){
+    failLog()
+    drawLog()
+    document.getElementById('genCard').style.display='none'
+    var ec=document.getElementById('errCard')
+    ec.style.display='block'
+    ec.innerHTML='<div class="ebox"><h3>❌ حدث خطأ</h3><p>'+err.message+'</p></div>'
+      +'<div style="text-align:center;margin-top:1rem">'
+      +'<button class="btn btn-ghost" onclick="goPage(3)">← حاولي مجدداً</button></div>'
+  }
+}
+
+// ══ BUILD HTML (no template literals, no script tag conflicts) ══
+function makeHTML(actHTML, fb, fbPath, tPwd, label, wDB){
+  var out = []
+  out.push('<!DOCTYPE html><html lang="ar" dir="rtl"><head>')
+  out.push('<meta charset="UTF-8">')
+  out.push('<meta name="viewport" content="width=device-width,initial-scale=1">')
+  out.push('<title>'+label+'</title>')
+  out.push('<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">')
+  out.push('<style>')
+  out.push('*{box-sizing:border-box;margin:0;padding:0}')
+  out.push('body{font-family:Tajawal,sans-serif;background:#F3F1ED;color:#1C1814;min-height:100vh;direction:rtl}')
+  out.push('.wrap{max-width:680px;margin:0 auto;padding:1.5rem}')
+  out.push('input,textarea,select{font-family:Tajawal,sans-serif}')
+  if(wDB){
+    out.push('#tbtn{position:fixed;bottom:1.2rem;left:1.2rem;background:#fff;border:2px solid #0A7A6C;border-radius:28px;padding:9px 18px;font-family:Tajawal,sans-serif;font-size:13px;font-weight:700;color:#0A7A6C;cursor:pointer;box-shadow:0 3px 14px rgba(10,122,108,.2);z-index:100}')
+    out.push('#tbtn:hover{background:#0A7A6C;color:#fff}')
+    out.push('.ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center}')
+    out.push('.ov.on{display:flex}')
+    out.push('.mb{background:#fff;border-radius:18px;padding:1.8rem;width:90%;max-width:340px;text-align:center}')
+    out.push('.mb h3{font-size:17px;font-weight:700;margin-bottom:.3rem}')
+    out.push('.mb p{font-size:13px;color:#888;margin-bottom:1rem}')
+    out.push('.mb input{width:100%;padding:11px;border:2px solid #ddd;border-radius:10px;font-size:20px;letter-spacing:8px;text-align:center;outline:none}')
+    out.push('.mb input:focus{border-color:#0A7A6C}')
+    out.push('.mbe{font-size:12.5px;color:#dc2626;margin-top:6px;min-height:16px}')
+    out.push('.mbr{display:flex;gap:8px;margin-top:.9rem}')
+    out.push('.mbr button{flex:1;padding:10px;border-radius:9px;font-family:Tajawal,sans-serif;font-size:14px;font-weight:700;cursor:pointer;border:none}')
+    out.push('#dp{display:none;padding:1.5rem}')
+    out.push('.dh{background:linear-gradient(135deg,#0A7A6C,#158048);border-radius:14px;padding:1.4rem;color:#fff;text-align:center;margin-bottom:1.4rem}')
+    out.push('.dh h2{font-size:20px;font-weight:900;margin-bottom:.4rem}')
+    out.push('.dc{font-size:38px;font-weight:900;display:block;margin:.3rem 0}')
+    out.push('.da{display:flex;gap:10px;margin-bottom:1.4rem;flex-wrap:wrap}')
+    out.push('.da button{flex:1;padding:11px;color:#fff;border:none;border-radius:10px;font-family:Tajawal,sans-serif;font-size:14px;font-weight:700;cursor:pointer;min-width:100px}')
+    out.push('.rc{background:#fff;border:1px solid #E2D9D0;border-radius:12px;padding:1rem 1.2rem;margin-bottom:10px}')
+    out.push('.rn{font-size:15px;font-weight:700;margin-bottom:4px}')
+    out.push('.rt{font-size:11px;color:#aaa;margin-bottom:8px}')
+    out.push('.rf{background:#F3F1ED;border-radius:8px;padding:7px 11px;margin:3px 0;font-size:13px;border-right:3px solid #0A7A6C}')
+    out.push('.rl{font-size:11px;font-weight:700;color:#0A7A6C;margin-bottom:2px}')
+    out.push('.em{text-align:center;padding:3rem;color:#aaa;font-size:14px}')
+  }
+  out.push('</style></head><body>')
+
+  if(wDB){
+    out.push('<div class="ov" id="pov">')
+    out.push('<div class="mb">')
+    out.push('<div style="font-size:28px;margin-bottom:.4rem">&#128274;</div>')
+    out.push('<h3>شاشة المعلمة</h3><p>ادخلي كلمة المرور</p>')
+    out.push('<input type="password" id="pi" maxlength="20" placeholder="&bull;&bull;&bull;&bull;" onkeydown="if(event.key===\'Enter\')cp()">')
+    out.push('<div class="mbe" id="pe"></div>')
+    out.push('<div class="mbr">')
+    out.push('<button style="background:#f5f5f5;color:#666" onclick="cv()">الغاء</button>')
+    out.push('<button style="background:#0A7A6C;color:#fff" onclick="cp()">دخول &#8592;</button>')
+    out.push('</div></div></div>')
+  }
+
+  out.push('<div id="sp">')
+  out.push(actHTML)
+  out.push('</div>')
+
+  if(wDB){
+    out.push('<div id="dp">')
+    out.push('<div class="dh"><h2>&#127919; لوحة المعلمة</h2>')
+    out.push('<span class="dc" id="dc">0</span>')
+    out.push('<span style="font-size:13px;opacity:.85">اجابة مستلمة</span></div>')
+    out.push('<div class="da">')
+    out.push('<button style="background:#0A7A6C" onclick="lr()">تحديث</button>')
+    out.push('<button style="background:#dc2626" onclick="da()">مسح الكل</button>')
+    out.push('<button style="background:#888" onclick="cd()">اغلاق</button>')
+    out.push('</div>')
+    out.push('<div id="dg"><div class="em">&#9200; لا توجد اجابات بعد...</div></div>')
+    out.push('</div>')
+    out.push('<button id="tbtn" onclick="ov()">&#128274; شاشة المعلمة</button>')
+  }
+
+  // Script — split the tag to avoid parser conflicts
+  var SO = '<scr'+'ipt>'
+  var SC = '</sc'+'ript>'
+
+  var js = ''
+  js += 'var _D="'+fb+'",_P="'+fbPath+'"'
+  if(wDB) js += ',_W="'+tPwd+'"'
+  js += ',_I=null;'
+
+  // Expose Firebase functions on window
+  js += 'window.FBSAVE=async function(obj){'
+  js += 'var k="r"+Date.now();'
+  js += 'var u=_D+_P+"/"+k+".json";'
+  js += 'var b=Object.assign({},obj,{_t:Date.now()});'
+  js += 'var r=await fetch(u,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(b)});'
+  js += 'if(!r.ok)throw new Error("save failed "+r.status);'
+  js += 'return k;};'
+
+  js += 'window.FBLOAD=async function(){'
+  js += 'var r=await fetch(_D+_P+".json");'
+  js += 'var d=await r.json()||{};'
+  js += 'var v=Object.values(d).filter(function(x){return x&&x.phase==="1";});'
+  js += 'return v.length?v[Math.floor(Math.random()*v.length)]:null;};'
+
+  js += 'window.FBLISTEN=function(gn,cb){'
+  js += 'return setInterval(async function(){'
+  js += 'var r=await fetch(_D+_P+".json");'
+  js += 'var d=await r.json()||{};'
+  js += 'cb(Object.values(d).filter(function(x){return String(x.group)===String(gn);}));'
+  js += '},3000);};'
+
+  if(wDB){
+    js += 'function ov(){document.getElementById("pov").classList.add("on");setTimeout(function(){document.getElementById("pi").focus();},80);}'
+    js += 'function cv(){document.getElementById("pov").classList.remove("on");document.getElementById("pi").value="";document.getElementById("pe").textContent="";}'
+    js += 'function cp(){if(document.getElementById("pi").value===_W){cv();od();}else{document.getElementById("pe").textContent="كلمة المرور خاطئة";document.getElementById("pi").value="";}}'
+    js += 'function od(){document.getElementById("sp").style.display="none";document.getElementById("tbtn").style.display="none";document.getElementById("dp").style.display="block";lr();_I=setInterval(lr,4000);}'
+    js += 'function cd(){if(_I)clearInterval(_I);document.getElementById("dp").style.display="none";document.getElementById("sp").style.display="block";document.getElementById("tbtn").style.display="block";}'
+    js += 'async function lr(){'
+    js += 'try{'
+    js += 'var r=await fetch(_D+_P+".json");'
+    js += 'var d=await r.json()||{};'
+    js += 'var arr=Object.values(d).sort(function(a,b){return(b._t||0)-(a._t||0);});'
+    js += 'document.getElementById("dc").textContent=arr.length;'
+    js += 'var el=document.getElementById("dg");'
+    js += 'if(!arr.length){el.innerHTML=\'<div class="em">&#9200; لا توجد اجابات بعد...</div>\';return;}'
+    js += 'var h="";'
+    js += 'arr.forEach(function(e){'
+    js += 'var f="";'
+    js += 'Object.keys(e).forEach(function(k){if(k!=="_t"&&k!=="name")f+=\'<div class="rf"><div class="rl">\'+k+\'</div>\'+e[k]+\'</div>\';});'
+    js += 'var t=e._t?new Date(e._t).toLocaleTimeString("ar",{hour:"2-digit",minute:"2-digit"}):"";'
+    js += 'h+=\'<div class="rc"><div class="rn">&#128100; \'+(e.name||"طالب")+\'</div><div class="rt">\'+ t +\'</div>\'+f+\'</div>\';'
+    js += '});'
+    js += 'el.innerHTML=h;'
+    js += '}catch(e){console.error(e);}}'
+    js += 'async function da(){if(!confirm("مسح جميع الاجابات؟"))return;await fetch(_D+_P+".json",{method:"DELETE"});document.getElementById("dg").innerHTML=\'<div class="em">&#10003; تم المسح</div>\';document.getElementById("dc").textContent="0";}'
+  }
+
+  out.push(SO+js+SC)
+  out.push('</body></html>')
+  return out.join('\n')
+}
+
+// ══ UTILS ══
+function toB64(str){return btoa(unescape(encodeURIComponent(str)))}
+function cpUrl(){
+  var u=document.getElementById('pubUrl').textContent
+  navigator.clipboard.writeText(u).then(function(){toast('✅ تم نسخ الرابط!')})
+}
+function restart(){
+  sel={atype:null,itype:null}
+  document.querySelectorAll('.opt').forEach(function(o){o.setAttribute('data-sel','false')})
+  document.getElementById('btn1').disabled=true
+  document.getElementById('lessonTxt').value=''
+  imgB64=null;imgMime=null
+  document.getElementById('imgInput').value=''
+  document.getElementById('imgThumb').src=''
+  document.getElementById('imgPH').style.display='block'
+  document.getElementById('imgPrev').style.display='none'
+  logs=[]
+  goPage(1)
+}
+function toast(m){
+  var t=document.getElementById('toast')
+  t.textContent=m
+  t.classList.add('show')
+  setTimeout(function(){t.classList.remove('show')},2800)
+}
+</script>
+</body>
+</html>
