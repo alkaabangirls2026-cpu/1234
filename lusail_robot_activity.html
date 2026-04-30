@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🤖 روبوت لوسيل - مراجعة الخوارزمية والمخطط الانسيابي</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #06081a;
+  --bg2: #0e1035;
+  --purple: #7b2d8b;
+  --purple2: #a044c0;
+  --purple3: #5a1570;
+  --gold: #f0c040;
+  --gold2: #d4a820;
+  --maroon: #8b0024;
+  --cyan: #00e5ff;
+  --green: #00e676;
+  --red: #ff5252;
+  --white: #ffffff;
+  --card: rgba(255,255,255,0.05);
+  --border: rgba(123,45,139,0.5);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--white);min-height:100vh;direction:rtl;overflow-x:hidden}
+.screen{display:none;min-height:100vh;flex-direction:column}
+.screen.active{display:flex}
+
+/* ── BACKGROUND ── */
+.bg-particles{position:fixed;inset:0;background:
+  radial-gradient(ellipse 120% 60% at 50% 0%, rgba(123,45,139,0.18) 0%, transparent 70%),
+  radial-gradient(ellipse 80% 50% at 80% 100%, rgba(139,0,36,0.12) 0%, transparent 60%);
+pointer-events:none;z-index:0}
+.bg-dots{position:fixed;inset:0;
+  background-image:radial-gradient(circle,rgba(255,255,255,0.06) 1px,transparent 1px);
+  background-size:28px 28px;pointer-events:none;z-index:0}
+
+/* ── WELCOME ── */
+#welcome-screen{align-items:center;justify-content:center;padding:20px;position:relative;min-height:100vh}
+.welcome-wrap{position:relative;z-index:2;width:100%;max-width:560px}
+.welcome-card{
+  background:linear-gradient(145deg,rgba(30,8,60,0.95),rgba(20,5,45,0.98));
+  border:1.5px solid rgba(240,192,64,0.5);
+  border-radius:28px;padding:40px 35px;
+  box-shadow:0 0 80px rgba(123,45,139,0.4),inset 0 0 40px rgba(123,45,139,0.05);
+  text-align:center}
+.robot-anim{font-size:4.5rem;display:block;animation:float 2.5s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-14px) rotate(3deg)}}
+.welcome-title{
+  font-size:2.1rem;font-weight:900;
+  background:linear-gradient(135deg,var(--gold),#ffd700,var(--gold2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  margin:12px 0 4px}
+.welcome-sub{font-size:1rem;color:rgba(255,255,255,0.65);margin-bottom:20px}
+
+/* Stadium SVG wrapper */
+.stadium-wrap{background:rgba(0,0,0,0.3);border-radius:16px;padding:12px;margin:16px 0;overflow:hidden}
+
+/* Tag levels */
+.levels-preview{display:flex;gap:10px;justify-content:center;margin:16px 0}
+.lv-tag{background:rgba(123,45,139,0.25);border:1px solid var(--border);border-radius:30px;
+  padding:6px 14px;font-size:0.82rem;font-weight:700;color:var(--purple2)}
+
+.inp-name{
+  width:100%;padding:14px 18px;font-size:1.1rem;font-family:'Tajawal',sans-serif;
+  background:rgba(255,255,255,0.06);border:2px solid rgba(123,45,139,0.5);
+  border-radius:14px;color:var(--white);text-align:center;outline:none;margin-bottom:14px;
+  transition:border-color 0.3s}
+.inp-name:focus{border-color:var(--gold)}
+.inp-name::placeholder{color:rgba(255,255,255,0.3)}
+.inp-name.err{border-color:var(--red);animation:shake 0.3s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+.btn-start{
+  width:100%;padding:15px;font-size:1.2rem;font-weight:800;font-family:'Tajawal',sans-serif;
+  background:linear-gradient(135deg,var(--gold),#e8b800);color:#1a0a00;
+  border:none;border-radius:50px;cursor:pointer;margin-bottom:12px;
+  box-shadow:0 6px 30px rgba(240,192,64,0.4);transition:all 0.2s}
+.btn-start:hover{transform:translateY(-2px);box-shadow:0 10px 40px rgba(240,192,64,0.6)}
+.btn-teacher{
+  background:transparent;border:1px solid rgba(255,255,255,0.2);
+  color:rgba(255,255,255,0.5);font-size:0.88rem;font-family:'Tajawal',sans-serif;
+  padding:8px 20px;border-radius:20px;cursor:pointer;transition:all 0.2s;width:100%}
+.btn-teacher:hover{border-color:var(--purple2);color:var(--purple2)}
+
+/* ── LEVEL HEADER ── */
+.lvl-header{
+  background:linear-gradient(135deg,rgba(139,0,36,0.9),rgba(30,5,60,0.9));
+  border-bottom:2px solid rgba(240,192,64,0.4);
+  padding:14px 20px;display:flex;align-items:center;justify-content:space-between;
+  position:relative;z-index:2}
+.lvl-left{display:flex;flex-direction:column;gap:2px}
+.lvl-name{font-size:1.1rem;font-weight:800;color:var(--gold)}
+.lvl-student{font-size:0.85rem;color:rgba(255,255,255,0.6)}
+.score-pill{
+  background:rgba(240,192,64,0.12);border:1.5px solid var(--gold);
+  border-radius:30px;padding:6px 18px;font-size:1rem;font-weight:700;color:var(--gold)}
+.prog-bar{height:5px;background:rgba(255,255,255,0.08);position:relative;z-index:2}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--maroon),var(--purple),var(--gold));transition:width 0.5s}
+
+/* ── LEVEL CONTENT ── */
+.lvl-body{flex:1;padding:20px;display:flex;flex-direction:column;align-items:center;gap:18px;position:relative;z-index:1}
+.lvl-intro{
+  background:linear-gradient(135deg,rgba(123,45,139,0.2),rgba(61,16,96,0.3));
+  border:1px solid var(--border);border-radius:18px;padding:18px 22px;
+  text-align:center;width:100%;max-width:640px}
+.lvl-emoji{font-size:2.2rem;margin-bottom:6px}
+.lvl-intro-title{font-size:1.4rem;font-weight:800;color:var(--gold);margin-bottom:4px}
+.lvl-intro-desc{font-size:0.95rem;color:rgba(255,255,255,0.75);line-height:1.5}
+
+/* ── DRAG & DROP (Level 1) ── */
+.dnd-wrap{display:flex;gap:20px;width:100%;max-width:700px;flex-wrap:wrap;justify-content:center}
+.dnd-pool-side,.dnd-slots-side{flex:1;min-width:270px}
+.dnd-label{font-size:0.9rem;font-weight:700;color:var(--cyan);margin-bottom:10px;text-align:center;
+  text-transform:uppercase;letter-spacing:1px}
+.cards-pool{display:flex;flex-direction:column;gap:10px;min-height:260px;padding:12px;
+  background:rgba(0,0,0,0.2);border:1px dashed rgba(0,229,255,0.2);border-radius:16px}
+.algo-card{
+  background:linear-gradient(135deg,rgba(61,16,96,0.9),rgba(90,21,112,0.7));
+  border:2px solid var(--border);border-radius:12px;padding:13px 16px;
+  font-size:0.95rem;font-weight:600;cursor:grab;
+  transition:all 0.2s;text-align:center;user-select:none;
+  box-shadow:0 3px 12px rgba(0,0,0,0.3)}
+.algo-card:hover{border-color:var(--gold);transform:scale(1.02)}
+.algo-card.dragging{opacity:0.4;transform:scale(0.94)}
+.algo-card.drag-src{border-style:dashed;opacity:0.6}
+
+.slots-list{display:flex;flex-direction:column;gap:10px}
+.slot{
+  border:2px dashed rgba(255,255,255,0.18);border-radius:12px;
+  padding:10px 14px;min-height:52px;display:flex;align-items:center;gap:10px;
+  transition:all 0.2s;background:rgba(0,0,0,0.15)}
+.slot.drag-over{border-color:var(--gold);background:rgba(240,192,64,0.08)}
+.slot.has-card{border-style:solid;border-color:rgba(123,45,139,0.6);background:rgba(123,45,139,0.08)}
+.slot.correct{border-color:var(--green)!important;background:rgba(0,230,118,0.1)!important}
+.slot.wrong{border-color:var(--red)!important;background:rgba(255,82,82,0.1)!important}
+.slot-num{
+  background:var(--purple3);border-radius:50%;width:30px;height:30px;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:0.9rem;flex-shrink:0;color:var(--gold)}
+.slot-ph{font-size:0.85rem;color:rgba(255,255,255,0.25);flex:1;text-align:center}
+.slot .algo-card{flex:1;margin:0;padding:9px 12px;font-size:0.9rem;cursor:grab}
+
+/* ── MCQ QUESTIONS ── */
+.q-box{
+  width:100%;max-width:650px;
+  background:linear-gradient(135deg,rgba(30,5,60,0.7),rgba(20,5,45,0.8));
+  border:1px solid var(--border);border-radius:18px;padding:22px}
+.q-meta{font-size:0.8rem;color:var(--purple2);font-weight:700;margin-bottom:8px;
+  display:flex;justify-content:space-between;align-items:center}
+.q-text{font-size:1.1rem;font-weight:700;margin-bottom:18px;line-height:1.5}
+.q-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.q-btn{
+  background:rgba(255,255,255,0.05);border:2px solid rgba(255,255,255,0.12);
+  border-radius:12px;padding:13px 12px;font-size:0.95rem;font-family:'Tajawal',sans-serif;
+  color:var(--white);cursor:pointer;transition:all 0.2s;text-align:center;font-weight:600}
+.q-btn:hover:not(:disabled){border-color:var(--purple2);background:rgba(123,45,139,0.2)}
+.q-btn.correct{border-color:var(--green)!important;background:rgba(0,230,118,0.15)!important;color:var(--green)}
+.q-btn.wrong{border-color:var(--red)!important;background:rgba(255,82,82,0.1)!important;color:var(--red)}
+.q-btn:disabled{cursor:default}
+
+/* Flowchart option */
+.fc-opts{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.fc-opt{
+  background:rgba(30,5,60,0.6);border:2px solid rgba(123,45,139,0.4);
+  border-radius:14px;padding:14px 12px;cursor:pointer;transition:all 0.2s;
+  flex:1;min-width:150px;max-width:190px;text-align:center}
+.fc-opt:hover{border-color:var(--gold)}
+.fc-opt.correct{border-color:var(--green)!important;background:rgba(0,230,118,0.12)!important}
+.fc-opt.wrong{border-color:var(--red)!important;background:rgba(255,82,82,0.08)!important}
+.fc-opt-label{font-size:0.9rem;font-weight:800;color:var(--gold);margin-bottom:8px}
+.fc-steps{display:flex;flex-direction:column;align-items:center;gap:4px}
+.fc-oval{
+  background:rgba(123,45,139,0.5);border:1.5px solid var(--purple2);
+  border-radius:50px;padding:4px 14px;font-size:0.72rem;color:var(--white);white-space:nowrap}
+.fc-rect{
+  background:rgba(61,16,96,0.8);border:1.5px solid var(--purple2);
+  border-radius:5px;padding:4px 8px;width:100%;font-size:0.68rem;color:var(--white);text-align:center}
+.fc-arr{color:var(--purple2);font-size:0.9rem;line-height:1}
+
+/* ── FEEDBACK ── */
+.feedback{
+  text-align:center;font-size:1.05rem;font-weight:700;min-height:28px;padding:6px 12px;
+  border-radius:10px;transition:all 0.3s}
+.feedback.good{color:var(--green);background:rgba(0,230,118,0.1)}
+.feedback.bad{color:var(--red);background:rgba(255,82,82,0.08)}
+.feedback.warn{color:var(--gold);background:rgba(240,192,64,0.08)}
+
+/* ── BUTTONS ── */
+.btn-check,.btn-next{
+  font-size:1.05rem;font-weight:800;font-family:'Tajawal',sans-serif;
+  padding:12px 36px;border-radius:50px;cursor:pointer;transition:all 0.2s;border:none}
+.btn-check{background:linear-gradient(135deg,var(--cyan),#0096cc);color:#06081a}
+.btn-check:hover{transform:scale(1.04);box-shadow:0 6px 20px rgba(0,229,255,0.4)}
+.btn-next{
+  background:linear-gradient(135deg,var(--purple),var(--purple3));
+  border:2px solid var(--purple2);color:var(--white);display:none}
+.btn-next:hover{transform:scale(1.04);box-shadow:0 6px 20px rgba(123,45,139,0.5)}
+.btn-next.show{display:block}
+.btns-row{display:flex;gap:14px;align-items:center;flex-wrap:wrap;justify-content:center}
+
+/* ── RESULTS ── */
+#results-screen{align-items:center;justify-content:center;padding:30px;
+  background:linear-gradient(160deg,#06081a 0%,#14052d 50%,#06081a 100%)}
+.res-card{
+  background:linear-gradient(145deg,rgba(30,8,60,0.97),rgba(20,5,45,0.99));
+  border:2px solid rgba(240,192,64,0.6);border-radius:28px;padding:40px 35px;
+  max-width:520px;width:100%;text-align:center;position:relative;z-index:2;
+  box-shadow:0 0 80px rgba(123,45,139,0.5)}
+.res-trophy{font-size:4rem;animation:float 2s ease-in-out infinite}
+.res-name{font-size:0.95rem;color:rgba(255,255,255,0.5);margin:8px 0}
+.res-stars{font-size:2.6rem;margin:12px 0;letter-spacing:4px}
+.res-score{font-size:4rem;font-weight:900;
+  background:linear-gradient(135deg,var(--gold),#ffd700);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.res-label{font-size:0.95rem;color:rgba(255,255,255,0.5);margin-bottom:6px}
+.res-msg{font-size:1.2rem;font-weight:700;color:var(--cyan);margin:14px 0}
+.res-breakdown{
+  background:rgba(0,0,0,0.3);border-radius:14px;padding:16px;margin:16px 0;text-align:right}
+.rb-title{font-size:0.85rem;color:var(--purple2);font-weight:700;margin-bottom:10px;text-align:center}
+.rb-row{display:flex;justify-content:space-between;font-size:0.9rem;padding:5px 0;
+  border-bottom:1px solid rgba(255,255,255,0.05)}
+.rb-row:last-child{border-bottom:none}
+.rb-val{color:var(--gold);font-weight:700}
+
+/* ── TEACHER ── */
+#teacher-screen{background:linear-gradient(160deg,#06081a,#0e1428)}
+.tea-header{
+  background:linear-gradient(135deg,rgba(139,0,36,0.95),rgba(80,0,20,0.95));
+  border-bottom:2px solid rgba(240,192,64,0.4);
+  padding:14px 20px;display:flex;align-items:center;justify-content:space-between;
+  position:relative;z-index:2}
+.tea-title{font-size:1.3rem;font-weight:800;color:var(--gold)}
+.tea-btns{display:flex;gap:8px;flex-wrap:wrap}
+.tea-btn{
+  font-size:0.82rem;font-family:'Tajawal',sans-serif;
+  padding:6px 14px;border-radius:20px;cursor:pointer;transition:all 0.2s;font-weight:700}
+.tea-btn-refresh{background:rgba(240,192,64,0.15);border:1px solid var(--gold);color:var(--gold)}
+.tea-btn-clear{background:rgba(255,82,82,0.15);border:1px solid var(--red);color:var(--red)}
+.tea-btn-back{background:transparent;border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.5)}
+.tea-body{padding:20px;flex:1;position:relative;z-index:1}
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px}
+.stat-card{
+  background:rgba(123,45,139,0.18);border:1px solid var(--border);
+  border-radius:14px;padding:16px;text-align:center}
+.stat-n{font-size:2.2rem;font-weight:900;color:var(--gold)}
+.stat-l{font-size:0.78rem;color:rgba(255,255,255,0.55)}
+.t-table{width:100%;border-collapse:collapse;
+  background:rgba(255,255,255,0.02);border-radius:14px;overflow:hidden}
+.t-table th{background:rgba(123,45,139,0.35);padding:11px;font-size:0.85rem;color:var(--gold);text-align:center}
+.t-table td{padding:10px 12px;font-size:0.9rem;text-align:center;border-bottom:1px solid rgba(255,255,255,0.04)}
+.t-table tr:last-child td{border-bottom:none}
+.t-table tr:hover td{background:rgba(123,45,139,0.1)}
+.lv-badge{display:inline-block;padding:3px 12px;border-radius:20px;font-size:0.78rem;font-weight:700}
+.lv-1{background:rgba(0,229,255,0.15);color:var(--cyan)}
+.lv-2{background:rgba(240,192,64,0.15);color:var(--gold)}
+.lv-3{background:rgba(160,68,192,0.2);color:var(--purple2)}
+.lv-done{background:rgba(0,230,118,0.15);color:var(--green)}
+.refresh-note{text-align:center;font-size:0.78rem;color:rgba(255,255,255,0.3);margin-top:12px}
+
+/* ── MODAL ── */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.75);display:flex;align-items:center;justify-content:center;z-index:9999}
+.modal-box{
+  background:linear-gradient(145deg,#1a0540,#2d0850);
+  border:2px solid var(--gold);border-radius:22px;padding:32px;text-align:center;max-width:340px;width:90%}
+.modal-title{font-size:1.3rem;font-weight:800;color:var(--gold);margin-bottom:18px}
+.modal-inp{
+  width:100%;padding:12px;border:2px solid var(--purple2);border-radius:10px;
+  background:rgba(255,255,255,0.08);color:white;font-size:1rem;
+  font-family:'Tajawal',sans-serif;text-align:center;margin-bottom:14px;outline:none;
+  letter-spacing:3px}
+.modal-err{color:var(--red);font-size:0.85rem;margin-bottom:10px;min-height:20px}
+.modal-btns{display:flex;gap:10px;justify-content:center}
+.modal-ok{background:var(--gold);color:#1a0a00;border:none;border-radius:30px;
+  padding:10px 28px;font-size:1rem;font-weight:800;font-family:'Tajawal',sans-serif;cursor:pointer}
+.modal-cancel{background:transparent;border:1px solid rgba(255,255,255,0.25);
+  color:rgba(255,255,255,0.5);border-radius:30px;padding:10px 20px;
+  font-size:0.9rem;font-family:'Tajawal',sans-serif;cursor:pointer}
+
+/* ── CONFETTI ── */
+.cf{position:fixed;top:-12px;border-radius:3px;pointer-events:none;z-index:9998;
+  animation:cf-fall 3s ease-in forwards}
+@keyframes cf-fall{to{transform:translateY(110vh) rotate(720deg);opacity:0}}
+
+@media(max-width:480px){
+  .dnd-wrap{flex-direction:column}
+  .q-grid{grid-template-columns:1fr}
+  .stats-row{grid-template-columns:repeat(2,1fr)}
+  .welcome-title{font-size:1.6rem}
+  .fc-opts{gap:8px}
+  .fc-opt{min-width:130px}
+}
+</style>
+</head>
+<body>
+<div class="bg-particles"></div>
+<div class="bg-dots"></div>
+
+<!-- ════════════ WELCOME ════════════ -->
+<div id="welcome-screen" class="screen active">
+  <div class="welcome-wrap" style="position:relative;z-index:2">
+    <div class="welcome-card">
+      <span class="robot-anim">🤖</span>
+      <div class="welcome-title">مغامرة روبوت لوسيل!</div>
+      <div class="welcome-sub">مراجعة: الخوارزمية والمخطط الانسيابي</div>
+
+      <!-- Lusail Stadium SVG -->
+      <div class="stadium-wrap">
+        <svg viewBox="0 0 460 130" xmlns="http://www.w3.org/2000/svg" width="100%" style="max-height:130px">
+          <defs>
+            <radialGradient id="stadGrad" cx="50%" cy="60%">
+              <stop offset="0%" stop-color="#5a1570"/>
+              <stop offset="100%" stop-color="#1a0040"/>
+            </radialGradient>
+            <radialGradient id="fieldGrad" cx="50%" cy="50%">
+              <stop offset="0%" stop-color="#0d3320"/>
+              <stop offset="100%" stop-color="#061808"/>
+            </radialGradient>
+          </defs>
+          <!-- Outer ring glow -->
+          <ellipse cx="230" cy="75" rx="215" ry="62" fill="none" stroke="rgba(123,45,139,0.3)" stroke-width="8"/>
+          <!-- Stadium body -->
+          <ellipse cx="230" cy="78" rx="200" ry="56" fill="url(#stadGrad)"/>
+          <!-- Roof grid lines -->
+          <ellipse cx="230" cy="70" rx="200" ry="56" fill="none" stroke="rgba(240,192,64,0.25)" stroke-width="1"/>
+          <ellipse cx="230" cy="68" rx="165" ry="44" fill="none" stroke="rgba(240,192,64,0.15)" stroke-width="1"/>
+          <ellipse cx="230" cy="66" rx="130" ry="33" fill="none" stroke="rgba(240,192,64,0.1)" stroke-width="1"/>
+          <!-- Spoke lines -->
+          <line x1="230" y1="22" x2="230" y2="68" stroke="rgba(240,192,64,0.2)" stroke-width="1"/>
+          <line x1="30" y1="78" x2="230" y2="68" stroke="rgba(240,192,64,0.15)" stroke-width="1"/>
+          <line x1="430" y1="78" x2="230" y2="68" stroke="rgba(240,192,64,0.15)" stroke-width="1"/>
+          <line x1="80" y1="40" x2="230" y2="68" stroke="rgba(240,192,64,0.12)" stroke-width="1"/>
+          <line x1="380" y1="40" x2="230" y2="68" stroke="rgba(240,192,64,0.12)" stroke-width="1"/>
+          <!-- Field -->
+          <ellipse cx="230" cy="78" rx="100" ry="28" fill="url(#fieldGrad)"/>
+          <ellipse cx="230" cy="78" rx="70" ry="18" fill="none" stroke="rgba(0,200,100,0.3)" stroke-width="1"/>
+          <!-- Robot path (dashed orbit) -->
+          <ellipse cx="230" cy="78" rx="210" ry="60" fill="none" stroke="rgba(0,229,255,0.6)" stroke-width="2" stroke-dasharray="10,6"/>
+          <!-- Animated robot on path -->
+          <g id="robot-on-path">
+            <circle cx="20" cy="78" r="11" fill="rgba(240,192,64,0.9)"/>
+            <text x="20" y="83" text-anchor="middle" font-size="12">🤖</text>
+          </g>
+          <!-- Stars on stadium -->
+          <circle cx="60" cy="35" r="2" fill="rgba(240,192,64,0.5)"/>
+          <circle cx="400" cy="35" r="2" fill="rgba(240,192,64,0.5)"/>
+          <circle cx="150" cy="20" r="1.5" fill="rgba(255,255,255,0.4)"/>
+          <circle cx="320" cy="20" r="1.5" fill="rgba(255,255,255,0.4)"/>
+          <!-- Label -->
+          <text x="230" y="80" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.5)" font-family="Tajawal,sans-serif">استاد لوسيل</text>
+        </svg>
+      </div>
+
+      <div class="levels-preview">
+        <div class="lv-tag">⭐ ترتيب الخوارزمية</div>
+        <div class="lv-tag">⭐⭐ المخطط الانسيابي</div>
+        <div class="lv-tag">⭐⭐⭐ تحدي التفكير</div>
+      </div>
+
+      <input type="text" id="inp-name" class="inp-name" placeholder="✏️ اكتبي اسمك هنا..." maxlength="40">
+      <button class="btn-start" onclick="startActivity()">🚀 ابدأي المغامرة!</button>
+      <button class="btn-teacher" onclick="openTeacherModal()">🔐 شاشة المعلمة</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ LEVEL 1: ALGORITHM ORDER ════════════ -->
+<div id="lvl1-screen" class="screen">
+  <div class="lvl-header">
+    <div class="lvl-left">
+      <div class="lvl-name">⭐ المستوى الأول</div>
+      <div class="lvl-student" id="l1-name"></div>
+    </div>
+    <div class="score-pill" id="l1-score-pill">0 نقطة</div>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="p1-fill" style="width:0%"></div></div>
+  <div class="lvl-body">
+    <div class="lvl-intro">
+      <div class="lvl-emoji">🔢</div>
+      <div class="lvl-intro-title">رتّبي خطوات الخوارزمية!</div>
+      <div class="lvl-intro-desc">اسحبي كل خطوة من العمود الأيمن إلى المكان المناسب في الترتيب الصحيح لبرمجة حركة الروبوت حول استاد لوسيل 🏟️</div>
+    </div>
+    <div class="dnd-wrap">
+      <div class="dnd-pool-side">
+        <div class="dnd-label">📦 الخطوات</div>
+        <div class="cards-pool" id="pool" ondragover="event.preventDefault()" ondrop="dropToPool(event)"></div>
+      </div>
+      <div class="dnd-slots-side">
+        <div class="dnd-label">📋 الترتيب الصحيح</div>
+        <div class="slots-list" id="slots"></div>
+      </div>
+    </div>
+    <div class="btns-row">
+      <button class="btn-check" onclick="checkLevel1()">✅ تحقق من الترتيب</button>
+      <div class="feedback" id="l1-fb"></div>
+    </div>
+    <button class="btn-next" id="l1-next" onclick="gotoLvl2()">المستوى الثاني ← المخطط الانسيابي</button>
+  </div>
+</div>
+
+<!-- ════════════ LEVEL 2: FLOWCHART MCQ ════════════ -->
+<div id="lvl2-screen" class="screen">
+  <div class="lvl-header">
+    <div class="lvl-left">
+      <div class="lvl-name">⭐⭐ المستوى الثاني</div>
+      <div class="lvl-student" id="l2-name"></div>
+    </div>
+    <div class="score-pill" id="l2-score-pill">0 نقطة</div>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="p2-fill" style="width:50%"></div></div>
+  <div class="lvl-body">
+    <div class="lvl-intro">
+      <div class="lvl-emoji">📊</div>
+      <div class="lvl-intro-title">المخطط الانسيابي</div>
+      <div class="lvl-intro-desc">أجيبي على الأسئلة حول المخطط الانسيابي لحركة الروبوت 🤖</div>
+    </div>
+    <div class="q-box" id="l2-qbox"></div>
+    <div class="feedback" id="l2-fb"></div>
+    <button class="btn-next" id="l2-next" onclick="nextL2()">السؤال التالي →</button>
+  </div>
+</div>
+
+<!-- ════════════ LEVEL 3: ADVANCED MCQ ════════════ -->
+<div id="lvl3-screen" class="screen">
+  <div class="lvl-header">
+    <div class="lvl-left">
+      <div class="lvl-name">⭐⭐⭐ المستوى الثالث</div>
+      <div class="lvl-student" id="l3-name"></div>
+    </div>
+    <div class="score-pill" id="l3-score-pill">0 نقطة</div>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="p3-fill" style="width:75%"></div></div>
+  <div class="lvl-body">
+    <div class="lvl-intro">
+      <div class="lvl-emoji">🧠</div>
+      <div class="lvl-intro-title">تحدي التفكير!</div>
+      <div class="lvl-intro-desc">اثبتي أنكِ خبيرة في الخوارزميات والمخططات الانسيابية 💡</div>
+    </div>
+    <div class="q-box" id="l3-qbox"></div>
+    <div class="feedback" id="l3-fb"></div>
+    <button class="btn-next" id="l3-next" onclick="nextL3()">السؤال التالي →</button>
+  </div>
+</div>
+
+<!-- ════════════ RESULTS ════════════ -->
+<div id="results-screen" class="screen" style="align-items:center;justify-content:center;padding:30px;background:radial-gradient(ellipse at 50% 0%,rgba(123,45,139,0.2),transparent 70%),#06081a">
+  <div class="res-card" style="position:relative;z-index:2">
+    <div class="res-trophy">🏆</div>
+    <div style="font-size:1.5rem;font-weight:900;color:var(--gold)">أحسنتِ يا بطلة!</div>
+    <div class="res-name" id="res-sname"></div>
+    <div class="res-stars" id="res-stars">⭐⭐⭐</div>
+    <div class="res-score" id="res-score">0</div>
+    <div class="res-label">نقطة من 100</div>
+    <div class="res-msg" id="res-msg"></div>
+    <div class="res-breakdown">
+      <div class="rb-title">تفاصيل النتيجة</div>
+      <div class="rb-row"><span>⭐ ترتيب الخوارزمية</span><span class="rb-val" id="rb1">0/30</span></div>
+      <div class="rb-row"><span>⭐⭐ المخطط الانسيابي</span><span class="rb-val" id="rb2">0/30</span></div>
+      <div class="rb-row"><span>⭐⭐⭐ تحدي التفكير</span><span class="rb-val" id="rb3">0/40</span></div>
+    </div>
+    <button class="btn-start" onclick="restart()" style="margin-top:8px">🔄 حاولي مرة أخرى</button>
+  </div>
+</div>
+
+<!-- ════════════ TEACHER ════════════ -->
+<div id="teacher-screen" class="screen">
+  <div class="tea-header">
+    <div class="tea-title">📊 لوحة المعلمة - متابعة الطالبات</div>
+    <div class="tea-btns">
+      <button class="tea-btn tea-btn-refresh" onclick="loadTeacher()">🔄 تحديث</button>
+      <button class="tea-btn tea-btn-clear" onclick="clearData()">🗑️ مسح الكل</button>
+      <button class="tea-btn tea-btn-back" onclick="backToWelcome()">← رجوع</button>
+    </div>
+  </div>
+  <div class="tea-body">
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-n" id="st-total">0</div><div class="stat-l">إجمالي الطالبات</div></div>
+      <div class="stat-card"><div class="stat-n" id="st-done">0</div><div class="stat-l">أنهين النشاط ✅</div></div>
+      <div class="stat-card"><div class="stat-n" id="st-avg">0</div><div class="stat-l">متوسط النقاط</div></div>
+    </div>
+    <div style="overflow-x:auto">
+      <table class="t-table">
+        <thead>
+          <tr><th>#</th><th>اسم الطالبة</th><th>المستوى</th><th>النقاط</th><th>الوقت</th></tr>
+        </thead>
+        <tbody id="t-body"><tr><td colspan="5" style="padding:30px;color:rgba(255,255,255,0.3)">لا توجد بيانات بعد...</td></tr></tbody>
+      </table>
+    </div>
+    <div class="refresh-note" id="refresh-note">يتجدد تلقائيًا كل 5 ثوانٍ</div>
+  </div>
+</div>
+
+<!-- ════════════ TEACHER MODAL ════════════ -->
+<div class="modal-bg" id="tmodal" style="display:none">
+  <div class="modal-box">
+    <div class="modal-title">🔐 دخول المعلمة</div>
+    <input type="password" id="t-pass" class="modal-inp" placeholder="كلمة المرور">
+    <div class="modal-err" id="t-err"></div>
+    <div class="modal-btns">
+      <button class="modal-ok" onclick="verifyPass()">دخول</button>
+      <button class="modal-cancel" onclick="closeModal()">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════ CONFIG ══════════
+const FB = 'https://cyber-safety-class-default-rtdb.firebaseio.com';
+const DB = 'lusail_robot_v1';
+const TPASS = 'معلمة123';
+
+// ══════════ STATE ══════════
+let sName = '';
+let sc = {l1:0, l2:0, l3:0};
+let l2idx = 0, l3idx = 0;
+let timerRef = null;
+
+// Level 1 state
+const STEPS = [
+  {id:'s1', text:'🟢 بداية الخوارزمية', slot:0},
+  {id:'s2', text:'⚙️ ضبط محرّكات الروبوت', slot:1},
+  {id:'s3', text:'🔄 تحرّك دائريًا لمدة 7 ثوانٍ', slot:2},
+  {id:'s4', text:'🔴 نهاية الخوارزمية', slot:3},
+];
+let pool = [];   // IDs in pool
+let slots = [null,null,null,null]; // IDs in slots
+
+// ══════════ LEVEL 2 QUESTIONS ══════════
+const Q2 = [
+  {
+    q:'ما شكل بداية ونهاية المخطط الانسيابي؟',
+    opts:['شكل بيضاوي 🔵','شكل مستطيل ▬','شكل معين ◆','دائرة ⭕'],
+    ans:0,
+    ok:'ممتاز! البداية والنهاية يُمثَّلان بشكل بيضاوي ✅',
+    no:'البداية والنهاية يُمثَّلان بالشكل البيضاوي'
+  },
+  {
+    q:'ما الشكل الذي يمثّل خطوات العمل والأوامر في المخطط؟',
+    opts:['شكل بيضاوي 🔵','شكل مستطيل ▬','مثلث ▲','نجمة ⭐'],
+    ans:1,
+    ok:'صحيح! خطوات العمل تُمثَّل بالمستطيل ✅',
+    no:'خطوات العمل تُمثَّل بالشكل المستطيل'
+  },
+  {
+    q:'أيّ المخططات يمثّل الترتيب الصحيح لحركة الروبوت حول الاستاد؟',
+    isFC:true,
+    fcs:[
+      ['البداية','ضبط المحرّكات','تحرّك دائريًا 7ث','النهاية'],
+      ['ضبط المحرّكات','البداية','تحرّك دائريًا 7ث','النهاية'],
+      ['البداية','تحرّك دائريًا 7ث','ضبط المحرّكات','النهاية'],
+    ],
+    ans:0,
+    ok:'رائع! هذا هو الترتيب الصحيح للمخطط الانسيابي ✅',
+    no:'الترتيب الصحيح: البداية ← ضبط المحرّكات ← تحرّك دائريًا ← النهاية'
+  },
+  {
+    q:'ما وظيفة الأسهم في المخطط الانسيابي؟',
+    opts:['تزيين المخطط فقط','تحديد اتجاه تسلسل الخطوات','ترقيم الخطوات','تمثيل البيانات'],
+    ans:1,
+    ok:'أحسنتِ! الأسهم تحدد اتجاه تسلسل الخطوات ✅',
+    no:'الأسهم تحدد اتجاه تسلسل الخطوات في المخطط'
+  },
+];
+
+// ══════════ LEVEL 3 QUESTIONS ══════════
+const Q3 = [
+  {
+    q:'ما تعريف الخوارزمية؟',
+    opts:['مجموعة خطوات مرتبة لحل مشكلة','برنامج حاسوبي معقد','جهاز تحكم للروبوت','لغة برمجة متقدمة'],
+    ans:0,
+    ok:'ممتاز! الخوارزمية هي مجموعة خطوات مرتبة لحل مشكلة ✅',
+    no:'الخوارزمية: مجموعة خطوات مرتبة لحل مشكلة'
+  },
+  {
+    q:'كم تستغرق حركة الروبوت حول استاد لوسيل في الخوارزمية؟',
+    opts:['7 دقائق','7 ساعات','7 ثوانٍ','70 ثانية'],
+    ans:2,
+    ok:'صحيح! الروبوت يتحرك لمدة 7 ثوانٍ فقط ✅',
+    no:'الروبوت يتحرك دائريًا لمدة 7 ثوانٍ'
+  },
+  {
+    q:'ما الفرق الرئيسي بين الخوارزمية والمخطط الانسيابي؟',
+    opts:[
+      'الخوارزمية نصية والمخطط تمثيل بصري لها',
+      'الخوارزمية للبشر فقط والمخطط للحاسوب',
+      'المخطط أصعب من الخوارزمية',
+      'لا يوجد فرق بينهما'
+    ],
+    ans:0,
+    ok:'ممتاز! الخوارزمية نصية والمخطط الانسيابي تمثيل بصري لها ✅',
+    no:'الخوارزمية تُكتب كنص، والمخطط الانسيابي تمثيل بصري لها'
+  },
+  {
+    q:'لماذا يجب أن تبدأ أي خوارزمية بـ "بداية الخوارزمية"؟',
+    opts:[
+      'للزينة والتنسيق فقط',
+      'لتحديد نقطة البداية وضمان الترتيب الصحيح',
+      'لأن الحاسوب لا يفهم بدونها',
+      'لتسريع تنفيذ الخوارزمية'
+    ],
+    ans:1,
+    ok:'رائع! تحدد نقطة البداية وتضمن الترتيب الصحيح للتنفيذ ✅',
+    no:'تحدد نقطة البداية وتضمن الترتيب الصحيح'
+  },
+  {
+    q:'لو أردنا جعل الروبوت يدور حول الاستاد مرتين، أين نضيف الخطوة الإضافية؟',
+    opts:[
+      'قبل بداية الخوارزمية',
+      'بعد نهاية الخوارزمية',
+      'بين "ضبط المحرّكات" و"النهاية" مرة إضافية',
+      'لا نضيف شيئًا، تتكرر تلقائيًا'
+    ],
+    ans:2,
+    ok:'عبقرية! نضيف خطوة دوران إضافية قبل النهاية ✅',
+    no:'نضيف خطوة تحرّك دائري إضافية قبل نهاية الخوارزمية'
+  },
+];
+
+// ══════════ HELPERS ══════════
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+function totalSc(){return sc.l1+sc.l2+sc.l3}
+function updatePills(){
+  ['l1','l2','l3'].forEach(k=>{
+    const el=document.getElementById(`${k}-score-pill`);
+    if(el) el.textContent=totalSc()+' نقطة';
+  });
+}
+
+// ══════════ FIREBASE ══════════
+async function fbSave(data){
+  if(!sName) return;
+  try{
+    const key=encodeURIComponent(sName.replace(/[.#$[\]/]/g,'_'));
+    await fetch(`${FB}/${DB}/${key}.json`,{
+      method:'PUT',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({...data,name:sName,ts:new Date().toLocaleTimeString('ar-QA')})
+    });
+  }catch(e){}
+}
+async function fbLoad(){
+  try{
+    const r=await fetch(`${FB}/${DB}.json`);
+    return await r.json();
+  }catch(e){return null}
+}
+async function fbClear(){
+  try{await fetch(`${FB}/${DB}.json`,{method:'DELETE'})}catch(e){}
+}
+
+// ══════════ WELCOME ══════════
+function startActivity(){
+  const v=document.getElementById('inp-name').value.trim();
+  if(!v){
+    const el=document.getElementById('inp-name');
+    el.classList.add('err');
+    el.placeholder='⚠️ اكتبي اسمك أولاً!';
+    setTimeout(()=>el.classList.remove('err'),500);
+    return;
+  }
+  sName=v; sc={l1:0,l2:0,l3:0}; l2idx=0; l3idx=0;
+  fbSave({level:1,score:0,status:'⭐ في المستوى الأول'});
+  setupLvl1();
+  showScreen('lvl1-screen');
+}
+
+// ══════════ LEVEL 1 ══════════
+let dragId=null, dragFrom=null;
+
+function setupLvl1(){
+  document.getElementById('l1-name').textContent='👩‍🎓 '+sName;
+  document.getElementById('l1-fb').textContent='';
+  document.getElementById('l1-next').classList.remove('show');
+  // Shuffle pool
+  pool=[...STEPS.map(s=>s.id)].sort(()=>Math.random()-0.5);
+  slots=[null,null,null,null];
+  renderDnd();
+}
+
+function renderDnd(){
+  // Render pool
+  const poolEl=document.getElementById('pool');
+  poolEl.innerHTML='';
+  pool.forEach(id=>{
+    const step=STEPS.find(s=>s.id===id);
+    const d=document.createElement('div');
+    d.className='algo-card';
+    d.draggable=true;
+    d.dataset.id=id;
+    d.dataset.from='pool';
+    d.textContent=step.text;
+    d.addEventListener('dragstart',onDS);
+    d.addEventListener('dragend',onDE);
+    // Touch support
+    d.addEventListener('touchstart',tStart,{passive:false});
+    d.addEventListener('touchmove',tMove,{passive:false});
+    d.addEventListener('touchend',tEnd);
+    poolEl.appendChild(d);
+  });
+  if(pool.length===0){
+    const ph=document.createElement('div');
+    ph.style.cssText='text-align:center;color:rgba(0,229,255,0.3);padding:30px;font-size:0.85rem';
+    ph.textContent='✅ رتّبتِ جميع الخطوات!';
+    poolEl.appendChild(ph);
+  }
+
+  // Render slots
+  const slotsEl=document.getElementById('slots');
+  slotsEl.innerHTML='';
+  slots.forEach((id,i)=>{
+    const slot=document.createElement('div');
+    slot.className='slot'+(id?' has-card':'');
+    slot.dataset.slot=i;
+    slot.addEventListener('dragover',e=>{e.preventDefault();slot.classList.add('drag-over')});
+    slot.addEventListener('dragleave',()=>slot.classList.remove('drag-over'));
+    slot.addEventListener('drop',e=>onDrop(e,i));
+    const num=document.createElement('div');
+    num.className='slot-num';num.textContent=i+1;
+    slot.appendChild(num);
+    if(id){
+      const step=STEPS.find(s=>s.id===id);
+      const c=document.createElement('div');
+      c.className='algo-card';c.textContent=step.text;
+      c.draggable=true;c.dataset.id=id;c.dataset.from='slot:'+i;
+      c.addEventListener('dragstart',onDS);
+      c.addEventListener('dragend',onDE);
+      c.addEventListener('touchstart',tStart,{passive:false});
+      c.addEventListener('touchmove',tMove,{passive:false});
+      c.addEventListener('touchend',tEnd);
+      slot.appendChild(c);
+    } else {
+      const ph=document.createElement('div');
+      ph.className='slot-ph';ph.textContent='اسحبي هنا...';
+      slot.appendChild(ph);
+    }
+    slotsEl.appendChild(slot);
+  });
+}
+
+function onDS(e){
+  dragId=e.currentTarget.dataset.id;
+  dragFrom=e.currentTarget.dataset.from;
+  e.currentTarget.classList.add('dragging');
+  e.dataTransfer.effectAllowed='move';
+}
+function onDE(e){e.currentTarget.classList.remove('dragging')}
+
+function onDrop(e,toSlot){
+  e.preventDefault();
+  document.querySelectorAll('.slot').forEach(s=>s.classList.remove('drag-over'));
+  if(!dragId) return;
+  doMove(dragId,dragFrom,'slot:'+toSlot);
+  dragId=null; dragFrom=null;
+}
+function dropToPool(e){
+  e.preventDefault();
+  if(!dragId) return;
+  doMove(dragId,dragFrom,'pool');
+  dragId=null; dragFrom=null;
+}
+
+function doMove(id,from,to){
+  const fromSlot=from.startsWith('slot:')?parseInt(from.split(':')[1]):null;
+  const toSlot=to.startsWith('slot:')?parseInt(to.split(':')[1]):null;
+
+  // What's currently at destination?
+  const displaced = toSlot!==null ? slots[toSlot] : null;
+
+  // Remove from source
+  if(fromSlot!==null) slots[fromSlot]=null;
+  else pool=pool.filter(i=>i!==id);
+
+  // Place displaced item back to source
+  if(displaced && displaced!==id){
+    if(fromSlot!==null) slots[fromSlot]=displaced;
+    else pool.push(displaced);
+  }
+
+  // Place id at destination
+  if(toSlot!==null) slots[toSlot]=id;
+  else pool.push(id);
+
+  renderDnd();
+  updatePills();
+}
+
+// ── Touch drag ──
+let tCard=null, tGhost=null, tFromId=null, tFromSrc=null;
+function tStart(e){
+  e.preventDefault();
+  const el=e.currentTarget;
+  tCard=el; tFromId=el.dataset.id; tFromSrc=el.dataset.from;
+  const r=el.getBoundingClientRect();
+  tGhost=el.cloneNode(true);
+  tGhost.style.cssText=`position:fixed;opacity:0.75;pointer-events:none;z-index:9999;
+    width:${r.width}px;left:${r.left}px;top:${r.top}px;
+    background:linear-gradient(135deg,#a044c0,#f0c040);color:#06081a;
+    border-radius:12px;padding:13px 16px;font-family:Tajawal,sans-serif;font-size:0.95rem;text-align:center`;
+  document.body.appendChild(tGhost);
+}
+function tMove(e){
+  e.preventDefault();
+  if(!tGhost) return;
+  const t=e.touches[0];
+  tGhost.style.left=(t.clientX-tGhost.offsetWidth/2)+'px';
+  tGhost.style.top=(t.clientY-tGhost.offsetHeight/2)+'px';
+}
+function tEnd(e){
+  if(!tGhost) return;
+  const t=e.changedTouches[0];
+  const el=document.elementFromPoint(t.clientX,t.clientY);
+  document.body.removeChild(tGhost); tGhost=null;
+  const slot=el?.closest('.slot');
+  const poolEl=el?.closest('#pool');
+  if(slot) doMove(tFromId,tFromSrc,'slot:'+slot.dataset.slot);
+  else if(poolEl) doMove(tFromId,tFromSrc,'pool');
+  tCard=null; tFromId=null; tFromSrc=null;
+}
+
+function checkLevel1(){
+  const filled=slots.filter(Boolean).length;
+  const fb=document.getElementById('l1-fb');
+  if(filled<4){
+    fb.textContent='⚠️ رتّبي جميع الخطوات الأربع أولاً!';
+    fb.className='feedback warn';return;
+  }
+  let correct=0;
+  const slotEls=document.querySelectorAll('.slot');
+  slots.forEach((id,i)=>{
+    const step=STEPS.find(s=>s.id===id);
+    const el=slotEls[i];
+    el.classList.remove('correct','wrong');
+    if(step && step.slot===i){correct++;el.classList.add('correct');}
+    else el.classList.add('wrong');
+  });
+  sc.l1=correct===4?30:correct*6;
+  updatePills();
+  if(correct===4){
+    fb.textContent='🎉 رائع! الترتيب صحيح تمامًا!';
+    fb.className='feedback good';
+    confetti(15);
+  } else if(correct>=2){
+    fb.textContent=`👍 جيد! ${correct} من 4 صحيحة`;
+    fb.className='feedback good';
+  } else {
+    fb.textContent=`💪 حاولي مرة أخرى! ${correct} من 4 صحيحة`;
+    fb.className='feedback bad';
+  }
+  document.getElementById('l1-next').classList.add('show');
+  // Animate progress
+  document.getElementById('p1-fill').style.width='33%';
+  fbSave({level:1,score:totalSc(),status:'✅ أنهت المستوى الأول'});
+}
+
+// ══════════ LEVEL 2 ══════════
+function gotoLvl2(){
+  document.getElementById('l2-name').textContent='👩‍🎓 '+sName;
+  l2idx=0; renderQ2();
+  showScreen('lvl2-screen');
+  fbSave({level:2,score:totalSc(),status:'⭐⭐ في المستوى الثاني'});
+}
+function renderQ2(){
+  updatePills();
+  document.getElementById('l2-fb').textContent='';
+  document.getElementById('l2-next').classList.remove('show');
+  const q=Q2[l2idx];
+  const box=document.getElementById('l2-qbox');
+  // Update progress bar
+  document.getElementById('p2-fill').style.width=(50+((l2idx/Q2.length)*25))+'%';
+  let html=`<div class="q-meta"><span>سؤال ${l2idx+1} من ${Q2.length}</span><span>${'●'.repeat(l2idx+1)}${'○'.repeat(Q2.length-l2idx-1)}</span></div>
+  <div class="q-text">${q.q}</div>`;
+  if(q.isFC){
+    html+='<div class="fc-opts">';
+    q.fcs.forEach((fc,i)=>{
+      const lbl=['أ','ب','ج'][i];
+      html+=`<div class="fc-opt" onclick="pickFC(this,${i},${q.ans})" data-i="${i}">
+        <div class="fc-opt-label">${lbl}</div>
+        <div class="fc-steps">`;
+      fc.forEach((s,j)=>{
+        const isEnd=j===0||j===fc.length-1;
+        html+=`<div class="${isEnd?'fc-oval':'fc-rect'}">${s}</div>`;
+        if(j<fc.length-1) html+='<div class="fc-arr">↓</div>';
+      });
+      html+=`</div></div>`;
+    });
+    html+='</div>';
+  } else {
+    html+='<div class="q-grid">';
+    q.opts.forEach((o,i)=>html+=`<button class="q-btn" onclick="pickQ2(this,${i},${q.ans})">${o}</button>`);
+    html+='</div>';
+  }
+  box.innerHTML=html;
+}
+function pickQ2(btn,chosen,ans){
+  btn.closest('.q-grid').querySelectorAll('.q-btn').forEach(b=>b.disabled=true);
+  const q=Q2[l2idx];
+  const fb=document.getElementById('l2-fb');
+  if(chosen===ans){btn.classList.add('correct');sc.l2+=8;fb.textContent=q.ok;fb.className='feedback good';confetti(6);}
+  else{btn.classList.add('wrong');btn.closest('.q-grid').querySelectorAll('.q-btn')[ans].classList.add('correct');fb.textContent='❌ '+q.no;fb.className='feedback bad';}
+  updatePills();
+  const nb=document.getElementById('l2-next');
+  nb.textContent=l2idx<Q2.length-1?'السؤال التالي →':'المستوى الثالث ←';
+  nb.classList.add('show');
+}
+function pickFC(el,chosen,ans){
+  document.querySelectorAll('.fc-opt').forEach(e=>{e.style.pointerEvents='none'});
+  const q=Q2[l2idx];
+  const fb=document.getElementById('l2-fb');
+  if(chosen===ans){el.classList.add('correct');sc.l2+=8;fb.textContent=q.ok;fb.className='feedback good';confetti(6);}
+  else{el.classList.add('wrong');document.querySelector(`.fc-opt[data-i="${ans}"]`).classList.add('correct');fb.textContent='❌ '+q.no;fb.className='feedback bad';}
+  updatePills();
+  const nb=document.getElementById('l2-next');
+  nb.textContent=l2idx<Q2.length-1?'السؤال التالي →':'المستوى الثالث ←';
+  nb.classList.add('show');
+}
+function nextL2(){
+  l2idx++;
+  if(l2idx<Q2.length) renderQ2();
+  else gotoLvl3();
+}
+
+// ══════════ LEVEL 3 ══════════
+function gotoLvl3(){
+  document.getElementById('l3-name').textContent='👩‍🎓 '+sName;
+  l3idx=0; renderQ3();
+  showScreen('lvl3-screen');
+  fbSave({level:3,score:totalSc(),status:'⭐⭐⭐ في المستوى الثالث'});
+}
+function renderQ3(){
+  updatePills();
+  document.getElementById('l3-fb').textContent='';
+  document.getElementById('l3-next').classList.remove('show');
+  const q=Q3[l3idx];
+  document.getElementById('p3-fill').style.width=(75+((l3idx/Q3.length)*20))+'%';
+  let html=`<div class="q-meta"><span>سؤال ${l3idx+1} من ${Q3.length}</span><span>${'●'.repeat(l3idx+1)}${'○'.repeat(Q3.length-l3idx-1)}</span></div>
+  <div class="q-text">${q.q}</div><div class="q-grid">`;
+  q.opts.forEach((o,i)=>html+=`<button class="q-btn" onclick="pickQ3(this,${i},${q.ans})">${o}</button>`);
+  html+='</div>';
+  document.getElementById('l3-qbox').innerHTML=html;
+}
+function pickQ3(btn,chosen,ans){
+  btn.closest('.q-grid').querySelectorAll('.q-btn').forEach(b=>b.disabled=true);
+  const q=Q3[l3idx];
+  const fb=document.getElementById('l3-fb');
+  if(chosen===ans){btn.classList.add('correct');sc.l3+=8;fb.textContent=q.ok;fb.className='feedback good';confetti(6);}
+  else{btn.classList.add('wrong');btn.closest('.q-grid').querySelectorAll('.q-btn')[ans].classList.add('correct');fb.textContent='❌ '+q.no;fb.className='feedback bad';}
+  updatePills();
+  const nb=document.getElementById('l3-next');
+  nb.textContent=l3idx<Q3.length-1?'السؤال التالي →':'🏆 النتيجة النهائية!';
+  nb.classList.add('show');
+}
+function nextL3(){
+  l3idx++;
+  if(l3idx<Q3.length) renderQ3();
+  else showResults();
+}
+
+// ══════════ RESULTS ══════════
+function showResults(){
+  const total=totalSc();
+  document.getElementById('res-sname').textContent='👩‍🎓 '+sName;
+  document.getElementById('res-score').textContent=total;
+  document.getElementById('rb1').textContent=sc.l1+'/30';
+  document.getElementById('rb2').textContent=sc.l2+'/32';
+  document.getElementById('rb3').textContent=sc.l3+'/40';
+  let stars,msg;
+  if(total>=80){stars='⭐⭐⭐';msg='🏆 ممتازة! أنتِ نجمة الروبوتات!';}
+  else if(total>=55){stars='⭐⭐';msg='👍 جيد جدًا! استمري في التعلم!';}
+  else{stars='⭐';msg='💪 لا بأس! راجعي الدرس وأعيدي المحاولة!';}
+  document.getElementById('res-stars').textContent=stars;
+  document.getElementById('res-msg').textContent=msg;
+  document.getElementById('p3-fill').style.width='100%';
+  fbSave({level:'done',score:total,l1:sc.l1,l2:sc.l2,l3:sc.l3,stars,status:'✅ أنهت النشاط'});
+  if(total>=80) confetti(35);
+  showScreen('results-screen');
+}
+
+function restart(){
+  sName=''; sc={l1:0,l2:0,l3:0};
+  document.getElementById('inp-name').value='';
+  document.getElementById('inp-name').placeholder='✏️ اكتبي اسمك هنا...';
+  showScreen('welcome-screen');
+}
+
+// ══════════ TEACHER ══════════
+function openTeacherModal(){
+  document.getElementById('tmodal').style.display='flex';
+  document.getElementById('t-pass').value='';
+  document.getElementById('t-err').textContent='';
+  setTimeout(()=>document.getElementById('t-pass').focus(),100);
+}
+function closeModal(){document.getElementById('tmodal').style.display='none'}
+function verifyPass(){
+  if(document.getElementById('t-pass').value===TPASS){
+    closeModal();
+    enterTeacher();
+  } else {
+    document.getElementById('t-err').textContent='❌ كلمة المرور غير صحيحة';
+  }
+}
+function enterTeacher(){
+  showScreen('teacher-screen');
+  loadTeacher();
+  if(timerRef) clearInterval(timerRef);
+  timerRef=setInterval(loadTeacher,5000);
+}
+function backToWelcome(){
+  if(timerRef){clearInterval(timerRef);timerRef=null;}
+  showScreen('welcome-screen');
+}
+async function loadTeacher(){
+  const data=await fbLoad();
+  const body=document.getElementById('t-body');
+  if(!data){
+    body.innerHTML='<tr><td colspan="5" style="padding:30px;color:rgba(255,255,255,0.3)">لا توجد بيانات بعد</td></tr>';
+    ['st-total','st-done','st-avg'].forEach(id=>document.getElementById(id).textContent='0');
+    return;
+  }
+  const list=Object.values(data);
+  const done=list.filter(s=>s.level==='done');
+  const avg=done.length?Math.round(done.reduce((a,s)=>a+(s.score||0),0)/done.length):0;
+  document.getElementById('st-total').textContent=list.length;
+  document.getElementById('st-done').textContent=done.length;
+  document.getElementById('st-avg').textContent=avg;
+  body.innerHTML=list.map((s,i)=>{
+    const lv=s.level==='done'?'done':s.level||1;
+    const lvTxt=lv==='done'?'✅ أنهت':'المستوى '+lv;
+    const cls=lv==='done'?'lv-done':'lv-'+lv;
+    return `<tr>
+      <td style="color:rgba(255,255,255,0.4)">${i+1}</td>
+      <td style="font-weight:700">${s.name||'-'}</td>
+      <td><span class="lv-badge ${cls}">${lvTxt}</span></td>
+      <td style="color:var(--gold);font-weight:800">${s.score||0} ${s.stars||''}</td>
+      <td style="color:rgba(255,255,255,0.4);font-size:0.78rem">${s.ts||'-'}</td>
+    </tr>`;
+  }).join('');
+  document.getElementById('refresh-note').textContent='آخر تحديث: '+new Date().toLocaleTimeString('ar')+' | تلقائي كل 5ث';
+}
+async function clearData(){
+  if(!confirm('هل أنتِ متأكدة من مسح جميع بيانات الطالبات؟')) return;
+  await fbClear(); loadTeacher();
+}
+
+// ══════════ CONFETTI ══════════
+function confetti(n){
+  const colors=['#f0c040','#7b2d8b','#00e5ff','#ff6b6b','#00e676','#ff9800','#fff'];
+  for(let i=0;i<n;i++){
+    setTimeout(()=>{
+      const c=document.createElement('div');
+      c.className='cf';
+      c.style.left=Math.random()*100+'vw';
+      c.style.background=colors[Math.floor(Math.random()*colors.length)];
+      c.style.animationDuration=(2+Math.random()*1.5)+'s';
+      c.style.animationDelay=(Math.random()*0.4)+'s';
+      c.style.width=(6+Math.random()*8)+'px';
+      c.style.height=(6+Math.random()*8)+'px';
+      c.style.transform=`rotate(${Math.random()*360}deg)`;
+      document.body.appendChild(c);
+      setTimeout(()=>c.remove(),4000);
+    },i*60);
+  }
+}
+
+// ══════════ KEYBOARD ══════════
+document.getElementById('inp-name').addEventListener('keyup',e=>{if(e.key==='Enter')startActivity()});
+document.getElementById('t-pass').addEventListener('keyup',e=>{if(e.key==='Enter')verifyPass()});
+
+// Animate robot on stadium SVG
+(function(){
+  const robot=document.getElementById('robot-on-path');
+  if(!robot) return;
+  let t=0;
+  function animRobot(){
+    t+=0.008;
+    const x=230+Math.cos(t)*210;
+    const y=78+Math.sin(t)*60;
+    robot.setAttribute('transform',`translate(${x-20},${y-78})`);
+    requestAnimationFrame(animRobot);
+  }
+  animRobot();
+})();
+</script>
+</body>
+</html>
